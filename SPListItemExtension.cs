@@ -1,0 +1,367 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.SharePoint;
+using Microsoft.SharePoint.Utilities;
+using System.Web;
+using Newtonsoft.Json;
+using System.Text.RegularExpressions;
+using Microsoft.Office.Server;
+using Microsoft.Office.Server.UserProfiles;
+
+namespace ListsNotifications
+{
+    public static class SPListItemExtension
+    {
+        private static SPItemEventProperties eventProperties;
+
+        public static SPItemEventProperties GetEventProperties(this SPListItem item)
+        {
+            return eventProperties;
+        }
+
+        public static void SetEventProperties(this SPListItem item, SPItemEventProperties properties)
+        {
+            eventProperties = properties;
+        }
+
+        private static bool IsEventIng(SPItemEventProperties properties)
+        {
+            bool isEventIng = properties.EventType.ToString().Contains("ing");
+            return isEventIng;
+        }
+
+        public static List<SPPrincipal> GetAssignmentsPrincipals(SPRoleAssignmentCollection assignments)
+        {
+            List<SPPrincipal> actualAssignees = new List<SPPrincipal>();
+
+            foreach (SPRoleAssignment assignment in assignments)
+            {
+                if (Regex.IsMatch(assignment.Member.Name, @"svc_|system"))
+                {
+                    continue;
+                }
+
+                foreach (SPRoleDefinition assignmentBinding in assignment.RoleDefinitionBindings)
+                {
+                    if (assignmentBinding.Name != "Ограниченный доступ")
+                    {
+                        actualAssignees.Add(assignment.Member);
+                    }
+                }
+            }
+            return actualAssignees;
+        }
+
+        public static List<string> GetLoginsFromPrincipals(List<SPPrincipal> principals)
+        {
+            List<string> logins = new List<string>();
+
+            foreach (SPPrincipal principal in principals)
+            {
+                logins.Add(principal.LoginName);
+            }
+
+            return logins;
+        }
+
+        public static List<SPPrincipal> GetExtraAssignees(this SPListItem item, List<SPPrincipal> principals)
+        {
+            List<SPPrincipal> extraAssignees = new List<SPPrincipal>();
+
+            List<SPPrincipal> listActualPrincipals = GetAssignmentsPrincipals(item.ParentList.RoleAssignments);
+            List<SPPrincipal> itemActualPrincipals = GetAssignmentsPrincipals(item.RoleAssignments);
+
+            List<string> listActualLogins = GetLoginsFromPrincipals(listActualPrincipals);
+            List<string> principalsLogins = GetLoginsFromPrincipals(principals);
+
+            foreach (SPPrincipal itemPrincipal in itemActualPrincipals)
+            {
+                if (!listActualLogins.Contains(itemPrincipal.LoginName) && !principalsLogins.Contains(itemPrincipal.LoginName))
+                {
+                    extraAssignees.Add(itemPrincipal);
+                }
+            }
+
+            return extraAssignees;
+        }
+
+        public static string[] GetCodesFromDeptCodeField(this SPListItem item, string DeptCodeFieldName)
+        {
+            dynamic CodeNameValues;
+            string[] CodeNames = new String[] { };
+            List<string> CodeNamesList = new List<string>();
+            string splitPattern = @";#\d+;#";
+            string removePattern = @"\d+;#";
+
+            CodeNameValues = item.GetChangedFieldValue(DeptCodeFieldName);
+            if (CodeNameValues.GetType().Name == "String")
+            {
+                if (CodeNameValues == "")
+                {
+                    return CodeNames;
+                }
+
+                CodeNames = Regex.Split(CodeNameValues, splitPattern);
+                CodeNames[0] = Regex.Replace(CodeNames[0], removePattern, "");
+            }
+            if (CodeNameValues.GetType().Name == "SPFieldLookupValueCollection")
+            {
+                foreach (SPFieldLookupValue CodeValue in CodeNameValues)
+                {
+                    CodeNamesList.Add(CodeValue.LookupValue);
+                    CodeNames = CodeNamesList.ToArray();
+                }
+            }
+
+            return CodeNames;
+        }
+
+        public static List<SPPrincipal> GetGroupsByDeptCodeField(this SPListItem item, string DeptCodeFieldName, string GroupSuffix)
+        {
+            List<SPPrincipal> codeFieldGroups = new List<SPPrincipal>();
+            string[] codeNames;
+
+            if (!item.ParentList.Fields.ContainsField(DeptCodeFieldName))
+            {
+                return codeFieldGroups;
+            }
+
+            codeNames = item.GetCodesFromDeptCodeField(DeptCodeFieldName);
+
+            foreach (string code in codeNames)
+            {
+                string groupName = code + GroupSuffix;
+                SPPrincipal CodeGroup;
+                try
+                {
+                    CodeGroup = item.ParentList.ParentWeb.SiteGroups.GetByName(groupName);
+                }
+                catch
+                {
+                    continue;
+                }
+                codeFieldGroups.Add(CodeGroup);
+            }
+
+            return codeFieldGroups;
+        }
+
+        public static List<SPPrincipal> GetUsersFromUsersFields(this SPListItem item, List<string> usersFields) //, SPItemEventProperties properties)
+        {
+            List<SPPrincipal> fieldsPrincipals = new List<SPPrincipal>();
+            string userLogin;
+            dynamic fieldValue;
+            SPUser svcUserForEmptyResponse = item.Web.EnsureUser("app@sharepoint");
+
+            foreach (string fieldTitle in usersFields)
+            {
+                if (!item.ParentList.Fields.ContainsField(fieldTitle))
+                {
+                    continue;
+                }
+
+                fieldValue = item.GetChangedFieldValue(fieldTitle);
+                if (fieldValue == null || (fieldValue.GetType().Name == "String" && fieldValue == ""))
+                {
+                    continue;
+                }
+
+                SPFieldUserValueCollection fieldValueUsers = new SPFieldUserValueCollection(item.Web, fieldValue.ToString());
+                foreach (SPFieldUserValue fieldUser in fieldValueUsers)
+                {
+                    SPPrincipal principal;
+                    if (fieldUser.User != null && fieldUser.User.LoginName != "")
+                    {
+                        userLogin = fieldUser.User.LoginName;
+                    }
+                    else
+                    {
+                        userLogin = fieldUser.LookupValue;
+                    }
+
+                    userLogin = userLogin.Substring(userLogin.IndexOf("\\") + 1);
+
+                    try
+                    {
+                        principal = item.Web.EnsureUser(userLogin);
+                    }
+                    catch
+                    {
+                        principal = item.ParentList.ParentWeb.SiteGroups.GetByName(userLogin);
+                    }
+
+                    fieldsPrincipals.Add(principal);
+                }
+            }
+
+            if (fieldsPrincipals.Count == 0)
+            {
+                fieldsPrincipals.Add(svcUserForEmptyResponse);
+            }
+
+            return fieldsPrincipals;
+        }
+
+        public static dynamic GetChangedFieldValue(this SPListItem item, string fieldTitle)
+        {
+            dynamic ChangedFieldValue;
+            string fieldInternalName;
+            string fieldStaticName;
+
+            try
+            {
+                fieldInternalName = item.ParentList.Fields[fieldTitle].InternalName;
+                fieldStaticName = item.ParentList.Fields[fieldTitle].StaticName;
+            }
+            catch
+            {
+                fieldInternalName = fieldTitle;
+                fieldStaticName = fieldTitle;
+            }
+
+            if (IsEventIng(eventProperties))
+            {
+                ChangedFieldValue = eventProperties.AfterProperties[fieldInternalName];
+
+                //if (ChangedFieldValue == null || ChangedFieldValue.ToString().Length < 5)
+                if (ChangedFieldValue == null)
+                {
+                    ChangedFieldValue = eventProperties.AfterProperties[fieldTitle];
+                    if (ChangedFieldValue == null)
+                    {
+                        ChangedFieldValue = eventProperties.AfterProperties[fieldStaticName];
+                        if (ChangedFieldValue == null)
+                        {
+                            ChangedFieldValue = item[fieldTitle];
+                        }
+                    }
+                }
+            }
+            else
+            {
+                ChangedFieldValue = item[fieldInternalName];
+            }
+
+            return ChangedFieldValue;
+        }
+
+        public static bool UserFieldIsChanged(this SPListItem item, string fieldTitle) //, SPItemEventProperties properties)
+        {
+            SPFieldUserValue assignedToFieldvalueBefore = new SPFieldUserValue(item.Web, item[fieldTitle].ToString());
+            String assignedToLoginBefore = assignedToFieldvalueBefore.User.LoginName;
+            assignedToLoginBefore = assignedToLoginBefore.Substring(assignedToLoginBefore.IndexOf("\\") + 1);
+
+            SPFieldUserValue assignedToFieldvalueAfter = new SPFieldUserValue(item.Web, eventProperties.AfterProperties[fieldTitle].ToString());
+            String assignedToLoginAfter = assignedToFieldvalueAfter.LookupValue;
+            assignedToLoginAfter = assignedToLoginAfter.Substring(assignedToLoginAfter.IndexOf("\\") + 1);
+
+            if (assignedToLoginAfter != "" && assignedToLoginBefore != assignedToLoginAfter)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public static bool NotUserFieldIsChanged(this SPListItem item, string fieldTitle)
+        {
+            dynamic FieldvalueAfter = item.GetChangedFieldValue(fieldTitle);
+            dynamic FieldvalueBefore = item[fieldTitle];
+            string FieldvalueBeforeToString;
+
+            switch (FieldvalueBefore.GetType().Name)
+            {
+                case "DateTime": 
+                    FieldvalueBeforeToString = FieldvalueBefore.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
+                    break;
+                case "Double":
+                    FieldvalueBeforeToString = FieldvalueBefore.ToString();
+                    break;
+                default:
+                    FieldvalueBeforeToString = (string)FieldvalueBefore;
+                    break;
+            }
+
+
+            if ((string)FieldvalueAfter != FieldvalueBeforeToString)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+        public static List<SPPrincipal> GetRelatedItemUsers(this SPListItem item)
+        {
+            List<SPPrincipal> arrRealtedItemUsers = new List<SPPrincipal>();
+            dynamic relatedItems = item[SPBuiltInFieldId.RelatedItems];
+            if (relatedItems == null)
+            {
+                return arrRealtedItemUsers;
+            }
+            String relatedItemsString = relatedItems.ToString();
+
+            dynamic jsonRelatedItems = JsonConvert.DeserializeObject(relatedItemsString);
+
+            foreach (dynamic relItem in jsonRelatedItems)
+            {
+                List<string> arrRelatedListUserFields = new List<string>();
+                int relatedItemId = (int)relItem["ItemId"];
+                String relatedlistIdString = relItem["ListId"];
+                Guid relatedlistId = new Guid(relatedlistIdString);
+
+                SPList relatedList = item.Web.Lists[relatedlistId];
+                SPListItem relatedItem = relatedList.GetItemById(relatedItemId);
+
+                arrRelatedListUserFields = relatedList.GetListUserFields();
+
+                arrRealtedItemUsers.AddRange(relatedItem.GetItemUsers(arrRelatedListUserFields));
+            }
+
+            return arrRealtedItemUsers;
+        }
+
+        public static List<SPUser> GetItemUsers(this SPListItem item, List<string> arrListUserFields)
+        {
+            List<SPUser> itemUsers = new List<SPUser>();
+            foreach (String field in arrListUserFields)
+            {
+                dynamic fieldUsers = item[field];
+                if (fieldUsers == null)
+                {
+                    continue;
+                }
+                if (fieldUsers.GetType().Name == "String")
+                {
+                    int userId = Int16.Parse(fieldUsers.Substring(0, fieldUsers.IndexOf(";")));
+                    SPUser user = item.Web.SiteUsers.GetByID(userId);
+                    itemUsers.Add(user);
+                }
+                else
+                {
+                    foreach (SPFieldUserValue userValue in fieldUsers)
+                    {
+                        int userId = userValue.LookupId;
+                        SPUser user = item.Web.SiteUsers.GetByID(userId);
+                        itemUsers.Add(user);
+                    }
+                }
+            };
+            return itemUsers;
+        }
+
+        public static string GetItemFullUrl(this SPListItem item)
+        {
+            string itemFullUrl = item.Web.Site.Url + item.ParentList.DefaultDisplayFormUrl + "?ID=" + item.ID;
+            return itemFullUrl;
+        }
+}
+}
