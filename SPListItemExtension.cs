@@ -268,27 +268,47 @@ namespace ListsNotifications
             }
         }
 
-        public static bool NotUserFieldIsChanged(this SPListItem item, string fieldTitle)
+        public static bool FieldIsChanged(this SPListItem item, string fieldTitle)
         {
-            dynamic FieldvalueAfter = item.GetChangedFieldValue(fieldTitle);
-            dynamic FieldvalueBefore = item[fieldTitle];
-            string FieldvalueBeforeToString;
+            dynamic FieldValueAfter = item.GetChangedFieldValue(fieldTitle);
+            dynamic FieldValueBefore = item[fieldTitle];
+            string FieldValueBeforeToString;
+            string FieldValueAfterToString;
 
-            switch (FieldvalueBefore.GetType().Name)
+            //switch (FieldValueBefore.GetType().Name)
+            switch (item.ParentList.Fields.GetField(fieldTitle).FieldValueType.Name)
             {
-                case "DateTime": 
-                    FieldvalueBeforeToString = FieldvalueBefore.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
+                case "DateTime":
+                    FieldValueBeforeToString = FieldValueBefore.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
+                    FieldValueAfterToString = (string)FieldValueAfter;
                     break;
                 case "Double":
-                    FieldvalueBeforeToString = FieldvalueBefore.ToString();
+                    FieldValueBeforeToString = FieldValueBefore.ToString();
+                    FieldValueAfterToString = (string)FieldValueAfter;
+                    break;
+                case "SPFieldUserValueCollection":
+                    FieldValueBeforeToString = FieldValueBefore.ToString();
+                    SPFieldUserValue[] FieldValueBeforeArr = FieldValueBefore.ToArray();
+                    SPFieldUserValue[] FieldValueAfterArr = ( new SPFieldUserValueCollection(item.Web, FieldValueAfter.ToString()) ).ToArray();
+                    FieldValueBeforeToString = String.Join(",", Array.ConvertAll(FieldValueBeforeArr, p => p.LookupId));
+                    FieldValueAfterToString = String.Join(",", Array.ConvertAll(FieldValueAfterArr, p => p.LookupId));
+                    break;
+                case "SPFieldUserValue":
+                    FieldValueBeforeToString = new SPFieldUserValue(item.Web, FieldValueBefore.ToString()).User.LoginName;
+                    FieldValueAfterToString = new SPFieldUserValue(item.Web, FieldValueAfter.ToString()).LookupValue;
+                    if (FieldValueAfterToString == "")
+                    {
+                        FieldValueAfterToString = new SPFieldUserValue(item.Web, FieldValueAfter.ToString()).User.LoginName;
+                    }
                     break;
                 default:
-                    FieldvalueBeforeToString = (string)FieldvalueBefore;
+                    FieldValueBeforeToString = (string)FieldValueBefore;
+                    FieldValueAfterToString = (string)FieldValueAfter;
                     break;
             }
 
 
-            if ((string)FieldvalueAfter != FieldvalueBeforeToString)
+            if ( (FieldValueAfterToString != FieldValueBeforeToString) && (FieldValueAfterToString != "" && FieldValueBeforeToString != null) )
             {
                 return true;
             }

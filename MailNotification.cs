@@ -27,7 +27,7 @@ namespace ListsNotifications
         {
             listItem = item;
             body = CreateBody(item, fields);
-            to = GetToMails(principals);
+            to = String.Join(",", SPCommon.GetUserMails(principals) );
             subject = String.Format("{0}: элемент изменен", item.Title);
             headers = GetHeaders();
         }
@@ -43,22 +43,32 @@ namespace ListsNotifications
             mailHeaders.Add("content-type", "text/html");
             return mailHeaders;
         }
-        private string GetToMails(List<SPPrincipal> principalsList)
-        {
-            List<string> toMailsList = new List<string>();
-            string toMails;
 
-            foreach (SPPrincipal principal in principalsList)
+        private string GetFriendlyChangedFieldValue(SPListItem item, string fieldTitle)
+        {
+            string changedFieldValue;
+            string changedFieldValueOriginal = (string)item.GetChangedFieldValue(fieldTitle);
+
+            switch (item.ParentList.Fields.GetField(fieldTitle).FieldValueType.Name)
             {
-                if (principal.GetType().Name != "SPUser")
-                {
-                    continue;
-                }
-                SPUser user = (SPUser)principal;
-                toMailsList.Add(user.Email);
+                case "DateTime":
+                    changedFieldValue = DateTime.Parse(changedFieldValueOriginal).ToLocalTime().ToString();
+                    break;
+                case "SPFieldUserValueCollection":
+                    //SPFieldUserValueCollection fieldValueUsers = new SPFieldUserValueCollection(item.Web, changedFieldValueOriginal);
+                    List<SPPrincipal> fieldPrincipals = item.GetUsersFromUsersFields(new List<string> { fieldTitle });
+                    changedFieldValue = String.Join(", ", SPCommon.GetUserNames(fieldPrincipals).ToArray());
+                    break;
+                case "SPFieldUserValue":
+                    changedFieldValue = item.Web.EnsureUser(new SPFieldUserValue(item.Web, changedFieldValueOriginal.ToString()).LookupValue).Name;
+                    break;
+                default:
+                    changedFieldValue = changedFieldValueOriginal;
+                    break;
+
             }
-            toMails = String.Join(",", toMailsList);
-            return toMails;
+
+            return changedFieldValue;
         }
 
         private string CreateBody(SPListItem item, List<string> fields)
@@ -77,14 +87,10 @@ namespace ListsNotifications
                     continue;
                 }
 
-                if (item.NotUserFieldIsChanged(fieldTitle))
+                if (item.FieldIsChanged(fieldTitle))
                 {
-                    string changeFieldValue = item.GetChangedFieldValue(fieldTitle);
-                    if (SPCommon.IsUTCDateString(changeFieldValue))
-                    {
-                        changeFieldValue = DateTime.Parse(changeFieldValue).ToLocalTime().ToString();
-                    }
-                    ChangedFieldsBlock += String.Format("<p>{0}: {1}</p>", fieldTitle, changeFieldValue);
+                    string changedFieldValue = GetFriendlyChangedFieldValue(item, fieldTitle);
+                    ChangedFieldsBlock += String.Format("<p>{0}: {1}</p>", fieldTitle, changedFieldValue);
                 }
 
             }

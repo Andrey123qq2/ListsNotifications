@@ -56,6 +56,7 @@
     <Reference Include="Microsoft.SharePoint.Client.ServerRuntime" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SPCommon.cs" />
     <Compile Include="MailNotification.cs" />
     <Compile Include="ConfigParams.cs" />
     <Compile Include="SPListExtension.cs" />
