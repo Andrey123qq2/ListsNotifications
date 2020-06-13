@@ -9,7 +9,7 @@ using Microsoft.SharePoint.Utilities;
 
 namespace ListsNotifications
 {
-    class SPCommon
+    static class SPCommon
     {
         public static bool IsUTCDateString(string str)
         {
@@ -51,6 +51,24 @@ namespace ListsNotifications
             }
 
             return toMailsList;
+        }
+
+        public static List<string> GetLoginsFromPrincipals(List<SPPrincipal> principalsList)
+        {
+            List<string> logins = new List<string>();
+
+            foreach (SPPrincipal principal in principalsList)
+            {
+                logins.Add(principal.LoginName);
+            }
+
+            return logins;
+        }
+
+        public static bool IsEventIng(SPItemEventProperties properties)
+        {
+            bool isEventIng = properties.EventType.ToString().Contains("ing");
+            return isEventIng;
         }
     }
 }

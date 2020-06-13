@@ -27,12 +27,6 @@ namespace ListsNotifications
             eventProperties = properties;
         }
 
-        private static bool IsEventIng(SPItemEventProperties properties)
-        {
-            bool isEventIng = properties.EventType.ToString().Contains("ing");
-            return isEventIng;
-        }
-
         public static List<SPPrincipal> GetAssignmentsPrincipals(SPRoleAssignmentCollection assignments)
         {
             List<SPPrincipal> actualAssignees = new List<SPPrincipal>();
@@ -55,18 +49,6 @@ namespace ListsNotifications
             return actualAssignees;
         }
 
-        public static List<string> GetLoginsFromPrincipals(List<SPPrincipal> principals)
-        {
-            List<string> logins = new List<string>();
-
-            foreach (SPPrincipal principal in principals)
-            {
-                logins.Add(principal.LoginName);
-            }
-
-            return logins;
-        }
-
         public static List<SPPrincipal> GetExtraAssignees(this SPListItem item, List<SPPrincipal> principals)
         {
             List<SPPrincipal> extraAssignees = new List<SPPrincipal>();
@@ -74,8 +56,8 @@ namespace ListsNotifications
             List<SPPrincipal> listActualPrincipals = GetAssignmentsPrincipals(item.ParentList.RoleAssignments);
             List<SPPrincipal> itemActualPrincipals = GetAssignmentsPrincipals(item.RoleAssignments);
 
-            List<string> listActualLogins = GetLoginsFromPrincipals(listActualPrincipals);
-            List<string> principalsLogins = GetLoginsFromPrincipals(principals);
+            List<string> listActualLogins = SPCommon.GetLoginsFromPrincipals(listActualPrincipals);
+            List<string> principalsLogins = SPCommon.GetLoginsFromPrincipals(principals);
 
             foreach (SPPrincipal itemPrincipal in itemActualPrincipals)
             {
@@ -149,7 +131,7 @@ namespace ListsNotifications
             return codeFieldGroups;
         }
 
-        public static List<SPPrincipal> GetUsersFromUsersFields(this SPListItem item, List<string> usersFields) //, SPItemEventProperties properties)
+        public static List<SPPrincipal> GetUsersFromUsersFields(this SPListItem item, List<string> usersFields)
         {
             List<SPPrincipal> fieldsPrincipals = new List<SPPrincipal>();
             string userLogin;
@@ -230,11 +212,10 @@ namespace ListsNotifications
                 fieldStaticName = fieldTitle;
             }
 
-            if (IsEventIng(eventProperties))
+            if (SPCommon.IsEventIng(eventProperties))
             {
                 ChangedFieldValue = eventProperties.AfterProperties[fieldInternalName];
 
-                //if (ChangedFieldValue == null || ChangedFieldValue.ToString().Length < 5)
                 if (ChangedFieldValue == null)
                 {
                     ChangedFieldValue = eventProperties.AfterProperties[fieldTitle];
@@ -256,7 +237,7 @@ namespace ListsNotifications
             return ChangedFieldValue;
         }
 
-        public static bool UserFieldIsChanged(this SPListItem item, string fieldTitle) //, SPItemEventProperties properties)
+        public static bool UserFieldIsChanged(this SPListItem item, string fieldTitle)
         {
             SPFieldUserValue assignedToFieldvalueBefore = new SPFieldUserValue(item.Web, item[fieldTitle].ToString());
             String assignedToLoginBefore = assignedToFieldvalueBefore.User.LoginName;
@@ -283,7 +264,6 @@ namespace ListsNotifications
             string FieldValueBeforeToString;
             string FieldValueAfterToString;
 
-            //switch (FieldValueBefore.GetType().Name)
             switch (item.ParentList.Fields.GetField(fieldTitle).FieldValueType.Name)
             {
                 case "DateTime":
@@ -316,7 +296,6 @@ namespace ListsNotifications
             }
 
 
-            //if ( (FieldValueAfterToString != FieldValueBeforeToString) && (FieldValueAfterToString != "" && FieldValueBeforeToString != null) )
             if ( FieldValueAfterToString != FieldValueBeforeToString )
             {
                 return true;
@@ -392,5 +371,36 @@ namespace ListsNotifications
             string itemFullUrl = item.Web.Site.Url + item.ParentList.DefaultDisplayFormUrl + "?ID=" + item.ID;
             return itemFullUrl;
         }
-}
+
+        public static string GetFriendlyChangedFieldValue(this SPListItem item, string fieldTitle)
+        {
+            string changedFieldValue;
+            dynamic FieldValueAfter = item.GetChangedFieldValue(fieldTitle);
+            string changedFieldValueOriginal = (FieldValueAfter != null) ? (string)FieldValueAfter : "";
+
+            if (changedFieldValueOriginal == "" || changedFieldValueOriginal == null)
+            {
+                return "[ValueRemoved]";
+            }
+
+            switch (item.ParentList.Fields.GetField(fieldTitle).FieldValueType.Name)
+            {
+                case "DateTime":
+                    changedFieldValue = DateTime.Parse(changedFieldValueOriginal).ToLocalTime().ToString();
+                    break;
+                case "SPFieldUserValueCollection":
+                    List<SPPrincipal> fieldPrincipals = item.GetUsersFromUsersFields(new List<string> { fieldTitle });
+                    changedFieldValue = String.Join(", ", SPCommon.GetUserNames(fieldPrincipals).ToArray());
+                    break;
+                case "SPFieldUserValue":
+                    changedFieldValue = item.Web.EnsureUser(new SPFieldUserValue(item.Web, changedFieldValueOriginal.ToString()).LookupValue).Name;
+                    break;
+                default:
+                    changedFieldValue = changedFieldValueOriginal;
+                    break;
+            }
+
+            return changedFieldValue;
+        }
+    }
 }

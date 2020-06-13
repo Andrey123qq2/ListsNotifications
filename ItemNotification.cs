@@ -33,24 +33,10 @@ namespace ListsNotifications
 
                     ConfigParams ERConfig = new ConfigParams(item.ParentList);
 
-                    //get UserNotifyFields
                     List<SPPrincipal> NotifyUsers = item.GetUsersFromUsersFields(ERConfig.UserNotifyFields);
                     
                     MailNotification mailToNotify = new MailNotification(item, ERConfig.TrackFields, NotifyUsers);
                     mailToNotify.SendMail();
-
-                    //ERConfig.TrackFields;
-
-                    //get TrackFields
-
-                    //get users from UserFields (additionally get emails)
-
-                    //get collection of changedFields with old and new values, and SPFields (maybe create class with constructor)
-
-                    //create mail message 
-                    //mail body: create from html template (maybe with old and new values by fields)
-                    //add to mail all useremails
-                    //send mail
                 }
             }
         }
