@@ -47,7 +47,13 @@ namespace ListsNotifications
         private string GetFriendlyChangedFieldValue(SPListItem item, string fieldTitle)
         {
             string changedFieldValue;
-            string changedFieldValueOriginal = (string)item.GetChangedFieldValue(fieldTitle);
+            dynamic FieldValueAfter = item.GetChangedFieldValue(fieldTitle);
+            string changedFieldValueOriginal = (FieldValueAfter != null) ? (string)FieldValueAfter : "";
+
+            if (changedFieldValueOriginal == "" || changedFieldValueOriginal == null)
+            {
+                return "[ValueRemoved]";
+            }
 
             switch (item.ParentList.Fields.GetField(fieldTitle).FieldValueType.Name)
             {

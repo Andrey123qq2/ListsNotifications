@@ -295,7 +295,7 @@ namespace ListsNotifications
                     FieldValueAfterToString = (FieldValueAfter != null) ? (string)FieldValueAfter : "";
                     break;
                 case "SPFieldUserValueCollection":
-                    FieldValueBeforeToString = FieldValueBefore.ToString();
+                    FieldValueBeforeToString = (FieldValueBefore != null) ? FieldValueBefore.ToString() : "";
                     SPFieldUserValue[] FieldValueBeforeArr = (FieldValueBefore != null) ? FieldValueBefore.ToArray() : new SPFieldUserValue[] { };
                     SPFieldUserValue[] FieldValueAfterArr = (FieldValueAfter != null) ? (new SPFieldUserValueCollection(item.Web, FieldValueAfter.ToString()) ).ToArray() : new SPFieldUserValue[] { };
                     FieldValueBeforeToString = (FieldValueBeforeArr.Length > 0) ? String.Join(",", Array.ConvertAll(FieldValueBeforeArr, p => p.LookupId)) : "";
@@ -310,13 +310,14 @@ namespace ListsNotifications
                     }
                     break;
                 default:
-                    FieldValueBeforeToString = (string)FieldValueBefore;
-                    FieldValueAfterToString = (string)FieldValueAfter;
+                    FieldValueBeforeToString = (FieldValueBefore != null) ? (string)FieldValueBefore : "";
+                    FieldValueAfterToString = (FieldValueAfter != null) ? (string)FieldValueAfter : "";
                     break;
             }
 
 
-            if ( (FieldValueAfterToString != FieldValueBeforeToString) && (FieldValueAfterToString != "" && FieldValueBeforeToString != null) )
+            //if ( (FieldValueAfterToString != FieldValueBeforeToString) && (FieldValueAfterToString != "" && FieldValueBeforeToString != null) )
+            if ( FieldValueAfterToString != FieldValueBeforeToString )
             {
                 return true;
             }
