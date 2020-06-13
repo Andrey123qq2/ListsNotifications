@@ -21,11 +21,11 @@ namespace ListsNotifications
             foreach (SPField fieldSP in list.Fields)
             {
                 string fTypeName = fieldSP.Type.ToString();
-                string fStaticName = fieldSP.StaticName;
-                bool notMatch = !Regex.IsMatch(fStaticName, "Editor|PreviouslyAssignedTo");
+                string fTitle = fieldSP.Title;
+                bool notMatch = !Regex.IsMatch(fTitle, "Editor|PreviouslyAssignedTo");
                 if (fTypeName == "User" && notMatch)
                 {
-                    arrListUserFields.Add(fStaticName);
+                    arrListUserFields.Add(fTitle);
                 }
             }
             return arrListUserFields;

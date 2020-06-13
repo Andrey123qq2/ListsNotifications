@@ -169,31 +169,39 @@ namespace ListsNotifications
                     continue;
                 }
 
-                SPFieldUserValueCollection fieldValueUsers = new SPFieldUserValueCollection(item.Web, fieldValue.ToString());
-                foreach (SPFieldUserValue fieldUser in fieldValueUsers)
+                if ((fieldValue.GetType().Name == "Int32") || (fieldValue.GetType().Name == "String" && Regex.IsMatch(fieldValue, @"^\d+$")))
                 {
-                    SPPrincipal principal;
-                    if (fieldUser.User != null && fieldUser.User.LoginName != "")
-                    {
-                        userLogin = fieldUser.User.LoginName;
-                    }
-                    else
-                    {
-                        userLogin = fieldUser.LookupValue;
-                    }
-
-                    userLogin = userLogin.Substring(userLogin.IndexOf("\\") + 1);
-
-                    try
-                    {
-                        principal = item.Web.EnsureUser(userLogin);
-                    }
-                    catch
-                    {
-                        principal = item.ParentList.ParentWeb.SiteGroups.GetByName(userLogin);
-                    }
-
+                    SPPrincipal principal = item.ParentList.ParentWeb.SiteUsers.GetByID(int.Parse(fieldValue.ToString()));
                     fieldsPrincipals.Add(principal);
+                }
+                else
+                {
+                    SPFieldUserValueCollection fieldValueUsers = new SPFieldUserValueCollection(item.Web, fieldValue.ToString());
+                    foreach (SPFieldUserValue fieldUser in fieldValueUsers)
+                    {
+                        SPPrincipal principal;
+                        if (fieldUser.User != null && fieldUser.User.LoginName != "")
+                        {
+                            userLogin = fieldUser.User.LoginName;
+                        }
+                        else
+                        {
+                            userLogin = fieldUser.LookupValue;
+                        }
+
+                        userLogin = userLogin.Substring(userLogin.IndexOf("\\") + 1);
+
+                        try
+                        {
+                            principal = item.Web.EnsureUser(userLogin);
+                        }
+                        catch
+                        {
+                            principal = item.ParentList.ParentWeb.SiteGroups.GetByName(userLogin);
+                        }
+
+                        fieldsPrincipals.Add(principal);
+                    }
                 }
             }
 
@@ -279,24 +287,24 @@ namespace ListsNotifications
             switch (item.ParentList.Fields.GetField(fieldTitle).FieldValueType.Name)
             {
                 case "DateTime":
-                    FieldValueBeforeToString = FieldValueBefore.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
-                    FieldValueAfterToString = (string)FieldValueAfter;
+                    FieldValueBeforeToString = (FieldValueBefore != null) ? FieldValueBefore.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ") : "";
+                    FieldValueAfterToString = (FieldValueAfter != null) ? (string)FieldValueAfter : "";
                     break;
                 case "Double":
-                    FieldValueBeforeToString = FieldValueBefore.ToString();
-                    FieldValueAfterToString = (string)FieldValueAfter;
+                    FieldValueBeforeToString = (FieldValueBefore != null) ? FieldValueBefore.ToString() : "";
+                    FieldValueAfterToString = (FieldValueAfter != null) ? (string)FieldValueAfter : "";
                     break;
                 case "SPFieldUserValueCollection":
                     FieldValueBeforeToString = FieldValueBefore.ToString();
-                    SPFieldUserValue[] FieldValueBeforeArr = FieldValueBefore.ToArray();
-                    SPFieldUserValue[] FieldValueAfterArr = ( new SPFieldUserValueCollection(item.Web, FieldValueAfter.ToString()) ).ToArray();
-                    FieldValueBeforeToString = String.Join(",", Array.ConvertAll(FieldValueBeforeArr, p => p.LookupId));
-                    FieldValueAfterToString = String.Join(",", Array.ConvertAll(FieldValueAfterArr, p => p.LookupId));
+                    SPFieldUserValue[] FieldValueBeforeArr = (FieldValueBefore != null) ? FieldValueBefore.ToArray() : new SPFieldUserValue[] { };
+                    SPFieldUserValue[] FieldValueAfterArr = (FieldValueAfter != null) ? (new SPFieldUserValueCollection(item.Web, FieldValueAfter.ToString()) ).ToArray() : new SPFieldUserValue[] { };
+                    FieldValueBeforeToString = (FieldValueBeforeArr.Length > 0) ? String.Join(",", Array.ConvertAll(FieldValueBeforeArr, p => p.LookupId)) : "";
+                    FieldValueAfterToString = (FieldValueAfterArr.Length > 0) ? String.Join(",", Array.ConvertAll(FieldValueAfterArr, p => p.LookupId)) : "";
                     break;
                 case "SPFieldUserValue":
-                    FieldValueBeforeToString = new SPFieldUserValue(item.Web, FieldValueBefore.ToString()).User.LoginName;
-                    FieldValueAfterToString = new SPFieldUserValue(item.Web, FieldValueAfter.ToString()).LookupValue;
-                    if (FieldValueAfterToString == "")
+                    FieldValueBeforeToString = (FieldValueBefore != null) ? new SPFieldUserValue(item.Web, FieldValueBefore.ToString()).User.LoginName : "";
+                    FieldValueAfterToString = (FieldValueAfter != null) ? new SPFieldUserValue(item.Web, FieldValueAfter.ToString()).LookupValue : "";
+                    if (FieldValueAfter != null && FieldValueAfterToString == "")
                     {
                         FieldValueAfterToString = new SPFieldUserValue(item.Web, FieldValueAfter.ToString()).User.LoginName;
                     }
