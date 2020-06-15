@@ -267,6 +267,12 @@ namespace ListsNotifications
             switch (item.ParentList.Fields.GetField(fieldTitle).FieldValueType.Name)
             {
                 case "DateTime":
+                    dynamic fieldDateTime = item.ParentList.Fields.GetField(fieldTitle);
+                    if (fieldDateTime.DisplayFormat.ToString() == "DateOnly" && Regex.IsMatch(FieldValueAfter, @"T00:00:00Z$"))
+                    {
+                        FieldValueBefore = (FieldValueBefore != null) ? FieldValueBefore.AddHours(3) : null;
+                    }
+
                     FieldValueBeforeToString = (FieldValueBefore != null) ? FieldValueBefore.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ") : "";
                     FieldValueAfterToString = (FieldValueAfter != null) ? (string)FieldValueAfter : "";
                     break;
@@ -387,6 +393,13 @@ namespace ListsNotifications
             {
                 case "DateTime":
                     changedFieldValue = DateTime.Parse(changedFieldValueOriginal).ToLocalTime().ToString();
+
+                    dynamic fieldDateTime = item.ParentList.Fields.GetField(fieldTitle);
+                    if (fieldDateTime.DisplayFormat.ToString() == "DateOnly")
+                    {
+                        changedFieldValue = Regex.Replace(changedFieldValue, @"\s[\d:]+$", "");
+                    }
+                    
                     break;
                 case "SPFieldUserValueCollection":
                     List<SPPrincipal> fieldPrincipals = item.GetUsersFromUsersFields(new List<string> { fieldTitle });
