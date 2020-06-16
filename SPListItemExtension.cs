@@ -78,7 +78,7 @@ namespace ListsNotifications
             string splitPattern = @";#\d+;#";
             string removePattern = @"\d+;#";
 
-            CodeNameValues = item.GetChangedFieldValue(DeptCodeFieldName);
+            CodeNameValues = item.GetFieldValue(DeptCodeFieldName);
             if (CodeNameValues.GetType().Name == "String")
             {
                 if (CodeNameValues == "")
@@ -131,7 +131,7 @@ namespace ListsNotifications
             return codeFieldGroups;
         }
 
-        public static List<SPPrincipal> GetUsersFromUsersFields(this SPListItem item, List<string> usersFields)
+        public static List<SPPrincipal> GetUsersFromUsersFields(this SPListItem item, List<string> usersFields, bool valueAfter = true )
         {
             List<SPPrincipal> fieldsPrincipals = new List<SPPrincipal>();
             string userLogin;
@@ -145,7 +145,7 @@ namespace ListsNotifications
                     continue;
                 }
 
-                fieldValue = item.GetChangedFieldValue(fieldTitle);
+                fieldValue = item.GetFieldValue(fieldTitle, valueAfter);
                 if (fieldValue == null || (fieldValue.GetType().Name == "String" && fieldValue == ""))
                 {
                     continue;
@@ -195,7 +195,7 @@ namespace ListsNotifications
             return fieldsPrincipals;
         }
 
-        public static dynamic GetChangedFieldValue(this SPListItem item, string fieldTitle)
+        public static dynamic GetFieldValue(this SPListItem item, string fieldTitle, bool valueAfter = true)
         {
             dynamic ChangedFieldValue;
             string fieldInternalName;
@@ -212,7 +212,7 @@ namespace ListsNotifications
                 fieldStaticName = fieldTitle;
             }
 
-            if (SPCommon.IsEventIng(eventProperties))
+            if (SPCommon.IsEventIng(eventProperties) && valueAfter)
             {
                 ChangedFieldValue = eventProperties.AfterProperties[fieldInternalName];
 
@@ -259,7 +259,7 @@ namespace ListsNotifications
 
         public static bool FieldIsChanged(this SPListItem item, string fieldTitle)
         {
-            dynamic FieldValueAfter = item.GetChangedFieldValue(fieldTitle);
+            dynamic FieldValueAfter = item.GetFieldValue(fieldTitle);
             dynamic FieldValueBefore = item[fieldTitle];
             string FieldValueBeforeToString;
             string FieldValueAfterToString;
@@ -270,7 +270,7 @@ namespace ListsNotifications
                     dynamic fieldDateTime = item.ParentList.Fields.GetField(fieldTitle);
                     if (fieldDateTime.DisplayFormat.ToString() == "DateOnly" && Regex.IsMatch(FieldValueAfter, @"T00:00:00Z$"))
                     {
-                        FieldValueBefore = (FieldValueBefore != null) ? FieldValueBefore.AddHours(3) : null;
+                        FieldValueBefore = (FieldValueBefore != null) ? FieldValueBefore.ToLocalTime() : null;
                     }
 
                     FieldValueBeforeToString = (FieldValueBefore != null) ? FieldValueBefore.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ") : "";
@@ -278,7 +278,8 @@ namespace ListsNotifications
                     break;
                 case "Double":
                     FieldValueBeforeToString = (FieldValueBefore != null) ? FieldValueBefore.ToString() : "";
-                    FieldValueAfterToString = (FieldValueAfter != null) ? (string)FieldValueAfter : "";
+                    FieldValueAfterToString = (FieldValueAfter != null) ? FieldValueAfter.ToString() : "";
+                    FieldValueAfterToString = Regex.Replace(FieldValueAfterToString, @"\.", ",");
                     break;
                 case "SPFieldUserValueCollection":
                     FieldValueBeforeToString = (FieldValueBefore != null) ? FieldValueBefore.ToString() : "";
@@ -378,42 +379,54 @@ namespace ListsNotifications
             return itemFullUrl;
         }
 
-        public static string GetFriendlyChangedFieldValue(this SPListItem item, string fieldTitle)
+        public static string GetFriendlyFieldValue(this SPListItem item, string fieldTitle, bool valueAfter = true)
         {
-            string changedFieldValue;
-            dynamic FieldValueAfter = item.GetChangedFieldValue(fieldTitle);
-            string changedFieldValueOriginal = (FieldValueAfter != null) ? (string)FieldValueAfter : "";
-
-            if (changedFieldValueOriginal == "" || changedFieldValueOriginal == null)
+            string friendlyFieldValue;
+            dynamic fieldValue = item.GetFieldValue(fieldTitle, valueAfter);
+            string fieldValueString;
+            try
             {
-                return "[ValueRemoved]";
+                fieldValueString = (fieldValue != null) ? (string)fieldValue : ""; 
+            }
+            catch
+            {
+                fieldValueString = (fieldValue != null) ? fieldValue.ToString() : "";
+            }
+            
+
+            if (fieldValueString == "" || fieldValueString == null)
+            {
+                return "-";
             }
 
             switch (item.ParentList.Fields.GetField(fieldTitle).FieldValueType.Name)
             {
                 case "DateTime":
-                    changedFieldValue = DateTime.Parse(changedFieldValueOriginal).ToLocalTime().ToString();
+                    friendlyFieldValue = DateTime.Parse(fieldValueString).ToLocalTime().ToString();
 
                     dynamic fieldDateTime = item.ParentList.Fields.GetField(fieldTitle);
                     if (fieldDateTime.DisplayFormat.ToString() == "DateOnly")
                     {
-                        changedFieldValue = Regex.Replace(changedFieldValue, @"\s[\d:]+$", "");
+                        friendlyFieldValue = Regex.Replace(friendlyFieldValue, @"\s[\d:]+$", "");
                     }
                     
                     break;
+                case "Double":
+                    friendlyFieldValue = Regex.Replace(fieldValueString, @"\.", ",");
+                    break;
                 case "SPFieldUserValueCollection":
-                    List<SPPrincipal> fieldPrincipals = item.GetUsersFromUsersFields(new List<string> { fieldTitle });
-                    changedFieldValue = String.Join(", ", SPCommon.GetUserNames(fieldPrincipals).ToArray());
+                    List<SPPrincipal> fieldPrincipals = item.GetUsersFromUsersFields(new List<string> { fieldTitle }, valueAfter);
+                    friendlyFieldValue = String.Join(", ", SPCommon.GetUserNames(fieldPrincipals).ToArray());
                     break;
                 case "SPFieldUserValue":
-                    changedFieldValue = item.Web.EnsureUser(new SPFieldUserValue(item.Web, changedFieldValueOriginal.ToString()).LookupValue).Name;
+                    friendlyFieldValue = item.Web.EnsureUser(new SPFieldUserValue(item.Web, fieldValueString.ToString()).LookupValue).Name;
                     break;
                 default:
-                    changedFieldValue = changedFieldValueOriginal;
+                    friendlyFieldValue = fieldValueString;
                     break;
             }
 
-            return changedFieldValue;
+            return friendlyFieldValue;
         }
     }
 }

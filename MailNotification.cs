@@ -56,8 +56,9 @@ namespace ListsNotifications
 
                 if (item.FieldIsChanged(fieldTitle))
                 {
-                    string changedFieldValue = item.GetFriendlyChangedFieldValue(fieldTitle);
-                    ChangedFieldsBlock += String.Format("<p>{0}: {1}</p>", fieldTitle, changedFieldValue);
+                    string beforeFieldValue = item.GetFriendlyFieldValue(fieldTitle, false);
+                    string afterFieldValue = item.GetFriendlyFieldValue(fieldTitle);
+                    ChangedFieldsBlock += String.Format("<p>{0}: <strike>{1}</strike> {2}</p>", fieldTitle, beforeFieldValue, afterFieldValue);
                 }
             }
 

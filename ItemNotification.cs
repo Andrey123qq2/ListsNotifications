@@ -29,6 +29,11 @@ namespace ListsNotifications
                     {
                         item = properties.ListItem;
                     }
+                    if (item == null)
+                    {
+                        return;
+                    }
+
                     item.SetEventProperties(properties);
 
                     ConfigParams ERConfig = new ConfigParams(item.ParentList);
