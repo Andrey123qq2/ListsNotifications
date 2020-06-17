@@ -44,6 +44,31 @@ namespace ListsNotifications.EventReceiver1
             }
         }
 
+        public override void ItemAttachmentAdding(SPItemEventProperties properties)
+        {
+            base.ItemAttachmentAdded(properties);
+            try
+            {
+                base.EventFiringEnabled = false;
+
+                if (!ItemNotification.IsUpdatingBySystem(properties) && !ItemNotification.IsJustCreated(properties))
+                {
+                    SPSecurity.RunWithElevatedPrivileges(delegate ()
+                    {
+                        ItemNotification.Notifications(properties);
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("CustomEventReceiver, ItemAttachmentAdding(): Exception: [" + ex.ToString() + "].");
+            }
+            finally
+            {
+                base.EventFiringEnabled = true;
+            }
+        }
+
 
     }
 }

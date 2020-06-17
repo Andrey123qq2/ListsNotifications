@@ -18,18 +18,36 @@ namespace ListsNotifications
         public readonly string body;
         public readonly string to;
         //public readonly string cc;
-        //public readonly string bcc;
+        public readonly string bcc;
         public readonly string subject;
         private SPListItem listItem;
         StringDictionary headers;
 
-        public MailNotification(SPListItem item, List<string> fields, List<SPPrincipal> principals)
+        public MailNotification(SPListItem item, List<SPPrincipal> principals, List<string> fields, List<string> bccMails)
         {
             listItem = item;
             body = CreateBody(item, fields);
             to = String.Join(",", SPCommon.GetUserMails(principals) );
-            subject = String.Format("{0}: элемент изменен", item.Title);
+            bcc = String.Join(",", bccMails);
+            subject = CreateSubject(item);
             headers = GetHeaders();
+        }
+
+        private string CreateSubject(SPListItem item)
+        {
+            string mailSubject;
+            string subjectMode;
+
+            if (!item.GetEventProperties().EventType.ToString().Contains("Attachment"))
+            {
+                subjectMode = "элемент изменен";
+            }
+            else {
+                subjectMode = "добавлено вложение";
+            }
+            mailSubject = String.Format("{0}: {1}", item.Title, subjectMode);
+
+            return mailSubject;
         }
 
         private StringDictionary GetHeaders()
@@ -37,9 +55,8 @@ namespace ListsNotifications
             StringDictionary mailHeaders = new StringDictionary(); ;
             mailHeaders.Add("to", to);
             //mailHeaders.Add("cc", cc);
-            //mailHeaders.Add("bcc", bcc);
+            mailHeaders.Add("bcc", bcc);
             mailHeaders.Add("subject", subject);
-
             mailHeaders.Add("content-type", "text/html");
             return mailHeaders;
         }
@@ -47,19 +64,29 @@ namespace ListsNotifications
         private string GetChangedFieldsBlock(SPListItem item, List<string> fields)
         {
             string ChangedFieldsBlock = "";
-            foreach (string fieldTitle in fields)
-            {
-                if (!item.ParentList.Fields.ContainsField(fieldTitle))
-                {
-                    continue;
-                }
 
-                if (item.FieldIsChanged(fieldTitle))
+            if (!item.GetEventProperties().EventType.ToString().Contains("Attachment"))
+            {
+                foreach (string fieldTitle in fields)
                 {
-                    string beforeFieldValue = item.GetFriendlyFieldValue(fieldTitle, false);
-                    string afterFieldValue = item.GetFriendlyFieldValue(fieldTitle);
-                    ChangedFieldsBlock += String.Format("<p>{0}: <strike>{1}</strike> {2}</p>", fieldTitle, beforeFieldValue, afterFieldValue);
+                    if (!item.ParentList.Fields.ContainsField(fieldTitle))
+                    {
+                        continue;
+                    }
+
+                    if (item.FieldIsChanged(fieldTitle))
+                    {
+                        string beforeFieldValue = item.GetFriendlyFieldValue(fieldTitle, false);
+                        string afterFieldValue = item.GetFriendlyFieldValue(fieldTitle);
+                        ChangedFieldsBlock += String.Format("<p>{0}: <strike>{1}</strike> {2}</p>", fieldTitle, beforeFieldValue, afterFieldValue);
+                    }
                 }
+            }
+            else
+            {
+                string attachmentUrl = item.Web.Url + "/" + item.GetEventProperties().AfterUrl.ToString();
+                string attachmentName = Regex.Replace(attachmentUrl, @"^.*\/", "");
+                ChangedFieldsBlock += String.Format("<p>{0}: <a href=\"{1}\">{2}</a></p>", "New Attachment", attachmentUrl, attachmentName);
             }
 
             return ChangedFieldsBlock;

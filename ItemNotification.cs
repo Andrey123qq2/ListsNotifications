@@ -40,23 +40,37 @@ namespace ListsNotifications
 
                     List<SPPrincipal> NotifyUsers = item.GetUsersFromUsersFields(ERConfig.UserNotifyFields);
                     
-                    MailNotification mailToNotify = new MailNotification(item, ERConfig.TrackFields, NotifyUsers);
+                    MailNotification mailToNotify = new MailNotification(item, NotifyUsers, ERConfig.TrackFields, ERConfig.MailBcc);
                     mailToNotify.SendMail();
                 }
             }
         }
         public static bool IsUpdatingBySystem(SPItemEventProperties properties)
+        {
+            if (properties.UserDisplayName == "app@sharepoint" || properties.UserDisplayName.Contains("svc_"))
             {
-                if (properties.UserDisplayName == "app@sharepoint" || properties.UserDisplayName.Contains("svc_"))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return true;
             }
+            else
+            {
+                return false;
+            }
+        }
+
+        public static bool IsJustCreated(SPItemEventProperties properties)
+        {
+            DateTime itemTimeCreated = (DateTime)properties.ListItem["Created"];
+            DateTime itemTimeModified = (DateTime)properties.ListItem["Modified"];
+            Double diffInSeconds = (itemTimeModified - itemTimeCreated).TotalSeconds;
+
+            if (diffInSeconds < 2)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
-
-
 }

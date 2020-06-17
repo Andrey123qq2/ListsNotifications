@@ -290,8 +290,8 @@ namespace ListsNotifications
                     break;
                 case "SPFieldUserValue":
                     FieldValueBeforeToString = (FieldValueBefore != null) ? new SPFieldUserValue(item.Web, FieldValueBefore.ToString()).User.LoginName : "";
-                    FieldValueAfterToString = (FieldValueAfter != null) ? new SPFieldUserValue(item.Web, FieldValueAfter.ToString()).LookupValue : "";
-                    if (FieldValueAfter != null && FieldValueAfterToString == "")
+                    FieldValueAfterToString = (FieldValueAfter != null && FieldValueAfter != "") ? new SPFieldUserValue(item.Web, FieldValueAfter.ToString()).LookupValue : "";
+                    if (FieldValueAfter != null && FieldValueAfter != "" && FieldValueAfterToString == "")
                     {
                         FieldValueAfterToString = new SPFieldUserValue(item.Web, FieldValueAfter.ToString()).User.LoginName;
                     }

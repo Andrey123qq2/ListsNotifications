@@ -42,5 +42,10 @@ namespace ListsNotifications
                 }
             }
         }
+
+        public void SetPropertiesAttribute()
+        {
+            
+        }
     }
 }

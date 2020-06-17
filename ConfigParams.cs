@@ -14,16 +14,19 @@ namespace ListsNotifications
     {
         public List<string> TrackFields;
         public List<string> UserNotifyFields;
+		public List<string> MailBcc;
 
-        public readonly string CODE_FIELD_NAME = "Підрозділ";
+		public readonly string CODE_FIELD_NAME = "Підрозділ";
         public readonly string CODE_FIELD_SUFFIX = "_сотрудники";
 
         private readonly List<string> USER_NOTIFY_FIELDS = new List<string> { "Постановщик", "Author", "Заказчик", "Редакторы", "Рабочая группа" };
         private readonly List<string> TRACK_FIELDS = new List<string> { };
-        private readonly string LIST_PROPERTY_USER_FIELDS = "er_notif_user_fields";
+		private readonly List<string> MAIL_BCC = new List<string> { };
+		private readonly string LIST_PROPERTY_USER_FIELDS = "er_notif_user_fields";
         private readonly string LIST_PROPERTY_TRACK_FIELDS = "er_notif_track_fields";
+		private readonly string LIST_PROPERTY_MAIL_BCC = "er_notif_mail_bcc";
 
-        public static string MAIL_BODY_TEMPLATE = @"
+		public static string MAIL_BODY_TEMPLATE = @"
 <!DOCTYPE html>
 <html>
 	<style>
@@ -57,6 +60,7 @@ namespace ListsNotifications
         {
             this.SetListAttribute(List, out TrackFields, TRACK_FIELDS, LIST_PROPERTY_TRACK_FIELDS);
             this.SetListAttribute(List, out UserNotifyFields, USER_NOTIFY_FIELDS, LIST_PROPERTY_USER_FIELDS);
-        }
+			this.SetListAttribute(List, out MailBcc, MAIL_BCC, LIST_PROPERTY_MAIL_BCC);
+		}
     }
 }

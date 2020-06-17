@@ -9,4 +9,13 @@
         <SequenceNumber>10000</SequenceNumber>
       </Receiver>
   </Receivers>
+  <Receivers ListTemplateId="100">
+    <Receiver>
+      <Name>EventReceiver1ItemAttachmentAdding</Name>
+      <Type>ItemAttachmentAdding</Type>
+      <Assembly>$SharePoint.Project.AssemblyFullName$</Assembly>
+      <Class>ListsNotifications.EventReceiver1.EventReceiver1</Class>
+      <SequenceNumber>10000</SequenceNumber>
+    </Receiver>
+  </Receivers>
 </Elements>
