@@ -47,7 +47,8 @@ namespace ListsNotifications
         }
         public static bool IsUpdatingBySystem(SPItemEventProperties properties)
         {
-            if (properties.UserDisplayName == "app@sharepoint" || properties.UserDisplayName.Contains("svc_"))
+            //if (properties.UserDisplayName == "app@sharepoint" || properties.UserDisplayName.Contains("svc_"))
+            if (properties.UserDisplayName.Contains("svc_"))
             {
                 return true;
             }
