@@ -10,7 +10,7 @@ using Microsoft.CSharp.RuntimeBinder;
 
 namespace ListsNotifications
 {
-    class Config
+    public class ERItemConfig
     {
         public void SetStringAttribute(SPList List, out string ConfAttribute, string ListPropertyName)
         {

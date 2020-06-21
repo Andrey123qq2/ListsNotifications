@@ -13,20 +13,8 @@ using Microsoft.Office.Server.UserProfiles;
 
 namespace ListsNotifications
 {
-    public static class SPListItemExtension
+    public static class ERItemSPExtension
     {
-        private static SPItemEventProperties eventProperties;
-
-        public static SPItemEventProperties GetEventProperties(this SPListItem item)
-        {
-            return eventProperties;
-        }
-
-        public static void SetEventProperties(this SPListItem item, SPItemEventProperties properties)
-        {
-            eventProperties = properties;
-        }
-
         public static List<SPPrincipal> GetAssignmentsPrincipals(SPRoleAssignmentCollection assignments)
         {
             List<SPPrincipal> actualAssignees = new List<SPPrincipal>();
@@ -70,7 +58,7 @@ namespace ListsNotifications
             return extraAssignees;
         }
 
-        public static string[] GetCodesFromDeptCodeField(this SPListItem item, string DeptCodeFieldName)
+        public static string[] GetCodesFromDeptCodeField(this ERItem item, string DeptCodeFieldName)
         {
             dynamic CodeNameValues;
             string[] CodeNames = new String[] { };
@@ -101,12 +89,12 @@ namespace ListsNotifications
             return CodeNames;
         }
 
-        public static List<SPPrincipal> GetGroupsByDeptCodeField(this SPListItem item, string DeptCodeFieldName, string GroupSuffix)
+        public static List<SPPrincipal> GetGroupsByDeptCodeField(this ERItem item, string DeptCodeFieldName, string GroupSuffix)
         {
             List<SPPrincipal> codeFieldGroups = new List<SPPrincipal>();
             string[] codeNames;
 
-            if (!item.ParentList.Fields.ContainsField(DeptCodeFieldName))
+            if (!item.listItem.ParentList.Fields.ContainsField(DeptCodeFieldName))
             {
                 return codeFieldGroups;
             }
@@ -119,7 +107,7 @@ namespace ListsNotifications
                 SPPrincipal CodeGroup;
                 try
                 {
-                    CodeGroup = item.ParentList.ParentWeb.SiteGroups.GetByName(groupName);
+                    CodeGroup = item.listItem.ParentList.ParentWeb.SiteGroups.GetByName(groupName);
                 }
                 catch
                 {
@@ -131,16 +119,16 @@ namespace ListsNotifications
             return codeFieldGroups;
         }
 
-        public static List<SPPrincipal> GetUsersFromUsersFields(this SPListItem item, List<string> usersFields, bool valueAfter = true )
+        public static List<SPPrincipal> GetUsersFromUsersFields(this ERItem item, List<string> usersFields, bool valueAfter = true )
         {
             List<SPPrincipal> fieldsPrincipals = new List<SPPrincipal>();
             string userLogin;
             dynamic fieldValue;
-            SPUser svcUserForEmptyResponse = item.Web.EnsureUser("app@sharepoint");
+            SPUser svcUserForEmptyResponse = item.listItem.Web.EnsureUser("app@sharepoint");
 
             foreach (string fieldTitle in usersFields)
             {
-                if (!item.ParentList.Fields.ContainsField(fieldTitle))
+                if (!item.listItem.ParentList.Fields.ContainsField(fieldTitle))
                 {
                     continue;
                 }
@@ -153,12 +141,12 @@ namespace ListsNotifications
 
                 if ((fieldValue.GetType().Name == "Int32") || (fieldValue.GetType().Name == "String" && Regex.IsMatch(fieldValue, @"^\d+$")))
                 {
-                    SPPrincipal principal = item.ParentList.ParentWeb.SiteUsers.GetByID(int.Parse(fieldValue.ToString()));
+                    SPPrincipal principal = item.listItem.ParentList.ParentWeb.SiteUsers.GetByID(int.Parse(fieldValue.ToString()));
                     fieldsPrincipals.Add(principal);
                 }
                 else
                 {
-                    SPFieldUserValueCollection fieldValueUsers = new SPFieldUserValueCollection(item.Web, fieldValue.ToString());
+                    SPFieldUserValueCollection fieldValueUsers = new SPFieldUserValueCollection(item.listItem.Web, fieldValue.ToString());
                     foreach (SPFieldUserValue fieldUser in fieldValueUsers)
                     {
                         SPPrincipal principal;
@@ -175,11 +163,11 @@ namespace ListsNotifications
 
                         try
                         {
-                            principal = item.Web.EnsureUser(userLogin);
+                            principal = item.listItem.Web.EnsureUser(userLogin);
                         }
                         catch
                         {
-                            principal = item.ParentList.ParentWeb.SiteGroups.GetByName(userLogin);
+                            principal = item.listItem.ParentList.ParentWeb.SiteGroups.GetByName(userLogin);
                         }
 
                         fieldsPrincipals.Add(principal);
@@ -195,7 +183,8 @@ namespace ListsNotifications
             return fieldsPrincipals;
         }
 
-        public static dynamic GetFieldValue(this SPListItem item, string fieldTitle, bool valueAfter = true)
+        //TO ERItem !!
+        public static dynamic GetFieldValue(this ERItem item, string fieldTitle, bool valueAfter = true)
         {
             dynamic ChangedFieldValue;
             string fieldInternalName;
@@ -203,8 +192,8 @@ namespace ListsNotifications
 
             try
             {
-                fieldInternalName = item.ParentList.Fields[fieldTitle].InternalName;
-                fieldStaticName = item.ParentList.Fields[fieldTitle].StaticName;
+                fieldInternalName = item.listItem.ParentList.Fields[fieldTitle].InternalName;
+                fieldStaticName = item.listItem.ParentList.Fields[fieldTitle].StaticName;
             }
             catch
             {
@@ -212,38 +201,39 @@ namespace ListsNotifications
                 fieldStaticName = fieldTitle;
             }
 
-            if (SPCommon.IsEventIng(eventProperties) && valueAfter)
+            if (SPCommon.IsEventIng(item.eventProperties) && valueAfter)
             {
-                ChangedFieldValue = eventProperties.AfterProperties[fieldInternalName];
+                ChangedFieldValue = item.eventProperties.AfterProperties[fieldInternalName];
 
                 if (ChangedFieldValue == null)
                 {
-                    ChangedFieldValue = eventProperties.AfterProperties[fieldTitle];
+                    ChangedFieldValue = item.eventProperties.AfterProperties[fieldTitle];
                     if (ChangedFieldValue == null)
                     {
-                        ChangedFieldValue = eventProperties.AfterProperties[fieldStaticName];
+                        ChangedFieldValue = item.eventProperties.AfterProperties[fieldStaticName];
                         if (ChangedFieldValue == null)
                         {
-                            ChangedFieldValue = item[fieldTitle];
+                            ChangedFieldValue = item.listItem[fieldTitle];
                         }
                     }
                 }
             }
             else
             {
-                ChangedFieldValue = item[fieldInternalName];
+                ChangedFieldValue = item.listItem[fieldInternalName];
             }
 
             return ChangedFieldValue;
         }
 
-        public static bool UserFieldIsChanged(this SPListItem item, string fieldTitle)
+        //TO ERItem !!
+        public static bool UserFieldIsChanged(this ERItem item, string fieldTitle)
         {
-            SPFieldUserValue assignedToFieldvalueBefore = new SPFieldUserValue(item.Web, item[fieldTitle].ToString());
+            SPFieldUserValue assignedToFieldvalueBefore = new SPFieldUserValue(item.listItem.Web, item.listItem[fieldTitle].ToString());
             String assignedToLoginBefore = assignedToFieldvalueBefore.User.LoginName;
             assignedToLoginBefore = assignedToLoginBefore.Substring(assignedToLoginBefore.IndexOf("\\") + 1);
 
-            SPFieldUserValue assignedToFieldvalueAfter = new SPFieldUserValue(item.Web, eventProperties.AfterProperties[fieldTitle].ToString());
+            SPFieldUserValue assignedToFieldvalueAfter = new SPFieldUserValue(item.listItem.Web, item.eventProperties.AfterProperties[fieldTitle].ToString());
             String assignedToLoginAfter = assignedToFieldvalueAfter.LookupValue;
             assignedToLoginAfter = assignedToLoginAfter.Substring(assignedToLoginAfter.IndexOf("\\") + 1);
 
@@ -257,17 +247,17 @@ namespace ListsNotifications
             }
         }
 
-        public static bool FieldIsChanged(this SPListItem item, string fieldTitle)
+        public static bool FieldIsChanged(this ERItem item, string fieldTitle)
         {
             dynamic FieldValueAfter = item.GetFieldValue(fieldTitle);
-            dynamic FieldValueBefore = item[fieldTitle];
+            dynamic FieldValueBefore = item.listItem[fieldTitle];
             string FieldValueBeforeToString;
             string FieldValueAfterToString;
 
-            switch (item.ParentList.Fields.GetField(fieldTitle).FieldValueType.Name)
+            switch (item.listItem.ParentList.Fields.GetField(fieldTitle).FieldValueType.Name)
             {
                 case "DateTime":
-                    dynamic fieldDateTime = item.ParentList.Fields.GetField(fieldTitle);
+                    dynamic fieldDateTime = item.listItem.ParentList.Fields.GetField(fieldTitle);
                     if (fieldDateTime.DisplayFormat.ToString() == "DateOnly" && Regex.IsMatch(FieldValueAfter, @"T00:00:00Z$"))
                     {
                         FieldValueBefore = (FieldValueBefore != null) ? FieldValueBefore.ToLocalTime() : null;
@@ -284,16 +274,16 @@ namespace ListsNotifications
                 case "SPFieldUserValueCollection":
                     FieldValueBeforeToString = (FieldValueBefore != null) ? FieldValueBefore.ToString() : "";
                     SPFieldUserValue[] FieldValueBeforeArr = (FieldValueBefore != null) ? FieldValueBefore.ToArray() : new SPFieldUserValue[] { };
-                    SPFieldUserValue[] FieldValueAfterArr = (FieldValueAfter != null) ? (new SPFieldUserValueCollection(item.Web, FieldValueAfter.ToString()) ).ToArray() : new SPFieldUserValue[] { };
+                    SPFieldUserValue[] FieldValueAfterArr = (FieldValueAfter != null) ? (new SPFieldUserValueCollection(item.listItem.Web, FieldValueAfter.ToString()) ).ToArray() : new SPFieldUserValue[] { };
                     FieldValueBeforeToString = (FieldValueBeforeArr.Length > 0) ? String.Join(",", Array.ConvertAll(FieldValueBeforeArr, p => p.LookupId)) : "";
                     FieldValueAfterToString = (FieldValueAfterArr.Length > 0) ? String.Join(",", Array.ConvertAll(FieldValueAfterArr, p => p.LookupId)) : "";
                     break;
                 case "SPFieldUserValue":
-                    FieldValueBeforeToString = (FieldValueBefore != null) ? new SPFieldUserValue(item.Web, FieldValueBefore.ToString()).User.LoginName : "";
-                    FieldValueAfterToString = (FieldValueAfter != null && FieldValueAfter != "") ? new SPFieldUserValue(item.Web, FieldValueAfter.ToString()).LookupValue : "";
+                    FieldValueBeforeToString = (FieldValueBefore != null) ? new SPFieldUserValue(item.listItem.Web, FieldValueBefore.ToString()).User.LoginName : "";
+                    FieldValueAfterToString = (FieldValueAfter != null && FieldValueAfter != "") ? new SPFieldUserValue(item.listItem.Web, FieldValueAfter.ToString()).LookupValue : "";
                     if (FieldValueAfter != null && FieldValueAfter != "" && FieldValueAfterToString == "")
                     {
-                        FieldValueAfterToString = new SPFieldUserValue(item.Web, FieldValueAfter.ToString()).User.LoginName;
+                        FieldValueAfterToString = new SPFieldUserValue(item.listItem.Web, FieldValueAfter.ToString()).User.LoginName;
                     }
                     break;
                 default:
@@ -314,10 +304,10 @@ namespace ListsNotifications
         }
 
 
-        public static List<SPPrincipal> GetRelatedItemUsers(this SPListItem item)
+        public static List<SPPrincipal> GetRelatedItemUsers(this ERItem item)
         {
             List<SPPrincipal> arrRealtedItemUsers = new List<SPPrincipal>();
-            dynamic relatedItems = item[SPBuiltInFieldId.RelatedItems];
+            dynamic relatedItems = item.listItem[SPBuiltInFieldId.RelatedItems];
             if (relatedItems == null)
             {
                 return arrRealtedItemUsers;
@@ -333,7 +323,7 @@ namespace ListsNotifications
                 String relatedlistIdString = relItem["ListId"];
                 Guid relatedlistId = new Guid(relatedlistIdString);
 
-                SPList relatedList = item.Web.Lists[relatedlistId];
+                SPList relatedList = item.listItem.Web.Lists[relatedlistId];
                 SPListItem relatedItem = relatedList.GetItemById(relatedItemId);
 
                 arrRelatedListUserFields = relatedList.GetListUserFields();
@@ -373,13 +363,13 @@ namespace ListsNotifications
             return itemUsers;
         }
 
-        public static string GetItemFullUrl(this SPListItem item)
+        public static string GetItemFullUrl(this SPListItem itemSP)
         {
-            string itemFullUrl = item.Web.Site.Url + item.ParentList.DefaultDisplayFormUrl + "?ID=" + item.ID;
+            string itemFullUrl = itemSP.Web.Site.Url + itemSP.ParentList.DefaultDisplayFormUrl + "?ID=" + itemSP.ID;
             return itemFullUrl;
         }
 
-        public static string GetFriendlyFieldValue(this SPListItem item, string fieldTitle, bool valueAfter = true)
+        public static string GetFriendlyFieldValue(this ERItem item, string fieldTitle, bool valueAfter = true)
         {
             string friendlyFieldValue;
             dynamic fieldValue = item.GetFieldValue(fieldTitle, valueAfter);
@@ -399,12 +389,12 @@ namespace ListsNotifications
                 return "-";
             }
 
-            switch (item.ParentList.Fields.GetField(fieldTitle).FieldValueType.Name)
+            switch (item.listItem.ParentList.Fields.GetField(fieldTitle).FieldValueType.Name)
             {
                 case "DateTime":
                     friendlyFieldValue = DateTime.Parse(fieldValueString).ToLocalTime().ToString();
 
-                    dynamic fieldDateTime = item.ParentList.Fields.GetField(fieldTitle);
+                    dynamic fieldDateTime = item.listItem.ParentList.Fields.GetField(fieldTitle);
                     if (fieldDateTime.DisplayFormat.ToString() == "DateOnly")
                     {
                         friendlyFieldValue = Regex.Replace(friendlyFieldValue, @"\s[\d:]+$", "");
@@ -419,7 +409,7 @@ namespace ListsNotifications
                     friendlyFieldValue = String.Join(", ", SPCommon.GetUserNames(fieldPrincipals).ToArray());
                     break;
                 case "SPFieldUserValue":
-                    friendlyFieldValue = item.Web.EnsureUser(new SPFieldUserValue(item.Web, fieldValueString.ToString()).LookupValue).Name;
+                    friendlyFieldValue = item.listItem.Web.EnsureUser(new SPFieldUserValue(item.listItem.Web, fieldValueString.ToString()).LookupValue).Name;
                     break;
                 default:
                     friendlyFieldValue = fieldValueString;

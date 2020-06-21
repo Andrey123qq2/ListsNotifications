@@ -10,7 +10,7 @@ using Microsoft.CSharp.RuntimeBinder;
 
 namespace ListsNotifications
 {
-    class ConfigParams : Config
+	public class ERItemConfigParams : ERItemConfig
     {
         public List<string> TrackFields;
         public List<string> UserNotifyFields;
@@ -19,12 +19,12 @@ namespace ListsNotifications
 		public readonly string CODE_FIELD_NAME = "Підрозділ";
         public readonly string CODE_FIELD_SUFFIX = "_сотрудники";
 
-        private readonly List<string> USER_NOTIFY_FIELDS = new List<string> { "Постановщик", "Author", "Заказчик", "Редакторы", "Рабочая группа" };
-        private readonly List<string> TRACK_FIELDS = new List<string> { };
-		private readonly List<string> MAIL_BCC = new List<string> { };
-		private readonly string LIST_PROPERTY_USER_FIELDS = "er_notif_user_fields";
-        private readonly string LIST_PROPERTY_TRACK_FIELDS = "er_notif_track_fields";
-		private readonly string LIST_PROPERTY_MAIL_BCC = "er_notif_mail_bcc";
+        public readonly List<string> USER_NOTIFY_FIELDS = new List<string> { "Постановщик", "Author", "Заказчик", "Редакторы", "Рабочая группа" };
+		public readonly List<string> TRACK_FIELDS = new List<string> { };
+		public readonly List<string> MAIL_BCC = new List<string> { };
+		public readonly string LIST_PROPERTY_USER_FIELDS = "er_notif_user_fields";
+		public readonly string LIST_PROPERTY_TRACK_FIELDS = "er_notif_track_fields";
+		public readonly string LIST_PROPERTY_MAIL_BCC = "er_notif_mail_bcc";
 
 		public static string MAIL_BODY_TEMPLATE = @"
 <!DOCTYPE html>
@@ -56,11 +56,12 @@ namespace ListsNotifications
 </html>
 ";
 
-        public ConfigParams(SPList List)
-        {
-            this.SetListAttribute(List, out TrackFields, TRACK_FIELDS, LIST_PROPERTY_TRACK_FIELDS);
-            this.SetListAttribute(List, out UserNotifyFields, USER_NOTIFY_FIELDS, LIST_PROPERTY_USER_FIELDS);
+		//public ERItemConfigParams(SPList List)
+		public void SetConfigAttributes(SPList List)
+		{
+			this.SetListAttribute(List, out TrackFields, TRACK_FIELDS, LIST_PROPERTY_TRACK_FIELDS);
+			this.SetListAttribute(List, out UserNotifyFields, USER_NOTIFY_FIELDS, LIST_PROPERTY_USER_FIELDS);
 			this.SetListAttribute(List, out MailBcc, MAIL_BCC, LIST_PROPERTY_MAIL_BCC);
 		}
-    }
+	}
 }

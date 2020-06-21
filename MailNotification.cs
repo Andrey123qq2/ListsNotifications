@@ -20,32 +20,32 @@ namespace ListsNotifications
         //public readonly string cc;
         public readonly string bcc;
         public readonly string subject;
-        private SPListItem listItem;
         StringDictionary headers;
 
-        public MailNotification(SPListItem item, List<SPPrincipal> principals, List<string> fields, List<string> bccMails)
+        public MailNotification(ERItem item)
         {
-            listItem = item;
-            body = CreateBody(item, fields);
+            List<SPPrincipal> principals = item.GetUsersFromUsersFields(item.UserNotifyFields); ;
+            //listItem = item;
+            body = CreateBody(item, item.TrackFields);
             to = String.Join(",", SPCommon.GetUserMails(principals) );
-            bcc = String.Join(",", bccMails);
+            bcc = String.Join(",", item.MailBcc);
             subject = CreateSubject(item);
             headers = GetHeaders();
         }
 
-        private string CreateSubject(SPListItem item)
+        private string CreateSubject(ERItem item)
         {
             string mailSubject;
             string subjectMode;
 
-            if (!item.GetEventProperties().EventType.ToString().Contains("Attachment"))
+            if (!item.eventProperties.EventType.ToString().Contains("Attachment"))
             {
                 subjectMode = "элемент изменен";
             }
             else {
                 subjectMode = "добавлено вложение";
             }
-            mailSubject = String.Format("{0}: {1}", item.Title, subjectMode);
+            mailSubject = String.Format("{0}: {1}", item.listItem.Title, subjectMode);
 
             return mailSubject;
         }
@@ -61,15 +61,15 @@ namespace ListsNotifications
             return mailHeaders;
         }
 
-        private string GetChangedFieldsBlock(SPListItem item, List<string> fields)
+        private string GetChangedFieldsBlock(ERItem item, List<string> fields)
         {
             string ChangedFieldsBlock = "";
 
-            if (!item.GetEventProperties().EventType.ToString().Contains("Attachment"))
+            if (!item.eventProperties.EventType.ToString().Contains("Attachment"))
             {
                 foreach (string fieldTitle in fields)
                 {
-                    if (!item.ParentList.Fields.ContainsField(fieldTitle))
+                    if (!item.listItem.ParentList.Fields.ContainsField(fieldTitle))
                     {
                         continue;
                     }
@@ -84,7 +84,7 @@ namespace ListsNotifications
             }
             else
             {
-                string attachmentUrl = item.Web.Url + "/" + item.GetEventProperties().AfterUrl.ToString();
+                string attachmentUrl = item.listItem.Web.Url + "/" + item.eventProperties.AfterUrl.ToString();
                 string attachmentName = Regex.Replace(attachmentUrl, @"^.*\/", "");
                 ChangedFieldsBlock += String.Format("<p>{0}: <a href=\"{1}\">{2}</a></p>", "New Attachment", attachmentUrl, attachmentName);
             }
@@ -92,7 +92,7 @@ namespace ListsNotifications
             return ChangedFieldsBlock;
         }
 
-        private string CreateBody(SPListItem item, List<string> fields)
+        private string CreateBody(ERItem item, List<string> fields)
         {
             string ChangedFieldsBlock;
             string ModifiedByBlock;
@@ -109,21 +109,23 @@ namespace ListsNotifications
             }
             else
             {
-                itemUrlBlock = String.Format("<p>Элемент: <a href='{0}'>{1}</a></p>", item.GetItemFullUrl(), item.Title);
+                itemUrlBlock = String.Format("<p>Элемент: <a href='{0}'>{1}</a></p>", item.listItem.GetItemFullUrl(), item.listItem.Title);
 
-                EditorDisplayName = item.GetEventProperties().UserDisplayName;
+                EditorDisplayName = item.eventProperties.UserDisplayName;
                 ModifiedByBlock = String.Format("<p>Кем изменено: {0}</p>", EditorDisplayName);
 
-                mailBodyString = String.Format(ConfigParams.MAIL_BODY_TEMPLATE, ChangedFieldsBlock, itemUrlBlock, ModifiedByBlock);
+                mailBodyString = String.Format(ERItemConfigParams.MAIL_BODY_TEMPLATE, ChangedFieldsBlock, itemUrlBlock, ModifiedByBlock);
             }
 
             return mailBodyString;
         }
 
-        public void SendMail()
+        public void SendMail(SPWeb web)
         {
             if (body != "" && to != "")
-            SPUtility.SendEmail(listItem.ParentList.ParentWeb, headers, body);
+            {
+                SPUtility.SendEmail(web, headers, body);
+            }
         }
     }
 }

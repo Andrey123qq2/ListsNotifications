@@ -70,5 +70,33 @@ namespace ListsNotifications
             bool isEventIng = properties.EventType.ToString().Contains("ing");
             return isEventIng;
         }
+
+        public static bool IsUpdatingBySystem(SPItemEventProperties properties)
+        {
+            if (properties.UserDisplayName == "app@sharepoint" || properties.UserDisplayName.Contains("svc_"))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public static bool IsJustCreated(SPItemEventProperties properties)
+        {
+            DateTime itemTimeCreated = (DateTime)properties.ListItem["Created"];
+            DateTime itemTimeModified = (DateTime)properties.ListItem["Modified"];
+            Double diffInSeconds = (itemTimeModified - itemTimeCreated).TotalSeconds;
+
+            if (diffInSeconds < 2)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

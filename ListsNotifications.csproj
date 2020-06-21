@@ -56,13 +56,14 @@
     <Reference Include="Microsoft.SharePoint.Client.ServerRuntime" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ERItem.cs" />
     <Compile Include="SPCommon.cs" />
     <Compile Include="MailNotification.cs" />
-    <Compile Include="ConfigParams.cs" />
+    <Compile Include="ERItemConfigParams.cs" />
     <Compile Include="SPListExtension.cs" />
-    <Compile Include="SPListItemExtension.cs" />
-    <Compile Include="Config.cs" />
-    <Compile Include="ItemNotification.cs" />
+    <Compile Include="ERItemSPExtension.cs" />
+    <Compile Include="ERItemConfig.cs" />
+    <Compile Include="MainInit.cs" />
     <Compile Include="EventReceiver1\EventReceiver1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

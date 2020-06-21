@@ -26,11 +26,11 @@ namespace ListsNotifications.EventReceiver1
             {
                 base.EventFiringEnabled = false;
 
-                if (!ItemNotification.IsUpdatingBySystem(properties))
+                if (!SPCommon.IsUpdatingBySystem(properties))
                 {
                     SPSecurity.RunWithElevatedPrivileges(delegate ()
                     {
-                        ItemNotification.Notifications(properties);
+                        MainInit.Notifications(properties);
                     });
                 }
             }
@@ -44,18 +44,18 @@ namespace ListsNotifications.EventReceiver1
             }
         }
 
-        public override void ItemAttachmentAdding(SPItemEventProperties properties)
+        public override void ItemAttachmentAdded(SPItemEventProperties properties)
         {
             base.ItemAttachmentAdded(properties);
             try
             {
                 base.EventFiringEnabled = false;
 
-                if (!ItemNotification.IsUpdatingBySystem(properties) && !ItemNotification.IsJustCreated(properties))
+                if (!SPCommon.IsUpdatingBySystem(properties) && !SPCommon.IsJustCreated(properties))
                 {
                     SPSecurity.RunWithElevatedPrivileges(delegate ()
                     {
-                        ItemNotification.Notifications(properties);
+                        MainInit.Notifications(properties);
                     });
                 }
             }
