@@ -15,49 +15,6 @@ namespace ListsNotifications
 {
     public static class ERItemSPExtension
     {
-        public static List<SPPrincipal> GetAssignmentsPrincipals(SPRoleAssignmentCollection assignments)
-        {
-            List<SPPrincipal> actualAssignees = new List<SPPrincipal>();
-
-            foreach (SPRoleAssignment assignment in assignments)
-            {
-                if (Regex.IsMatch(assignment.Member.Name, @"svc_|system"))
-                {
-                    continue;
-                }
-
-                foreach (SPRoleDefinition assignmentBinding in assignment.RoleDefinitionBindings)
-                {
-                    if (assignmentBinding.Name != "Ограниченный доступ")
-                    {
-                        actualAssignees.Add(assignment.Member);
-                    }
-                }
-            }
-            return actualAssignees;
-        }
-
-        public static List<SPPrincipal> GetExtraAssignees(this SPListItem item, List<SPPrincipal> principals)
-        {
-            List<SPPrincipal> extraAssignees = new List<SPPrincipal>();
-
-            List<SPPrincipal> listActualPrincipals = GetAssignmentsPrincipals(item.ParentList.RoleAssignments);
-            List<SPPrincipal> itemActualPrincipals = GetAssignmentsPrincipals(item.RoleAssignments);
-
-            List<string> listActualLogins = SPCommon.GetLoginsFromPrincipals(listActualPrincipals);
-            List<string> principalsLogins = SPCommon.GetLoginsFromPrincipals(principals);
-
-            foreach (SPPrincipal itemPrincipal in itemActualPrincipals)
-            {
-                if (!listActualLogins.Contains(itemPrincipal.LoginName) && !principalsLogins.Contains(itemPrincipal.LoginName))
-                {
-                    extraAssignees.Add(itemPrincipal);
-                }
-            }
-
-            return extraAssignees;
-        }
-
         public static string[] GetCodesFromDeptCodeField(this ERItem item, string DeptCodeFieldName)
         {
             dynamic CodeNameValues;
@@ -307,7 +264,20 @@ namespace ListsNotifications
         public static List<SPPrincipal> GetRelatedItemUsers(this ERItem item)
         {
             List<SPPrincipal> arrRealtedItemUsers = new List<SPPrincipal>();
-            dynamic relatedItems = item.listItem[SPBuiltInFieldId.RelatedItems];
+            dynamic relatedItems;
+            try
+            {
+                relatedItems = item.listItem[SPBuiltInFieldId.RelatedItems];
+                if (relatedItems == null)
+                {
+                    relatedItems = item.eventProperties.ListItem[SPBuiltInFieldId.RelatedItems];
+                }
+            }
+            catch
+            {
+                relatedItems = null;
+            }
+
             if (relatedItems == null)
             {
                 return arrRealtedItemUsers;
@@ -332,6 +302,7 @@ namespace ListsNotifications
             }
 
             return arrRealtedItemUsers;
+
         }
 
         public static List<SPUser> GetItemUsers(this SPListItem item, List<string> arrListUserFields)
@@ -346,7 +317,7 @@ namespace ListsNotifications
                 }
                 if (fieldUsers.GetType().Name == "String")
                 {
-                    int userId = Int16.Parse(fieldUsers.Substring(0, fieldUsers.IndexOf(";")));
+                    int userId = int.Parse(fieldUsers.Substring(0, fieldUsers.IndexOf(";")));
                     SPUser user = item.Web.SiteUsers.GetByID(userId);
                     itemUsers.Add(user);
                 }

@@ -16,8 +16,14 @@ namespace ListsNotifications
         {
             ERItem itemER = new ERItem(properties);
 
-            MailNotification mailToNotify = new MailNotification(itemER);
+            MailItem mailToNotify = new MailItem(itemER, itemER.TrackFields);
             mailToNotify.SendMail(itemER.listItem.ParentList.ParentWeb);
+
+            foreach (KeyValuePair<string, string> trackField in itemER.TrackFieldsSingleMail)
+            {
+                MailItem mailToNotifySingleField = new MailItem(itemER, new List<string> { trackField.Key }, trackField.Value, false);
+                mailToNotifySingleField.SendMail(itemER.listItem.ParentList.ParentWeb);
+            }
         }
     }
 }

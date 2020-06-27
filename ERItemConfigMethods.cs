@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Security.Permissions;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Utilities;
@@ -10,9 +11,9 @@ using Microsoft.CSharp.RuntimeBinder;
 
 namespace ListsNotifications
 {
-    public class ERItemConfig
+    public class ERItemConfigMethods
     {
-        public void SetStringAttribute(SPList List, out string ConfAttribute, string ListPropertyName)
+        public void SetAttribute(SPList List, out string ConfAttribute, string ListPropertyName)
         {
             ConfAttribute = "";
 
@@ -27,7 +28,7 @@ namespace ListsNotifications
             }
         }
 
-        public void SetListAttribute(SPList List, out List<string> ConfAttribute, List<string> Fields, string ListPropertyName)
+        public void SetAttribute(SPList List, out List<string> ConfAttribute, List<string> Fields, string ListPropertyName)
         {
             ConfAttribute = new List<string>();
             ConfAttribute.AddRange(Fields);
@@ -43,9 +44,24 @@ namespace ListsNotifications
             }
         }
 
-        public void SetPropertiesAttribute()
+        public void SetAttribute(SPList List, out Dictionary<string, string> ConfAttribute, string ListPropertyName)
         {
-            
+            ConfAttribute = new Dictionary<string, string>();
+
+            Hashtable ListRootFolderProperties = List.RootFolder.Properties;
+            if (ListRootFolderProperties.ContainsKey(ListPropertyName))
+            {
+                string listPropertyValue = ListRootFolderProperties[ListPropertyName].ToString();
+                if (listPropertyValue != "")
+                {
+                    string[] propertyValues = listPropertyValue.Split(',');
+                    foreach (string value in propertyValues)
+                    {
+                        string[] valueParts = value.Split('=');
+                        ConfAttribute.Add(valueParts[0], valueParts[1]);
+                    }
+                }
+            }
         }
     }
 }

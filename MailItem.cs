@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 
 namespace ListsNotifications
 {
-    class MailNotification
+    class MailItem
     {
         public readonly string body;
         public readonly string to;
@@ -21,30 +21,34 @@ namespace ListsNotifications
         public readonly string bcc;
         public readonly string subject;
         StringDictionary headers;
+        private bool BeforeValues;
 
-        public MailNotification(ERItem item)
+        public MailItem(ERItem item, List<string> fieldsToTrack, string mailSubjectMode = "", bool FieldsBeforeValue = true)
         {
-            List<SPPrincipal> principals = item.GetUsersFromUsersFields(item.UserNotifyFields); ;
-            //listItem = item;
-            body = CreateBody(item, item.TrackFields);
-            to = String.Join(",", SPCommon.GetUserMails(principals) );
+            BeforeValues = FieldsBeforeValue;
+            body = CreateBody(item, fieldsToTrack);
+            to = String.Join(",", item.UserNotifyFieldsMails);
             bcc = String.Join(",", item.MailBcc);
-            subject = CreateSubject(item);
+            subject = CreateSubject(item, mailSubjectMode);
             headers = GetHeaders();
         }
 
-        private string CreateSubject(ERItem item)
+        private string CreateSubject(ERItem item, string subjectMode)
         {
             string mailSubject;
-            string subjectMode;
 
-            if (!item.eventProperties.EventType.ToString().Contains("Attachment"))
+            if (subjectMode == "")
             {
-                subjectMode = "элемент изменен";
+                if (!item.eventProperties.EventType.ToString().Contains("Attachment"))
+                {
+                    subjectMode = "элемент изменен";
+                }
+                else
+                {
+                    subjectMode = "добавлено вложение";
+                }
             }
-            else {
-                subjectMode = "добавлено вложение";
-            }
+
             mailSubject = String.Format("{0}: {1}", item.listItem.Title, subjectMode);
 
             return mailSubject;
@@ -52,7 +56,7 @@ namespace ListsNotifications
 
         private StringDictionary GetHeaders()
         {
-            StringDictionary mailHeaders = new StringDictionary(); ;
+            StringDictionary mailHeaders = new StringDictionary();
             mailHeaders.Add("to", to);
             //mailHeaders.Add("cc", cc);
             mailHeaders.Add("bcc", bcc);
@@ -64,6 +68,7 @@ namespace ListsNotifications
         private string GetChangedFieldsBlock(ERItem item, List<string> fields)
         {
             string ChangedFieldsBlock = "";
+            string FieldStringTemplate;
 
             if (!item.eventProperties.EventType.ToString().Contains("Attachment"))
             {
@@ -78,7 +83,15 @@ namespace ListsNotifications
                     {
                         string beforeFieldValue = item.GetFriendlyFieldValue(fieldTitle, false);
                         string afterFieldValue = item.GetFriendlyFieldValue(fieldTitle);
-                        ChangedFieldsBlock += String.Format("<p>{0}: <strike>{1}</strike> {2}</p>", fieldTitle, beforeFieldValue, afterFieldValue);
+                        if (BeforeValues)
+                        {
+                            FieldStringTemplate = "<p>{0}: <strike>{1}</strike> {2}</p>";
+                        }
+                        else 
+                        {
+                            FieldStringTemplate = "<p>{0}: {2}</p>";
+                        }
+                        ChangedFieldsBlock += String.Format(FieldStringTemplate, fieldTitle, beforeFieldValue, afterFieldValue);
                     }
                 }
             }
@@ -86,7 +99,7 @@ namespace ListsNotifications
             {
                 string attachmentUrl = item.listItem.Web.Url + "/" + item.eventProperties.AfterUrl.ToString();
                 string attachmentName = Regex.Replace(attachmentUrl, @"^.*\/", "");
-                ChangedFieldsBlock += String.Format("<p>{0}: <a href=\"{1}\">{2}</a></p>", "New Attachment", attachmentUrl, attachmentName);
+                ChangedFieldsBlock += String.Format("<p>{0}: <a href=\"{1}\">{2}</a></p>", "Вложение", attachmentUrl, attachmentName);
             }
 
             return ChangedFieldsBlock;
@@ -114,7 +127,7 @@ namespace ListsNotifications
                 EditorDisplayName = item.eventProperties.UserDisplayName;
                 ModifiedByBlock = String.Format("<p>Кем изменено: {0}</p>", EditorDisplayName);
 
-                mailBodyString = String.Format(ERItemConfigParams.MAIL_BODY_TEMPLATE, ChangedFieldsBlock, itemUrlBlock, ModifiedByBlock);
+                mailBodyString = String.Format(ERItem.MAIL_BODY_TEMPLATE, ChangedFieldsBlock, itemUrlBlock, ModifiedByBlock);
             }
 
             return mailBodyString;
