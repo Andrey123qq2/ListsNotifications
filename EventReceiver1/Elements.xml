@@ -18,4 +18,13 @@
       <SequenceNumber>10000</SequenceNumber>
     </Receiver>
   </Receivers>
+  <Receivers ListTemplateId="101">
+    <Receiver>
+      <Name>LibsEventReceiver1ItemUpdating</Name>
+      <Type>ItemUpdating</Type>
+      <Assembly>$SharePoint.Project.AssemblyFullName$</Assembly>
+      <Class>ListsNotifications.EventReceiver1.EventReceiver1</Class>
+      <SequenceNumber>10000</SequenceNumber>
+    </Receiver>
+  </Receivers>
 </Elements>

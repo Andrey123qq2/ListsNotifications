@@ -83,6 +83,12 @@ namespace ListsNotifications
                     {
                         string beforeFieldValue = item.GetFriendlyFieldValue(fieldTitle, false);
                         string afterFieldValue = item.GetFriendlyFieldValue(fieldTitle);
+
+                        if (!BeforeValues && (afterFieldValue == "-" || afterFieldValue == ""))
+                        {
+                            continue;
+                        }
+
                         if (BeforeValues)
                         {
                             FieldStringTemplate = "<p>{0}: <strike>{1}</strike> {2}</p>";
