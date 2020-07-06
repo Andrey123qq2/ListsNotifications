@@ -16,8 +16,22 @@ namespace ListsNotifications
         {
             ERItem itemER = new ERItem(properties);
 
+            NotificationsTrackFields(itemER);
+            NotificationsSingleField(itemER);
+        }
+
+        public static void NotificationsTrackFields(ERItem itemER)
+        {
             MailItem mailToNotify = new MailItem(itemER, itemER.TrackFields);
             mailToNotify.SendMail(itemER.listItem.ParentList.ParentWeb);
+        }
+
+        public static void NotificationsSingleField(ERItem itemER)
+        {
+            if (itemER.eventProperties.EventType.ToString().Contains("Attachment"))
+            {
+                return;
+            }
 
             foreach (KeyValuePair<string, string> trackField in itemER.TrackFieldsSingleMail)
             {

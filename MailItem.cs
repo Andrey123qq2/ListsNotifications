@@ -49,7 +49,7 @@ namespace ListsNotifications
                 }
             }
 
-            mailSubject = String.Format("{0}: {1}", item.listItem.Title, subjectMode);
+            mailSubject = String.Format("{0}: {1}", item.itemTitle, subjectMode);
 
             return mailSubject;
         }
@@ -128,7 +128,7 @@ namespace ListsNotifications
             }
             else
             {
-                itemUrlBlock = String.Format("<p>Элемент: <a href='{0}'>{1}</a></p>", item.listItem.GetItemFullUrl(), item.listItem.Title);
+                itemUrlBlock = String.Format("<p>Элемент: <a href='{0}'>{1}</a></p>", item.listItem.GetItemFullUrl(), item.itemTitle);
 
                 EditorDisplayName = item.eventProperties.UserDisplayName;
                 ModifiedByBlock = String.Format("<p>Кем изменено: {0}</p>", EditorDisplayName);
