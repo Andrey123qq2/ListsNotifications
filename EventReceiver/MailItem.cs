@@ -28,8 +28,8 @@ namespace ListsNotifications
             BeforeValues = FieldsBeforeValue;
             body = CreateBody(item, fieldsToTrack);
             to = String.Join(",", item.UserNotifyFieldsMails);
-            bcc = String.Join(",", item.MailCC);
-            bcc = String.Join(",", item.MailBcc);
+            cc = String.Join(",", item.mailcc);
+            bcc = String.Join(",", item.mailbcc);
             subject = CreateSubject(item, mailSubjectMode);
             headers = GetHeaders();
         }

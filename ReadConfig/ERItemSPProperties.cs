@@ -13,13 +13,13 @@ using Microsoft.Office.Server.UserProfiles;
 
 namespace ListsNotifications
 {
-    public class ERItemMainProperties : ERItemConfigMethods
+    public class ERItemSPProperties : ERItemConfigMethods
     {
         public SPListItem listItem;
         public SPItemEventProperties eventProperties;
         public string itemTitle;
 
-        public ERItemMainProperties(SPItemEventProperties properties)
+        public ERItemSPProperties(SPItemEventProperties properties)
         {
             using (SPSite site = new SPSite(properties.WebUrl))
             {
@@ -46,5 +46,8 @@ namespace ListsNotifications
 
             itemTitle = (listItem.Title != "" && listItem.Title != null) ? listItem.Title : listItem["FileLeafRef"].ToString();
         }
+
+        public ERItemSPProperties()
+        { }
     }
 }

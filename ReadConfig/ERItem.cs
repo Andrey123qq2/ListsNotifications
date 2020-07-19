@@ -11,19 +11,20 @@ using Microsoft.CSharp.RuntimeBinder;
 
 namespace ListsNotifications
 {
-	public class ERItem : ERItemMainProperties
+	public class ERItem : ERItemSPProperties
     {
         public List<string> TrackFields;
 		public List<string> UserNotifyFields;
 		public List<string> UserNotifyFieldsMails;
-		public List<string> MailBcc; //TODO: change to lowercase as in ERListsSettings
-		public List<string> MailCC;
 		public Dictionary<string, string> TrackFieldsSingleMail;
+		public List<string> mailbcc;
+		public List<string> mailcc;
+		
 
 		public readonly string CODE_FIELD_NAME = "Підрозділ";
         public readonly string CODE_FIELD_SUFFIX = "_сотрудники";
 
-        public readonly List<string> USER_NOTIFY_FIELDS = new List<string> { "Постановщик", "Author", "Заказчик", "Редакторы", "Рабочая группа" };
+		public readonly List<string> USER_NOTIFY_FIELDS = new List<string> { };
 		public readonly List<string> TRACK_FIELDS = new List<string> { };
 		public readonly List<string> TRACK_FIELDS_SINGLEMAIL = new List<string> { };
 		public readonly List<string> MAIL_BCC = new List<string> { };
@@ -32,8 +33,8 @@ namespace ListsNotifications
 		public readonly string LIST_PROPERTY_USER_FIELDS = "er_notif_user_fields";
 		public readonly string LIST_PROPERTY_TRACK_FIELDS = "er_notif_track_fields";
 		public readonly string LIST_PROPERTY_TRACK_FIELDS_SINGLEMAIL = "er_notif_track_fields_singlemail";
-		public readonly string LIST_PROPERTY_MAIL_BCC = "er_notif_mail_bcc";
-		public readonly string LIST_PROPERTY_MAIL_CC = "er_notif_mail_cc";
+		public readonly string LIST_PROPERTY_MAIL_BCC = "er_notif_mailbcc";
+		public readonly string LIST_PROPERTY_MAIL_CC = "er_notif_mailcc";
 
 		public static string MAIL_BODY_TEMPLATE = @"
 <!DOCTYPE html>
@@ -67,16 +68,24 @@ namespace ListsNotifications
 
 		public ERItem(SPItemEventProperties properties): base(properties)
 		{
-			
-			this.SetAttribute(listItem.ParentList, out TrackFields, TRACK_FIELDS, LIST_PROPERTY_TRACK_FIELDS);
-			//this.SetListAttribute(listItem.ParentList, out TrackFieldsSingleMail, TRACK_FIELDS_SINGLEMAIL, LIST_PROPERTY_TRACK_FIELDS_SINGLEMAIL);
-			this.SetAttribute(listItem.ParentList, out UserNotifyFields, USER_NOTIFY_FIELDS, LIST_PROPERTY_USER_FIELDS);
-			this.SetAttribute(listItem.ParentList, out MailBcc, MAIL_BCC, LIST_PROPERTY_MAIL_BCC);
-			this.SetAttribute(listItem.ParentList, out MailCC, MAIL_CC, LIST_PROPERTY_MAIL_CC);
-			this.SetAttribute(listItem.ParentList, out TrackFieldsSingleMail, LIST_PROPERTY_TRACK_FIELDS_SINGLEMAIL);
+			SetAttributes(listItem.ParentList);
 
 			List<SPPrincipal> principals = this.GetUsersFromUsersFields(UserNotifyFields);
 			UserNotifyFieldsMails = SPCommon.GetUserMails(principals);
+		}
+
+		public ERItem(SPList listSP)
+		{
+			SetAttributes(listSP);
+		}
+
+		private void SetAttributes(SPList listSP)
+		{
+			this.SetAttribute(listSP, out TrackFields, TRACK_FIELDS, LIST_PROPERTY_TRACK_FIELDS);
+			this.SetAttribute(listSP, out UserNotifyFields, USER_NOTIFY_FIELDS, LIST_PROPERTY_USER_FIELDS);
+			this.SetAttribute(listSP, out mailcc, MAIL_CC, LIST_PROPERTY_MAIL_CC);
+			this.SetAttribute(listSP, out mailbcc, MAIL_BCC, LIST_PROPERTY_MAIL_BCC);
+			this.SetAttribute(listSP, out TrackFieldsSingleMail, LIST_PROPERTY_TRACK_FIELDS_SINGLEMAIL);
 		}
 	}
 }

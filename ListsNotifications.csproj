@@ -50,20 +50,32 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.SharePoint" />
     <Reference Include="Microsoft.SharePoint.Client.ServerRuntime" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ERItemMainProperties.cs" />
-    <Compile Include="SPCommon.cs" />
-    <Compile Include="MailItem.cs" />
-    <Compile Include="ERItem.cs" />
-    <Compile Include="SPListExtension.cs" />
+    <Compile Include="PageSettings\AdditionalFieldsTable.cs" />
+    <Compile Include="PageSettings\PageSettings.cs" />
+    <Compile Include="PageSettings\SettingsTable.cs" />
+    <Compile Include="PageSettings\TrackFieldsTable.cs" />
+    <Compile Include="ReadConfig\ERItemSPProperties.cs" />
+    <Compile Include="Layouts\ERListsSettings\ERListsSettings.aspx.cs">
+      <DependentUpon>ERListsSettings.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Layouts\ERListsSettings\ERListsSettings.aspx.designer.cs">
+      <DependentUpon>ERListsSettings.aspx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EventReceiver\SPCommon.cs" />
+    <Compile Include="EventReceiver\MailItem.cs" />
+    <Compile Include="ReadConfig\ERItem.cs" />
+    <Compile Include="EventReceiver\SPListExtension.cs" />
     <Compile Include="ERItemSPExtension.cs" />
-    <Compile Include="ERItemConfigMethods.cs" />
-    <Compile Include="MainInit.cs" />
+    <Compile Include="ReadConfig\ERItemConfigMethods.cs" />
+    <Compile Include="EventReceiver\MainInit.cs" />
     <Compile Include="EventReceiver1\EventReceiver1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -74,7 +86,25 @@
     <None Include="Features\Feature1\Feature1.feature">
       <FeatureId>{dbd2d127-831e-43da-94e0-cc062eff2e20}</FeatureId>
     </None>
+    <None Include="Features\Feature2\Feature2.feature">
+      <FeatureId>{3e9720c7-5ead-46aa-a032-6b87ce911731}</FeatureId>
+    </None>
     <None Include="key.snk" />
+    <None Include="Layouts\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{b7c1a2ff-5609-4d04-89e6-eecce3660939}</SharePointProjectItemId>
+    </None>
+    <None Include="List1\List1Instance\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{667fc318-d60a-461a-850c-6279fe1531f1}</SharePointProjectItemId>
+    </None>
+    <None Include="List1\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{5d6ebe51-e50b-40cc-8142-39788dc93876}</SharePointProjectItemId>
+    </None>
+    <None Include="List2\List2Instance\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{f27151da-93b4-4095-b672-44f3c5739130}</SharePointProjectItemId>
+    </None>
+    <None Include="List2\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{b5916c02-7717-404e-aab0-08512517932e}</SharePointProjectItemId>
+    </None>
     <None Include="Package\Package.package">
       <PackageId>{911e29b7-4433-439e-98a5-ed3b8e2bc805}</PackageId>
     </None>
@@ -88,6 +118,17 @@
     <Content Include="Features\Feature1\Feature1.Template.xml">
       <DependentUpon>Feature1.feature</DependentUpon>
     </Content>
+    <Content Include="Features\Feature2\Feature2.Template.xml">
+      <DependentUpon>Feature2.feature</DependentUpon>
+    </Content>
+    <Content Include="Layouts\ERListsSettings\ERListsSettings.aspx" />
+    <Content Include="Layouts\ERListsSettings\ListSettings.js" />
+    <Content Include="List1\Elements.xml" />
+    <Content Include="List1\List1Instance\Elements.xml" />
+    <Content Include="List1\Schema.xml" />
+    <Content Include="List2\Elements.xml" />
+    <Content Include="List2\List2Instance\Elements.xml" />
+    <Content Include="List2\Schema.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

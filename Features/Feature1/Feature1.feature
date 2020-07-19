@@ -2,5 +2,9 @@
 <feature xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="ea86a75d-f4a1-4350-af72-2ee784800a85" featureId="ea86a75d-f4a1-4350-af72-2ee784800a85" imageUrl="" solutionId="00000000-0000-0000-0000-000000000000" title="ListsNotifications Feature1" version="" deploymentPath="$SharePoint.Project.FileNameWithoutExtension$_$SharePoint.Feature.FileNameWithoutExtension$" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/FeatureModel">
   <projectItems>
     <projectItemReference itemId="67b80b59-61be-4de9-b4ea-e9a69468c076" />
+    <projectItemReference itemId="667fc318-d60a-461a-850c-6279fe1531f1" />
+    <projectItemReference itemId="5d6ebe51-e50b-40cc-8142-39788dc93876" />
+    <projectItemReference itemId="f27151da-93b4-4095-b672-44f3c5739130" />
+    <projectItemReference itemId="b5916c02-7717-404e-aab0-08512517932e" />
   </projectItems>
 </feature>
