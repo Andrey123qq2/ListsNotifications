@@ -16,7 +16,8 @@ namespace ListsNotifications
         public List<string> TrackFields;
 		public List<string> UserNotifyFields;
 		public List<string> UserNotifyFieldsMails;
-		public List<string> MailBcc;
+		public List<string> MailBcc; //TODO: change to lowercase as in ERListsSettings
+		public List<string> MailCC;
 		public Dictionary<string, string> TrackFieldsSingleMail;
 
 		public readonly string CODE_FIELD_NAME = "Підрозділ";
@@ -26,10 +27,13 @@ namespace ListsNotifications
 		public readonly List<string> TRACK_FIELDS = new List<string> { };
 		public readonly List<string> TRACK_FIELDS_SINGLEMAIL = new List<string> { };
 		public readonly List<string> MAIL_BCC = new List<string> { };
+		public readonly List<string> MAIL_CC = new List<string> { };
+
 		public readonly string LIST_PROPERTY_USER_FIELDS = "er_notif_user_fields";
 		public readonly string LIST_PROPERTY_TRACK_FIELDS = "er_notif_track_fields";
 		public readonly string LIST_PROPERTY_TRACK_FIELDS_SINGLEMAIL = "er_notif_track_fields_singlemail";
 		public readonly string LIST_PROPERTY_MAIL_BCC = "er_notif_mail_bcc";
+		public readonly string LIST_PROPERTY_MAIL_CC = "er_notif_mail_cc";
 
 		public static string MAIL_BODY_TEMPLATE = @"
 <!DOCTYPE html>
@@ -68,6 +72,7 @@ namespace ListsNotifications
 			//this.SetListAttribute(listItem.ParentList, out TrackFieldsSingleMail, TRACK_FIELDS_SINGLEMAIL, LIST_PROPERTY_TRACK_FIELDS_SINGLEMAIL);
 			this.SetAttribute(listItem.ParentList, out UserNotifyFields, USER_NOTIFY_FIELDS, LIST_PROPERTY_USER_FIELDS);
 			this.SetAttribute(listItem.ParentList, out MailBcc, MAIL_BCC, LIST_PROPERTY_MAIL_BCC);
+			this.SetAttribute(listItem.ParentList, out MailCC, MAIL_CC, LIST_PROPERTY_MAIL_CC);
 			this.SetAttribute(listItem.ParentList, out TrackFieldsSingleMail, LIST_PROPERTY_TRACK_FIELDS_SINGLEMAIL);
 
 			List<SPPrincipal> principals = this.GetUsersFromUsersFields(UserNotifyFields);

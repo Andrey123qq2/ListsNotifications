@@ -17,7 +17,7 @@ namespace ListsNotifications
     {
         public readonly string body;
         public readonly string to;
-        //public readonly string cc;
+        public readonly string cc;
         public readonly string bcc;
         public readonly string subject;
         StringDictionary headers;
@@ -28,6 +28,7 @@ namespace ListsNotifications
             BeforeValues = FieldsBeforeValue;
             body = CreateBody(item, fieldsToTrack);
             to = String.Join(",", item.UserNotifyFieldsMails);
+            bcc = String.Join(",", item.MailCC);
             bcc = String.Join(",", item.MailBcc);
             subject = CreateSubject(item, mailSubjectMode);
             headers = GetHeaders();
