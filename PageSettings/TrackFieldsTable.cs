@@ -111,8 +111,8 @@ namespace ListsNotifications
                     ID = "subjectSingleMail" + i.ToString(),
                     Width = 200,
                     Text = (checkbox2.Checked) ? listERConfig.TrackFieldsSingleMail[field.Title] : "",
-                    ReadOnly = (checkbox2.Checked) ? false : true,
-                    BorderColor = (checkbox2.Checked) ? Color.FromArgb(171, 171, 171) : Color.FromArgb(225, 225, 225)
+                    BorderColor = (checkbox2.Checked) ? Color.FromArgb(171, 171, 171) : Color.FromArgb(225, 225, 225),
+                    CssClass = (!checkbox2.Checked) ? "readonly" : ""
                 };
                 textBox1.Attributes.Add("Title", field.Title);
 

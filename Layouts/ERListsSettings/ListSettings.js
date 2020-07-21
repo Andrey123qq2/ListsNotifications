@@ -18,3 +18,9 @@
     }
     //textBox.disabled = (checkBox.checked) ? false : true;
 }
+
+function disableTextBoxes() {
+    document.querySelectorAll(".readonly").forEach(function (element) {
+        element.setAttribute("readonly", true);
+    })
+}

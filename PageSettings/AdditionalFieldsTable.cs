@@ -26,12 +26,12 @@ namespace ListsNotifications
 
             TableHeaderCell headerTableCell1 = new TableHeaderCell
             {
-                Text = "Paremeter"
+                Text = "Parameter"
             };
             TableHeaderCell headerTableCell2 = new TableHeaderCell
             {
                 Text = "Value",
-                Width = 300
+                Width = 500
             };
 
             header.Cells.Add(headerTableCell1);
@@ -68,7 +68,7 @@ namespace ListsNotifications
                 TextBox textBox1 = new TextBox
                 {
                     ID = field,
-                    Width = 200,
+                    Width = 400,
                     Text = textBoxValue
                 };
 

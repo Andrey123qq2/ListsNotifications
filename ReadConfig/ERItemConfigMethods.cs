@@ -58,7 +58,8 @@ namespace ListsNotifications
                     foreach (string value in propertyValues)
                     {
                         string[] valueParts = value.Split('=');
-                        ConfAttribute.Add(valueParts[0], valueParts[1]);
+                        string valueParts1 = (valueParts.Length == 2) ? valueParts[1] : "";
+                        ConfAttribute.Add(valueParts[0], valueParts1);
                     }
                 }
             }

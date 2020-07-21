@@ -68,6 +68,11 @@ namespace ListsNotifications
 
 		public ERItem(SPItemEventProperties properties): base(properties)
 		{
+			if (listItem == null)
+			{
+				return;
+			};
+
 			SetAttributes(listItem.ParentList);
 
 			List<SPPrincipal> principals = this.GetUsersFromUsersFields(UserNotifyFields);

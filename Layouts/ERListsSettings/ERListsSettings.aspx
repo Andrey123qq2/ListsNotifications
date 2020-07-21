@@ -13,6 +13,9 @@
 
 <asp:Content ID="Main" ContentPlaceHolderID="PlaceHolderMain" runat="server">
     <script type="text/javascript" src="<%= Page.ResolveUrl("ListSettings.js") %>"></script>
+    <script type="text/javascript">
+        window.onload = disableTextBoxes;
+    </script>
     <div class="listSettings" style="">
     </div>
     <asp:Panel ID="SettingsPanel" runat="server"></asp:Panel>
