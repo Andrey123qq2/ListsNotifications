@@ -243,6 +243,10 @@ namespace ListsNotifications
                         FieldValueAfterToString = new SPFieldUserValue(item.listItem.Web, FieldValueAfter.ToString()).User.LoginName;
                     }
                     break;
+                case "SPFieldLookupValueCollection":
+                    FieldValueBeforeToString = (FieldValueBefore != null) ? FieldValueBefore.ToString() : "";
+                    FieldValueAfterToString = (FieldValueAfter != null) ? (string)FieldValueAfter : "";
+                    break;
                 default:
                     FieldValueBeforeToString = (FieldValueBefore != null) ? (string)FieldValueBefore : "";
                     FieldValueAfterToString = (FieldValueAfter != null) ? (string)FieldValueAfter : "";
@@ -381,6 +385,10 @@ namespace ListsNotifications
                     break;
                 case "SPFieldUserValue":
                     friendlyFieldValue = item.listItem.Web.EnsureUser(new SPFieldUserValue(item.listItem.Web, fieldValueString.ToString()).LookupValue).Name;
+                    break;
+                case "SPFieldLookupValueCollection":
+                    SPFieldLookupValue[] fieldValueArr = new SPFieldLookupValueCollection(fieldValueString).ToArray();
+                    friendlyFieldValue = String.Join( ",", Array.ConvertAll(fieldValueArr, p => p.LookupValue) );
                     break;
                 default:
                     friendlyFieldValue = fieldValueString;

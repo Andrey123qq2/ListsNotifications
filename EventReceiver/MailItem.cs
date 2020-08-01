@@ -142,7 +142,7 @@ namespace ListsNotifications
 
         public void SendMail(SPWeb web)
         {
-            if (body != "" && to != "")
+            if (body != "" && (to != "" || cc != "" || bcc != ""))
             {
                 SPUtility.SendEmail(web, headers, body);
             }
