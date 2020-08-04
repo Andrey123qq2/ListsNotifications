@@ -59,7 +59,7 @@ namespace ListsNotifications
         {
             StringDictionary mailHeaders = new StringDictionary();
             mailHeaders.Add("to", to);
-            //mailHeaders.Add("cc", cc);
+            mailHeaders.Add("cc", cc);
             mailHeaders.Add("bcc", bcc);
             mailHeaders.Add("subject", subject);
             mailHeaders.Add("content-type", "text/html");
