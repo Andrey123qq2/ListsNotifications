@@ -16,6 +16,11 @@ namespace ListsNotifications
         {
             ERItem itemER = new ERItem(properties);
 
+            if (itemER.listItem == null)
+            {
+                return;
+            }
+
             NotificationsTrackFields(itemER);
             NotificationsSingleField(itemER);
         }

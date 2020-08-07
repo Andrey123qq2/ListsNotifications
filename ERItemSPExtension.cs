@@ -237,8 +237,8 @@ namespace ListsNotifications
                     break;
                 case "SPFieldUserValue":
                     FieldValueBeforeToString = (FieldValueBefore != null) ? new SPFieldUserValue(item.listItem.Web, FieldValueBefore.ToString()).User.LoginName : "";
-                    FieldValueAfterToString = (FieldValueAfter != null && FieldValueAfter != "") ? new SPFieldUserValue(item.listItem.Web, FieldValueAfter.ToString()).LookupValue : "";
-                    if (FieldValueAfter != null && FieldValueAfter != "" && FieldValueAfterToString == "")
+                    FieldValueAfterToString = (FieldValueAfter != null && FieldValueAfter.ToString() != "") ? new SPFieldUserValue(item.listItem.Web, FieldValueAfter.ToString()).LookupValue : "";
+                    if (FieldValueAfter != null && FieldValueAfter.ToString() != "" && FieldValueAfterToString == "")
                     {
                         FieldValueAfterToString = new SPFieldUserValue(item.listItem.Web, FieldValueAfter.ToString()).User.LoginName;
                     }
