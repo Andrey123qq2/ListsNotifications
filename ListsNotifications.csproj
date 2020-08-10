@@ -73,7 +73,7 @@
     <Compile Include="EventReceiver\MailItem.cs" />
     <Compile Include="ReadConfig\ERItem.cs" />
     <Compile Include="EventReceiver\SPListExtension.cs" />
-    <Compile Include="ERItemSPExtension.cs" />
+    <Compile Include="EventReceiver\ERItemSPExtension.cs" />
     <Compile Include="ReadConfig\ERItemConfigMethods.cs" />
     <Compile Include="EventReceiver\MainInit.cs" />
     <Compile Include="EventReceiver1\EventReceiver1.cs" />

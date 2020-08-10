@@ -183,26 +183,26 @@ namespace ListsNotifications
             return ChangedFieldValue;
         }
 
-        //TO ERItem !!
-        public static bool UserFieldIsChanged(this ERItem item, string fieldTitle)
-        {
-            SPFieldUserValue assignedToFieldvalueBefore = new SPFieldUserValue(item.listItem.Web, item.listItem[fieldTitle].ToString());
-            String assignedToLoginBefore = assignedToFieldvalueBefore.User.LoginName;
-            assignedToLoginBefore = assignedToLoginBefore.Substring(assignedToLoginBefore.IndexOf("\\") + 1);
+        //TO ERItem !! TODO: remove if no needed
+        //public static bool UserFieldIsChanged(this ERItem item, string fieldTitle)
+        //{
+        //    SPFieldUserValue assignedToFieldvalueBefore = new SPFieldUserValue(item.listItem.Web, item.listItem[fieldTitle].ToString());
+        //    String assignedToLoginBefore = assignedToFieldvalueBefore.User.LoginName;
+        //    assignedToLoginBefore = assignedToLoginBefore.Substring(assignedToLoginBefore.IndexOf("\\") + 1);
 
-            SPFieldUserValue assignedToFieldvalueAfter = new SPFieldUserValue(item.listItem.Web, item.eventProperties.AfterProperties[fieldTitle].ToString());
-            String assignedToLoginAfter = assignedToFieldvalueAfter.LookupValue;
-            assignedToLoginAfter = assignedToLoginAfter.Substring(assignedToLoginAfter.IndexOf("\\") + 1);
+        //    SPFieldUserValue assignedToFieldvalueAfter = new SPFieldUserValue(item.listItem.Web, item.eventProperties.AfterProperties[fieldTitle].ToString());
+        //    String assignedToLoginAfter = assignedToFieldvalueAfter.LookupValue;
+        //    assignedToLoginAfter = assignedToLoginAfter.Substring(assignedToLoginAfter.IndexOf("\\") + 1);
 
-            if (assignedToLoginAfter != "" && assignedToLoginBefore != assignedToLoginAfter)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        //    if (assignedToLoginAfter != "" && assignedToLoginBefore != assignedToLoginAfter)
+        //    {
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        return false;
+        //    }
+        //}
 
         public static bool FieldIsChanged(this ERItem item, string fieldTitle)
         {
