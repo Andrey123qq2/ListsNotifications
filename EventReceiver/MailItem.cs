@@ -75,10 +75,10 @@ namespace ListsNotifications
             {
                 foreach (string fieldTitle in fields)
                 {
-                    if (!item.listItem.ParentList.Fields.ContainsField(fieldTitle))
-                    {
-                        continue;
-                    }
+                    //if (!item.listItem.ParentList.Fields.ContainsField(fieldTitle))
+                    //{
+                    //    continue;
+                    //}
 
                     if (item.FieldIsChanged(fieldTitle))
                     {

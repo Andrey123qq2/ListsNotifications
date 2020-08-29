@@ -21,20 +21,20 @@ namespace ListsNotifications
 		public List<string> mailcc;
 		
 
-		public readonly string CODE_FIELD_NAME = "Підрозділ";
-        public readonly string CODE_FIELD_SUFFIX = "_сотрудники";
+		public const string CODE_FIELD_NAME = "Підрозділ";
+        public const string CODE_FIELD_SUFFIX = "_сотрудники";
 
-		public readonly List<string> USER_NOTIFY_FIELDS = new List<string> { };
-		public readonly List<string> TRACK_FIELDS = new List<string> { };
-		public readonly List<string> TRACK_FIELDS_SINGLEMAIL = new List<string> { };
-		public readonly List<string> MAIL_BCC = new List<string> { };
-		public readonly List<string> MAIL_CC = new List<string> { };
+		//public readonly List<string> USER_NOTIFY_FIELDS = new List<string> { };
+		//public readonly List<string> TRACK_FIELDS = new List<string> { };
+		//public readonly List<string> TRACK_FIELDS_SINGLEMAIL = new List<string> { };
+		//public readonly List<string> MAIL_BCC = new List<string> { };
+		//public readonly List<string> MAIL_CC = new List<string> { };
 
-		public readonly string LIST_PROPERTY_USER_FIELDS = "er_notif_user_fields";
-		public readonly string LIST_PROPERTY_TRACK_FIELDS = "er_notif_track_fields";
-		public readonly string LIST_PROPERTY_TRACK_FIELDS_SINGLEMAIL = "er_notif_track_fields_singlemail";
-		public readonly string LIST_PROPERTY_MAIL_BCC = "er_notif_mailbcc";
-		public readonly string LIST_PROPERTY_MAIL_CC = "er_notif_mailcc";
+		public const string LIST_PROPERTY_USER_FIELDS = "er_notif_user_fields";
+		public const string LIST_PROPERTY_TRACK_FIELDS = "er_notif_track_fields";
+		public const string LIST_PROPERTY_TRACK_FIELDS_SINGLEMAIL = "er_notif_track_fields_singlemail";
+		public const string LIST_PROPERTY_MAIL_BCC = "er_notif_mailbcc";
+		public const string LIST_PROPERTY_MAIL_CC = "er_notif_mailcc";
 
 		public static string MAIL_BODY_TEMPLATE = @"
 <!DOCTYPE html>
@@ -86,11 +86,11 @@ namespace ListsNotifications
 
 		private void SetAttributes(SPList listSP)
 		{
-			this.SetAttribute(listSP, out TrackFields, TRACK_FIELDS, LIST_PROPERTY_TRACK_FIELDS);
-			this.SetAttribute(listSP, out UserNotifyFields, USER_NOTIFY_FIELDS, LIST_PROPERTY_USER_FIELDS);
-			this.SetAttribute(listSP, out mailcc, MAIL_CC, LIST_PROPERTY_MAIL_CC);
-			this.SetAttribute(listSP, out mailbcc, MAIL_BCC, LIST_PROPERTY_MAIL_BCC);
-			this.SetAttribute(listSP, out TrackFieldsSingleMail, LIST_PROPERTY_TRACK_FIELDS_SINGLEMAIL);
+			this.SetAttribute(listSP, out TrackFields, LIST_PROPERTY_TRACK_FIELDS, true);
+			this.SetAttribute(listSP, out UserNotifyFields, LIST_PROPERTY_USER_FIELDS, true);
+			this.SetAttribute(listSP, out mailcc, LIST_PROPERTY_MAIL_CC);
+			this.SetAttribute(listSP, out mailbcc, LIST_PROPERTY_MAIL_BCC);
+			this.SetAttribute(listSP, out TrackFieldsSingleMail, LIST_PROPERTY_TRACK_FIELDS_SINGLEMAIL, true);
 		}
 	}
 }

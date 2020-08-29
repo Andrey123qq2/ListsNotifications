@@ -85,10 +85,10 @@ namespace ListsNotifications
 
             foreach (string fieldTitle in usersFields)
             {
-                if (!item.listItem.ParentList.Fields.ContainsField(fieldTitle))
-                {
-                    continue;
-                }
+                //if (!item.listItem.ParentList.Fields.ContainsField(fieldTitle))
+                //{
+                //    continue;
+                //}
 
                 fieldValue = item.GetFieldValue(fieldTitle, valueAfter);
                 if (fieldValue == null || (fieldValue.GetType().Name == "String" && fieldValue == ""))

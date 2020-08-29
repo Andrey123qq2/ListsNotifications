@@ -1,28 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Elements xmlns="http://schemas.microsoft.com/sharepoint/">
   <ListTemplate
-		Name="TasksSettingsNew"
-		Type="171"
+		Name="TaskListsNewSettings"
+		Type="107"
 		BaseType="0"
 		OnQuickLaunch="TRUE"
 		SecurityBits="11"
 		Sequence="410"
-		DisplayName="TasksSettingsNew"
-		Description="Tasks Settings New"
+		DisplayName="TaskListsSettings"
+		Description="TaskLists Settings"
 		Image="/_layouts/images/itgen.png"/>
   <CustomAction
-		Id="Custom.Configuration.ListCustomSettings.TasksNew"
+		Id="Custom.Configuration.ListCustomSettings.TaskListsNewSettings"
 		GroupId="GeneralSettings"
-		Location="Microsoft.SharePoint.ListEdit"
-		RegistrationId = "171"
+		Location="Microsoft.SharePoint.ListEdit.TaskListsNewSettings"
+		RegistrationId = "101"
 		RequireSiteAdministrator="FALSE"
     RegistrationType="List"
     Rights="MyList"
 		Sequence="410"
-		Title="ER Lists Permissions">
+		Title="ER Lists Notifications">
     <UrlAction
-    Url="_layouts/ERListsSettings/Permissions.aspx?List={ListId}" />
+    Url="_layouts/ERListsSettings/ERListsSettings.aspx?List={ListId}&amp;Mode=Notifications" />
   </CustomAction>
 </Elements>
-
-

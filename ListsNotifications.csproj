@@ -102,6 +102,18 @@
     <None Include="List2\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{b5916c02-7717-404e-aab0-08512517932e}</SharePointProjectItemId>
     </None>
+    <None Include="List3\List3Instance\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{320a7a78-8441-4e3a-a804-d3fbf223dbd0}</SharePointProjectItemId>
+    </None>
+    <None Include="List3\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{e37d7421-4a29-4c0e-95b8-6cbbe441a1f8}</SharePointProjectItemId>
+    </None>
+    <None Include="List4\List4Instance\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{7c45c934-7d02-4e4c-8154-22d7319c8d23}</SharePointProjectItemId>
+    </None>
+    <None Include="List4\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{9785b80b-6421-488c-a17c-0341e7c171a2}</SharePointProjectItemId>
+    </None>
     <None Include="Package\Package.package">
       <PackageId>{911e29b7-4433-439e-98a5-ed3b8e2bc805}</PackageId>
     </None>
@@ -123,6 +135,12 @@
     <Content Include="List2\Elements.xml" />
     <Content Include="List2\List2Instance\Elements.xml" />
     <Content Include="List2\Schema.xml" />
+    <Content Include="List3\Elements.xml" />
+    <Content Include="List3\List3Instance\Elements.xml" />
+    <Content Include="List3\Schema.xml" />
+    <Content Include="List4\Elements.xml" />
+    <Content Include="List4\List4Instance\Elements.xml" />
+    <Content Include="List4\Schema.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

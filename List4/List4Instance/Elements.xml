@@ -21,8 +21,7 @@
 		Sequence="410"
 		Title="ER Lists Permissions">
     <UrlAction
-    Url="_layouts/ERListsSettings/Permissions.aspx?List={ListId}" />
+    Url="_layouts/ERListsSettings/ERListsSettings.aspx?List={ListId}&amp;Mode=Notifications" />
   </CustomAction>
 </Elements>
-
 
