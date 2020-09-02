@@ -377,7 +377,15 @@ namespace ListsNotifications
                     
                     break;
                 case "Double":
-                    friendlyFieldValue = Regex.Replace(fieldValueString, @"\.", ",");
+                    if (item.listItem.ParentList.Fields.GetField(fieldTitle).FieldRenderingControl.AlternateTemplateName == "PercentageNumberField")
+                    {
+                        fieldValueString = fieldValueString.Replace(@",", ".");
+                        friendlyFieldValue = item.listItem.ParentList.Fields.GetField(fieldTitle).GetFieldValueAsText(fieldValueString);
+                    }
+                    else
+                    {
+                        friendlyFieldValue = Regex.Replace(fieldValueString, @"\.", ",");
+                    }
                     break;
                 case "SPFieldUserValueCollection":
                     List<SPPrincipal> fieldPrincipals = item.GetUsersFromUsersFields(new List<string> { fieldTitle }, valueAfter);

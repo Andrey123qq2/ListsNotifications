@@ -27,4 +27,22 @@
       <SequenceNumber>10000</SequenceNumber>
     </Receiver>
   </Receivers>
+  <Receivers ListTemplateId="107">
+    <Receiver>
+      <Name>TasksEventReceiver1ItemUpdating</Name>
+      <Type>ItemUpdating</Type>
+      <Assembly>$SharePoint.Project.AssemblyFullName$</Assembly>
+      <Class>ListsNotifications.EventReceiver1.EventReceiver1</Class>
+      <SequenceNumber>10000</SequenceNumber>
+    </Receiver>
+  </Receivers>
+  <Receivers ListTemplateId="171">
+    <Receiver>
+      <Name>TasksNewEventReceiver1ItemUpdating</Name>
+      <Type>ItemUpdating</Type>
+      <Assembly>$SharePoint.Project.AssemblyFullName$</Assembly>
+      <Class>ListsNotifications.EventReceiver1.EventReceiver1</Class>
+      <SequenceNumber>10000</SequenceNumber>
+    </Receiver>
+  </Receivers>
 </Elements>

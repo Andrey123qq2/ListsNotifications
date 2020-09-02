@@ -19,9 +19,8 @@
     RegistrationType="List"
     Rights="MyList"
 		Sequence="410"
-		Title="ER Lists Permissions">
+		Title="ER Lists Notifications">
     <UrlAction
     Url="_layouts/ERListsSettings/ERListsSettings.aspx?List={ListId}&amp;Mode=Notifications" />
   </CustomAction>
 </Elements>
-

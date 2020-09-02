@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Elements xmlns="http://schemas.microsoft.com/sharepoint/">
   <ListTemplate
-		Name="TaskListsNewSettings"
+		Name="TaskListsSettings"
 		Type="107"
 		BaseType="0"
 		OnQuickLaunch="TRUE"
@@ -13,8 +13,8 @@
   <CustomAction
 		Id="Custom.Configuration.ListCustomSettings.TaskListsNewSettings"
 		GroupId="GeneralSettings"
-		Location="Microsoft.SharePoint.ListEdit.TaskListsNewSettings"
-		RegistrationId = "101"
+		Location="Microsoft.SharePoint.ListEdit"
+		RegistrationId = "107"
 		RequireSiteAdministrator="FALSE"
     RegistrationType="List"
     Rights="MyList"
