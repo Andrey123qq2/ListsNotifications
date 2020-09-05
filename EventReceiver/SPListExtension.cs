@@ -18,6 +18,7 @@ namespace ListsNotifications
         public static List<string> GetListUserFields(this SPList list)
         {
             List<string> arrListUserFields = new List<string>();
+
             foreach (SPField fieldSP in list.Fields)
             {
                 string fTypeName = fieldSP.Type.ToString();
@@ -28,6 +29,7 @@ namespace ListsNotifications
                     arrListUserFields.Add(fTitle);
                 }
             }
+
             return arrListUserFields;
         }
     }

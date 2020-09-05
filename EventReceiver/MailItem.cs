@@ -21,17 +21,43 @@ namespace ListsNotifications
         public readonly string bcc;
         public readonly string subject;
         StringDictionary headers;
-        private bool BeforeValues;
 
-        public MailItem(ERItem item, List<string> fieldsToTrack, string mailSubjectMode = "", bool FieldsBeforeValue = true)
+        private bool showBeforeValues;
+        private string fieldStringTemplate;
+        private bool eventTypeAttachment;
+
+        public MailItem(ERItem item, List<SPItemField> fieldsToTrack, string mailSubjectMode = "", bool showBeforeValuesParam = true)
         {
-            BeforeValues = FieldsBeforeValue;
+            showBeforeValues = showBeforeValuesParam;
+            fieldStringTemplate = GetFieldStringTemplate();
+            eventTypeAttachment = item.eventProperties.EventType.ToString().Contains("Attachment");
+
             body = CreateBody(item, fieldsToTrack);
             to = String.Join(",", item.UserNotifyFieldsMails);
             cc = String.Join(",", item.mailcc);
             bcc = String.Join(",", item.mailbcc);
             subject = CreateSubject(item, mailSubjectMode);
             headers = GetHeaders();
+        }
+
+        private string GetFieldStringTemplate()
+        {
+            string stringTemplate;
+            if (showBeforeValues)
+            {
+                stringTemplate = "<p>{0}: <strike>{1}</strike> {2}</p>";
+            }
+            else
+            {
+                stringTemplate = "<p>{0}: {2}</p>";
+            }
+
+            if (eventTypeAttachment)
+            {
+                stringTemplate = "<p>{0}: <a href=\"{1}\">{2}</a></p>";
+            }
+
+            return stringTemplate;
         }
 
         private string CreateSubject(ERItem item, string subjectMode)
@@ -66,53 +92,95 @@ namespace ListsNotifications
             return mailHeaders;
         }
 
-        private string GetChangedFieldsBlock(ERItem item, List<string> fields)
+        private string GetChangedFieldsBlock(ERItem item)
         {
             string ChangedFieldsBlock = "";
-            string FieldStringTemplate;
 
-            if (!item.eventProperties.EventType.ToString().Contains("Attachment"))
+            string attachmentUrl = item.listItem.Web.Url + "/" + item.eventProperties.AfterUrl.ToString();
+            string attachmentName = Regex.Replace(attachmentUrl, @"^.*\/", "");
+            ChangedFieldsBlock += String.Format(fieldStringTemplate, "Вложение", attachmentUrl, attachmentName);
+
+            return ChangedFieldsBlock;
+        }
+
+        private string GetChangedFieldsBlock(ERItem item, List<SPItemField> itemFields)
+        {
+            string ChangedFieldsBlock = "";
+
+            foreach (SPItemField field in itemFields)
             {
-                foreach (string fieldTitle in fields)
+                if (!showBeforeValues && (field.friendlyFieldValueAfter == "-" || field.friendlyFieldValueAfter == ""))
                 {
-                    //if (!item.listItem.ParentList.Fields.ContainsField(fieldTitle))
-                    //{
-                    //    continue;
-                    //}
-
-                    if (item.FieldIsChanged(fieldTitle))
-                    {
-                        string beforeFieldValue = item.GetFriendlyFieldValue(fieldTitle, false);
-                        string afterFieldValue = item.GetFriendlyFieldValue(fieldTitle);
-
-                        if (!BeforeValues && (afterFieldValue == "-" || afterFieldValue == ""))
-                        {
-                            continue;
-                        }
-
-                        if (BeforeValues)
-                        {
-                            FieldStringTemplate = "<p>{0}: <strike>{1}</strike> {2}</p>";
-                        }
-                        else 
-                        {
-                            FieldStringTemplate = "<p>{0}: {2}</p>";
-                        }
-                        ChangedFieldsBlock += String.Format(FieldStringTemplate, fieldTitle, beforeFieldValue, afterFieldValue);
-                    }
+                    continue;
                 }
-            }
-            else
-            {
-                string attachmentUrl = item.listItem.Web.Url + "/" + item.eventProperties.AfterUrl.ToString();
-                string attachmentName = Regex.Replace(attachmentUrl, @"^.*\/", "");
-                ChangedFieldsBlock += String.Format("<p>{0}: <a href=\"{1}\">{2}</a></p>", "Вложение", attachmentUrl, attachmentName);
+
+                ChangedFieldsBlock += String.Format(fieldStringTemplate, field.fieldTitle, field.friendlyFieldValueBefore, field.friendlyFieldValueAfter);
             }
 
             return ChangedFieldsBlock;
         }
 
-        private string CreateBody(ERItem item, List<string> fields)
+        //private string GetChangedFieldsBlock(ERItem item, List<SPItemField> itemFields)
+        //{
+        //    string ChangedFieldsBlock = "";
+
+        //    if (item.eventProperties.EventType.ToString().Contains("Attachment"))
+        //    {
+        //        ChangedFieldsBlock = GetChangedFieldsBlockAttachment(item, itemFields);
+        //    }
+        //    else
+        //    {
+        //        ChangedFieldsBlock = GetChangedFieldsBlockNotAttachment(item, itemFields);
+        //    }
+
+
+        //    return ChangedFieldsBlock;
+        //}
+
+            //string FieldStringTemplate;
+
+            //if (!item.eventProperties.EventType.ToString().Contains("Attachment"))
+            //{
+            //    foreach (SPItemField field in itemFields)
+            //    {
+            //        //if (!item.listItem.ParentList.Fields.ContainsField(fieldTitle))
+            //        //{
+            //        //    continue;
+            //        //}
+
+            //        //if (item.FieldIsChanged(fieldTitle))
+            //        //{
+            //        //    string beforeFieldValue = item.GetFriendlyFieldValue(fieldTitle, false);
+            //        //    string afterFieldValue = item.GetFriendlyFieldValue(fieldTitle);
+
+            //        //    if (!BeforeValues && (afterFieldValue == "-" || afterFieldValue == ""))
+            //        //    {
+            //        //        continue;
+            //        //    }
+
+            //        //    if (BeforeValues)
+            //        //    {
+            //        //        FieldStringTemplate = "<p>{0}: <strike>{1}</strike> {2}</p>";
+            //        //    }
+            //        //    else 
+            //        //    {
+            //        //        FieldStringTemplate = "<p>{0}: {2}</p>";
+            //        //    }
+            //        //    ChangedFieldsBlock += String.Format(FieldStringTemplate, fieldTitle, beforeFieldValue, afterFieldValue);
+            //        //}
+            //    }
+            //}
+            //else
+            //{
+            //    string attachmentUrl = item.listItem.Web.Url + "/" + item.eventProperties.AfterUrl.ToString();
+            //    string attachmentName = Regex.Replace(attachmentUrl, @"^.*\/", "");
+            //    ChangedFieldsBlock += String.Format("<p>{0}: <a href=\"{1}\">{2}</a></p>", "Вложение", attachmentUrl, attachmentName);
+            //}
+
+            //return ChangedFieldsBlock;
+        //}
+
+        private string CreateBody(ERItem item, List<SPItemField> fields)
         {
             string ChangedFieldsBlock;
             string ModifiedByBlock;
@@ -121,21 +189,18 @@ namespace ListsNotifications
 
             string mailBodyString;
 
-            ChangedFieldsBlock = GetChangedFieldsBlock(item, fields);
+            ChangedFieldsBlock = eventTypeAttachment ? GetChangedFieldsBlock(item, fields) : GetChangedFieldsBlock(item);
 
             if (ChangedFieldsBlock == "")
             {
-                mailBodyString = "";
+                return "";
             }
-            else
-            {
-                itemUrlBlock = String.Format("<p>Элемент: <a href='{0}'>{1}</a></p>", item.listItem.GetItemFullUrl(), item.itemTitle);
 
-                EditorDisplayName = item.eventProperties.UserDisplayName;
-                ModifiedByBlock = String.Format("<p>Кем изменено: {0}</p>", EditorDisplayName);
+            itemUrlBlock = String.Format(NotifCommonConfig.MAIL_URL_TEMPLATE, item.listItem.GetItemFullUrl(), item.itemTitle);
+            EditorDisplayName = item.eventProperties.UserDisplayName;
+            ModifiedByBlock = String.Format(NotifCommonConfig.MAIL_MODIFIED_BY_TEMPLATE, EditorDisplayName);
 
-                mailBodyString = String.Format(ERItem.MAIL_BODY_TEMPLATE, ChangedFieldsBlock, itemUrlBlock, ModifiedByBlock);
-            }
+            mailBodyString = String.Format(NotifCommonConfig.MAIL_BODY_TEMPLATE, ChangedFieldsBlock, itemUrlBlock, ModifiedByBlock);
 
             return mailBodyString;
         }

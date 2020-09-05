@@ -27,7 +27,7 @@ namespace ListsNotifications
 
         public static void NotificationsTrackFields(ERItem itemER)
         {
-            MailItem mailToNotify = new MailItem(itemER, itemER.TrackFields);
+            MailItem mailToNotify = new MailItem(itemER, itemER.TrackSPItemFields);
             mailToNotify.SendMail(itemER.listItem.ParentList.ParentWeb);
         }
 

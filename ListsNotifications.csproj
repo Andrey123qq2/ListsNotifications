@@ -57,10 +57,19 @@
     <Reference Include="Microsoft.SharePoint.Client.ServerRuntime" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SPItemField\SPItemFieldTypeSPFieldLookupValueCollection.cs" />
+    <Compile Include="SPItemField\SPItemFieldTypeSPFieldUserValue.cs" />
+    <Compile Include="SPItemField\SPItemFieldTypeSPFieldUserValueCollection.cs" />
+    <Compile Include="SPItemField\SPItemFieldTypeDouble.cs" />
+    <Compile Include="SPItemField\SPItemFieldTypeCommon.cs" />
+    <Compile Include="SPItemField\SPItemFieldTypeDateTime.cs" />
+    <Compile Include="SPItemField\SPItemField.cs" />
+    <Compile Include="SPItemField\SPItemFieldFactory.cs" />
     <Compile Include="PageSettings\AdditionalFieldsTable.cs" />
     <Compile Include="PageSettings\PageSettings.cs" />
     <Compile Include="PageSettings\SettingsTable.cs" />
     <Compile Include="PageSettings\TrackFieldsTable.cs" />
+    <Compile Include="ReadConfig\NotifCommonConfig.cs" />
     <Compile Include="ReadConfig\ERItemSPProperties.cs" />
     <Compile Include="Layouts\ERListsSettings\ERListsSettings.aspx.cs">
       <DependentUpon>ERListsSettings.aspx</DependentUpon>

@@ -184,9 +184,9 @@ namespace ListsNotifications
                 }
             };
 
-            list.RootFolder.Properties["er_notif_track_fields"] = String.Join(",", trackFieldsList.ToArray());
-            list.RootFolder.Properties["er_notif_track_fields_singlemail"] = String.Join(",", TrackFieldsSingleMail.ToArray());
-            list.RootFolder.Properties["er_notif_user_fields"] = String.Join(",", UserNotifyFields.ToArray());
+            list.RootFolder.Properties[NotifCommonConfig.LIST_PROPERTY_TRACK_FIELDS] = String.Join(",", trackFieldsList.ToArray());
+            list.RootFolder.Properties[NotifCommonConfig.LIST_PROPERTY_TRACK_FIELDS_SINGLEMAIL] = String.Join(",", TrackFieldsSingleMail.ToArray());
+            list.RootFolder.Properties[NotifCommonConfig.LIST_PROPERTY_USER_FIELDS] = String.Join(",", UserNotifyFields.ToArray());
             list.Update();
         }
     }
