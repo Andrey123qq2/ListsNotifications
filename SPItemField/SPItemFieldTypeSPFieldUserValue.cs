@@ -25,7 +25,14 @@ namespace ListsNotifications
 
         public override void GetFriendlyFieldValues(string fieldValueString, out string friendlyFieldValue)
         {
-            friendlyFieldValue = item.listItem.Web.EnsureUser(new SPFieldUserValue(item.listItem.Web, fieldValueString.ToString()).LookupValue).Name;
+            try
+            {
+                friendlyFieldValue = item.listItem.Web.EnsureUser(new SPFieldUserValue(item.listItem.Web, fieldValueString.ToString()).LookupValue).Name;
+            }
+            catch
+            {
+                friendlyFieldValue = new SPFieldUserValue(item.listItem.Web, fieldValueString.ToString()).User.Name;
+            }
         }
     }
 }

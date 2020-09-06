@@ -38,7 +38,7 @@ namespace ListsNotifications
 			UserNotifyFieldsMails = SPCommon.GetUserMails(principals);
 
 			TrackSPItemFields = TrackFields
-				//.AsParallel()
+				.AsParallel()
 				.Select(f => SPItemFieldFactory.create(this, f))
 				.Where(t => t.IsChanged)
 				.ToList();
