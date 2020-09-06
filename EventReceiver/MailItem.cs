@@ -43,6 +43,7 @@ namespace ListsNotifications
         private string GetFieldStringTemplate()
         {
             string stringTemplate;
+
             if (showBeforeValues)
             {
                 stringTemplate = "<p>{0}: <strike>{1}</strike> {2}</p>";
@@ -120,66 +121,6 @@ namespace ListsNotifications
             return ChangedFieldsBlock;
         }
 
-        //private string GetChangedFieldsBlock(ERItem item, List<SPItemField> itemFields)
-        //{
-        //    string ChangedFieldsBlock = "";
-
-        //    if (item.eventProperties.EventType.ToString().Contains("Attachment"))
-        //    {
-        //        ChangedFieldsBlock = GetChangedFieldsBlockAttachment(item, itemFields);
-        //    }
-        //    else
-        //    {
-        //        ChangedFieldsBlock = GetChangedFieldsBlockNotAttachment(item, itemFields);
-        //    }
-
-
-        //    return ChangedFieldsBlock;
-        //}
-
-            //string FieldStringTemplate;
-
-            //if (!item.eventProperties.EventType.ToString().Contains("Attachment"))
-            //{
-            //    foreach (SPItemField field in itemFields)
-            //    {
-            //        //if (!item.listItem.ParentList.Fields.ContainsField(fieldTitle))
-            //        //{
-            //        //    continue;
-            //        //}
-
-            //        //if (item.FieldIsChanged(fieldTitle))
-            //        //{
-            //        //    string beforeFieldValue = item.GetFriendlyFieldValue(fieldTitle, false);
-            //        //    string afterFieldValue = item.GetFriendlyFieldValue(fieldTitle);
-
-            //        //    if (!BeforeValues && (afterFieldValue == "-" || afterFieldValue == ""))
-            //        //    {
-            //        //        continue;
-            //        //    }
-
-            //        //    if (BeforeValues)
-            //        //    {
-            //        //        FieldStringTemplate = "<p>{0}: <strike>{1}</strike> {2}</p>";
-            //        //    }
-            //        //    else 
-            //        //    {
-            //        //        FieldStringTemplate = "<p>{0}: {2}</p>";
-            //        //    }
-            //        //    ChangedFieldsBlock += String.Format(FieldStringTemplate, fieldTitle, beforeFieldValue, afterFieldValue);
-            //        //}
-            //    }
-            //}
-            //else
-            //{
-            //    string attachmentUrl = item.listItem.Web.Url + "/" + item.eventProperties.AfterUrl.ToString();
-            //    string attachmentName = Regex.Replace(attachmentUrl, @"^.*\/", "");
-            //    ChangedFieldsBlock += String.Format("<p>{0}: <a href=\"{1}\">{2}</a></p>", "Вложение", attachmentUrl, attachmentName);
-            //}
-
-            //return ChangedFieldsBlock;
-        //}
-
         private string CreateBody(ERItem item, List<SPItemField> fields)
         {
             string ChangedFieldsBlock;
@@ -189,7 +130,7 @@ namespace ListsNotifications
 
             string mailBodyString;
 
-            ChangedFieldsBlock = eventTypeAttachment ? GetChangedFieldsBlock(item, fields) : GetChangedFieldsBlock(item);
+            ChangedFieldsBlock = eventTypeAttachment ? GetChangedFieldsBlock(item) : GetChangedFieldsBlock(item, fields);
 
             if (ChangedFieldsBlock == "")
             {

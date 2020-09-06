@@ -38,9 +38,9 @@ namespace ListsNotifications
                 return;
             }
 
-            foreach (KeyValuePair<string, string> trackField in itemER.TrackFieldsSingleMail)
+            foreach (KeyValuePair<SPItemField, string> trackField in itemER.TrackSingleMailSPItemFields)
             {
-                MailItem mailToNotifySingleField = new MailItem(itemER, new List<string> { trackField.Key }, trackField.Value, false);
+                MailItem mailToNotifySingleField = new MailItem(itemER, new List<SPItemField> { trackField.Key }, trackField.Value, false);
                 mailToNotifySingleField.SendMail(itemER.listItem.ParentList.ParentWeb);
             }
         }

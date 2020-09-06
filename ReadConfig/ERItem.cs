@@ -22,6 +22,7 @@ namespace ListsNotifications
 		public List<string> mailcc;
 
 		public List<SPItemField> TrackSPItemFields;
+		public Dictionary<SPItemField, string> TrackSingleMailSPItemFields;
 		//public List<SPItemField> TrackFieldsSingleMailSPItemField;
 
 		public ERItem(SPItemEventProperties properties): base(properties)
@@ -36,9 +37,17 @@ namespace ListsNotifications
 			List<SPPrincipal> principals = this.GetUsersFromUsersFields(UserNotifyFields);
 			UserNotifyFieldsMails = SPCommon.GetUserMails(principals);
 
-			TrackSPItemFields = TrackFields.Select(f => SPItemFieldFactory.create(this, f)).Where(t => t.IsChanged).ToList();
+			TrackSPItemFields = TrackFields
+				//.AsParallel()
+				.Select(f => SPItemFieldFactory.create(this, f))
+				.Where(t => t.IsChanged)
+				.ToList();
 
-			//GetSPItemFieldsChanges();
+			TrackSingleMailSPItemFields = TrackFieldsSingleMail
+				//.AsParallel()
+				.Select(f => SPItemFieldFactory.create(this, f.Key))
+				.Where(t => t.IsChanged)
+				.ToDictionary(t => t, t => TrackFieldsSingleMail[t.fieldTitle]);
 		}
 
 		public ERItem(SPList listSP)
