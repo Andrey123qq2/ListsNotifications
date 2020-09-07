@@ -9,9 +9,8 @@ namespace ListsNotifications
 {
     class SPItemFieldTypeSPFieldUserValueCollection : SPItemField
     {
-        public SPItemFieldTypeSPFieldUserValueCollection(ERItem itemParam, string fieldTitleParam, bool valueAfterParam = true) : base(itemParam, fieldTitleParam, valueAfterParam)
+        public SPItemFieldTypeSPFieldUserValueCollection(params object[] attributes) : base(attributes)
         {
-
         }
         public override void GetFieldValuesToStringForCompare()
         {

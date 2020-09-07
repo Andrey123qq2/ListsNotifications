@@ -9,7 +9,7 @@ namespace ListsNotifications
 {
     class SPItemFieldTypeSPFieldLookupValueCollection :SPItemField
     {
-        public SPItemFieldTypeSPFieldLookupValueCollection(ERItem itemParam, string fieldTitleParam, bool valueAfterParam = true) : base(itemParam, fieldTitleParam, valueAfterParam)
+        public SPItemFieldTypeSPFieldLookupValueCollection(params object[] attributes) : base(attributes)
         {
 
         }

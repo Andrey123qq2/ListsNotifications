@@ -27,11 +27,12 @@ namespace ListsNotifications
         protected string fieldValueBeforeToStringForFriendly;
 
 
-        public SPItemField(ERItem itemParam, string fieldTitleParam, bool valueAfterParam = true)
+        
+        public SPItemField(params object[] attributes)
         {
-            fieldTitle = fieldTitleParam;
-            item = itemParam;
-            valueAfter = valueAfterParam;
+            item = (ERItem)attributes[0];
+            fieldTitle = (string)attributes[1];
+            valueAfter = (bool)attributes[2];
 
             fieldValueAfter = valueAfter ? item.GetFieldValue(fieldTitle, valueAfter) : null;
             fieldValueBefore = item.GetFieldValue(fieldTitle, false);

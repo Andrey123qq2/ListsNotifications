@@ -9,7 +9,7 @@ namespace ListsNotifications
 {
     class SPItemFieldTypeDateTime : SPItemField
     {
-        public SPItemFieldTypeDateTime(ERItem itemParam, string fieldTitleParam, bool valueAfterParam = true) : base(itemParam, fieldTitleParam, valueAfterParam)
+        public SPItemFieldTypeDateTime(params object[] attributes) : base(attributes)
         {
         }
         public override void GetFieldValuesToStringForCompare()

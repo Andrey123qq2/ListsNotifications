@@ -10,21 +10,28 @@ namespace ListsNotifications
     {
         public static SPItemField create(ERItem item, string fieldTitle, bool valueAfterParam = true)
         {
-            switch (item.listItem.ParentList.Fields.GetField(fieldTitle).FieldValueType.Name)
+            object[] SPItemFieldParams = { item, fieldTitle, valueAfterParam };
+
+            Type SPItemFieldType = GetSPItemFieldType(item, fieldTitle);
+
+            if (SPItemFieldType != null)
             {
-                case "DateTime":
-                    return new SPItemFieldTypeDateTime(item, fieldTitle, valueAfterParam);
-                case "Double":
-                    return new SPItemFieldTypeDouble(item, fieldTitle, valueAfterParam);
-                case "SPFieldUserValueCollection":
-                    return new SPItemFieldTypeSPFieldUserValueCollection(item, fieldTitle, valueAfterParam);
-                case "SPFieldUserValue":
-                    return new SPItemFieldTypeSPFieldUserValue(item, fieldTitle, valueAfterParam);
-                case "SPFieldLookupValueCollection":
-                    return new SPItemFieldTypeSPFieldLookupValueCollection(item, fieldTitle, valueAfterParam);
-                default:
-                    return new SPItemFieldTypeCommon(item, fieldTitle, valueAfterParam);
+                return (SPItemField)Activator.CreateInstance(SPItemFieldType, SPItemFieldParams);
             }
+            else
+            {
+                return new SPItemFieldTypeCommon(SPItemFieldParams);
+            }
+        }
+
+        private static Type GetSPItemFieldType(ERItem item, string fieldTitle)
+        {
+            string SPItemFieldTypeName = "SPItemFieldType" + item.listItem.ParentList.Fields.GetField(fieldTitle).FieldValueType.Name;
+            string assemblyName = "ListsNotifications";
+
+            Type SPItemFieldType = Type.GetType(assemblyName + "." + SPItemFieldTypeName);
+
+            return SPItemFieldType;
         }
     }
 }

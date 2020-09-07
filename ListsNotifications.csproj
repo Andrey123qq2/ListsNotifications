@@ -57,6 +57,7 @@
     <Reference Include="Microsoft.SharePoint.Client.ServerRuntime" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SPItemField\SPItemFieldTypeString.cs" />
     <Compile Include="SPItemField\SPItemFieldTypeSPFieldLookupValueCollection.cs" />
     <Compile Include="SPItemField\SPItemFieldTypeSPFieldUserValue.cs" />
     <Compile Include="SPItemField\SPItemFieldTypeSPFieldUserValueCollection.cs" />

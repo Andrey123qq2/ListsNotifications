@@ -9,9 +9,8 @@ namespace ListsNotifications
 {
     class SPItemFieldTypeDouble : SPItemField
     {
-        public SPItemFieldTypeDouble(ERItem itemParam, string fieldTitleParam, bool valueAfterParam = true) : base(itemParam, fieldTitleParam, valueAfterParam)
+        public SPItemFieldTypeDouble(params object[] attributes) : base(attributes)
         {
-
         }
         public override void GetFieldValuesToStringForCompare()
         {
