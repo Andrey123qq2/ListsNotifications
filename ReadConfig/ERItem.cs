@@ -27,18 +27,18 @@ namespace ListsNotifications
 
 		public ERItem(SPItemEventProperties properties): base(properties)
 		{
-			if (listItem == null)
-			{
-				return;
-			};
-
 			SetAllAttributes(listItem.ParentList);
 
 			List<SPPrincipal> principals = this.GetUsersFromUsersFields(UserNotifyFields);
 			UserNotifyFieldsMails = SPCommon.GetUserMails(principals);
 
+			if (properties.EventType.ToString().Contains("Attachment"))
+			{
+				return;
+			}
+
 			TrackSPItemFields = TrackFields
-				.AsParallel()
+				//.AsParallel()
 				.Select(f => SPItemFieldFactory.create(this, f))
 				.Where(t => t.IsChanged)
 				.ToList();

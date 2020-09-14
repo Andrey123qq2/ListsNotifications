@@ -55,7 +55,7 @@ namespace ListsNotifications.EventReceiver1
                 {
                     SPSecurity.RunWithElevatedPrivileges(delegate ()
                     {
-                        MainInit.Notifications(properties);
+                        MainInit.NotificationsAttachment(properties);
                     });
                 }
             }
@@ -68,7 +68,5 @@ namespace ListsNotifications.EventReceiver1
                 base.EventFiringEnabled = true;
             }
         }
-
-
     }
 }

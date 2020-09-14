@@ -35,9 +35,10 @@ namespace ListsNotifications
                     {
                         listItem = properties.ListItem;
                     }
+
                     if (listItem == null)
                     {
-                        return;
+                        throw new Exception("ListItem not found");
                     }
                 }
             }

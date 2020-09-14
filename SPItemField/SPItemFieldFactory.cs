@@ -14,22 +14,30 @@ namespace ListsNotifications
 
             Type SPItemFieldType = GetSPItemFieldType(item, fieldTitle);
 
-            if (SPItemFieldType != null)
-            {
-                return (SPItemField)Activator.CreateInstance(SPItemFieldType, SPItemFieldParams);
-            }
-            else
-            {
-                return new SPItemFieldTypeCommon(SPItemFieldParams);
-            }
+            return (SPItemField)Activator.CreateInstance(SPItemFieldType, SPItemFieldParams);
         }
 
         private static Type GetSPItemFieldType(ERItem item, string fieldTitle)
         {
-            string SPItemFieldTypeName = "SPItemFieldType" + item.listItem.ParentList.Fields.GetField(fieldTitle).FieldValueType.Name;
+            Type SPItemFieldType;
+            string SPItemFieldTypeName;
+
+            try
+            {
+                SPItemFieldTypeName = "SPItemFieldType" + item.listItem.ParentList.Fields.GetField(fieldTitle).FieldValueType.Name;
+            }
+            catch {
+                SPItemFieldTypeName = "SPItemFieldType" + item.listItem.ParentList.Fields.GetField(fieldTitle).FieldTypeDefinition.TypeName;
+                SPItemFieldTypeName = SPItemFieldTypeName.Replace("File", "String");
+            }
             string assemblyName = "ListsNotifications";
 
-            Type SPItemFieldType = Type.GetType(assemblyName + "." + SPItemFieldTypeName);
+            SPItemFieldType = Type.GetType(assemblyName + "." + SPItemFieldTypeName);
+
+            if (SPItemFieldType == null)
+            {
+                SPItemFieldType = Type.GetType(assemblyName + ".SPItemFieldTypeCommon");
+            }
 
             return SPItemFieldType;
         }

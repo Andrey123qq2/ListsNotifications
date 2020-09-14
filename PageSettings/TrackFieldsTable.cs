@@ -63,12 +63,12 @@ namespace ListsNotifications
             int i = 0;
             foreach (SPField field in listFields)
             {
-                i++;
-
                 if (field.ReadOnlyField || field.Hidden)
                 {
                     continue;
                 };
+
+                i++;
 
                 TableRow tr = new TableRow();
 

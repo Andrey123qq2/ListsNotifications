@@ -14,6 +14,22 @@ namespace ListsNotifications
     {
         public static void Notifications(SPItemEventProperties properties)
         {
+            ERItem itemER;
+            try
+            {
+                itemER = new ERItem(properties);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("ERItem constructor exception: " + e.Message);
+            }
+
+            NotificationsTrackFields(itemER);
+            NotificationsSingleField(itemER);
+        }
+
+        public static void NotificationsAttachment(SPItemEventProperties properties)
+        {
             ERItem itemER = new ERItem(properties);
 
             if (itemER.listItem == null)
@@ -21,28 +37,33 @@ namespace ListsNotifications
                 return;
             }
 
-            NotificationsTrackFields(itemER);
-            NotificationsSingleField(itemER);
+            NotificationsAttachments(itemER);
         }
 
         public static void NotificationsTrackFields(ERItem itemER)
         {
+            if (itemER.TrackSPItemFields.Count == 0)
+            {
+                return;
+            }
+
             MailItem mailToNotify = new MailItem(itemER, itemER.TrackSPItemFields);
             mailToNotify.SendMail(itemER.listItem.ParentList.ParentWeb);
         }
 
         public static void NotificationsSingleField(ERItem itemER)
         {
-            if (itemER.eventProperties.EventType.ToString().Contains("Attachment"))
-            {
-                return;
-            }
-
             foreach (KeyValuePair<SPItemField, string> trackField in itemER.TrackSingleMailSPItemFields)
             {
                 MailItem mailToNotifySingleField = new MailItem(itemER, new List<SPItemField> { trackField.Key }, trackField.Value, false);
                 mailToNotifySingleField.SendMail(itemER.listItem.ParentList.ParentWeb);
             }
+        }
+
+        public static void NotificationsAttachments(ERItem itemER)
+        {
+            MailItem mailToNotify = new MailItem(itemER);
+            mailToNotify.SendMail(itemER.listItem.ParentList.ParentWeb);
         }
     }
 }
