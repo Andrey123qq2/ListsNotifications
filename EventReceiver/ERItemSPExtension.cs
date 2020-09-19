@@ -123,7 +123,14 @@ namespace ListsNotifications
                         }
                         catch
                         {
-                            principal = item.listItem.ParentList.ParentWeb.SiteGroups.GetByName(userLogin);
+                            try
+                            {
+                                principal = item.listItem.ParentList.ParentWeb.SiteGroups.GetByName(userLogin);
+                            }
+                            catch
+                            {
+                                continue;
+                            }
                         }
 
                         fieldsPrincipals.Add(principal);

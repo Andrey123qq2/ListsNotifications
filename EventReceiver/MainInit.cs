@@ -47,7 +47,7 @@ namespace ListsNotifications
                 return;
             }
 
-            MailItem mailToNotify = new MailItem(itemER, itemER.TrackSPItemFields);
+            MailItem mailToNotify = new MailItem(itemER, itemER.TrackSPItemFields, "", itemER.eventType.Contains("ing"));
             mailToNotify.SendMail(itemER.listItem.ParentList.ParentWeb);
         }
 

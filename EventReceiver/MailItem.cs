@@ -101,7 +101,7 @@ namespace ListsNotifications
 
             ChangedFieldsBlock = GetChangedFieldsBlock(fields);
 
-            mailBodyString = String.Format(NotifCommonConfig.MAIL_BODY_TEMPLATE, ChangedFieldsBlock, itemUrlBlock, ModifiedByBlock);
+            mailBodyString = ChangedFieldsBlock != "" ? String.Format(NotifCommonConfig.MAIL_BODY_TEMPLATE, ChangedFieldsBlock, itemUrlBlock, ModifiedByBlock) : "";
 
             return mailBodyString;
         }

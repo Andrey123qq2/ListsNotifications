@@ -44,6 +44,32 @@ namespace ListsNotifications.EventReceiver1
             }
         }
 
+        public override void ItemUpdated(SPItemEventProperties properties)
+        {
+            base.ItemUpdated(properties);
+
+            try
+            {
+                base.EventFiringEnabled = false;
+
+                if (!SPCommon.IsUpdatingBySystem(properties))
+                {
+                    SPSecurity.RunWithElevatedPrivileges(delegate ()
+                    {
+                        MainInit.Notifications(properties);
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("CustomEventReceiver, ItemUpdated(): Exception: [" + ex.ToString() + "].");
+            }
+            finally
+            {
+                base.EventFiringEnabled = true;
+            }
+        }
+
         public override void ItemAttachmentAdded(SPItemEventProperties properties)
         {
             base.ItemAttachmentAdded(properties);

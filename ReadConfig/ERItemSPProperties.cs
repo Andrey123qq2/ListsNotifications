@@ -17,6 +17,7 @@ namespace ListsNotifications
     {
         public SPListItem listItem;
         public SPItemEventProperties eventProperties;
+        public string eventType;
         public string itemTitle;
 
         public ERItemSPProperties(SPItemEventProperties properties)
@@ -44,6 +45,8 @@ namespace ListsNotifications
             }
 
             eventProperties = properties;
+
+            eventType = properties.EventType.ToString();
 
             itemTitle = (listItem.Title != "" && listItem.Title != null) ? listItem.Title : listItem["FileLeafRef"].ToString();
         }

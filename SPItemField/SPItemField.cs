@@ -40,6 +40,11 @@ namespace ListsNotifications
             GetFieldValuesToStringForCompare();
             IsChanged = FieldIsChanged();
 
+            if (IsChanged == false)
+            {
+                return;
+            }
+
             GetFieldValuesToStringForFriendly();
             if (friendlyFieldValueAfter != "-")
             {
