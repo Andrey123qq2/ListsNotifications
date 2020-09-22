@@ -58,6 +58,7 @@
     <Reference Include="Microsoft.SharePoint.Client.ServerRuntime" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ReadConfig\ERItemPageSettings.cs" />
     <Compile Include="SPItemField\SPItemFieldTypeString.cs" />
     <Compile Include="SPItemField\SPItemFieldTypeSPFieldLookupValueCollection.cs" />
     <Compile Include="SPItemField\SPItemFieldTypeSPFieldUserValue.cs" />

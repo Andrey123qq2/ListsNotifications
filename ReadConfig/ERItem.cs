@@ -19,6 +19,7 @@ namespace ListsNotifications
 		public List<string> UserNotifyFieldsMails;
 		public List<string> mailbcc;
 		public List<string> mailcc;
+		public bool NotifiersPresent = true;
 
 		public List<string> TrackFields;
 		public Dictionary<string, string> TrackFieldsSingleMail;
@@ -27,64 +28,42 @@ namespace ListsNotifications
 		public List<SPItemField> TrackSPItemFields;
 		public Dictionary<SPItemField, string> TrackSingleMailSPItemFields;
 
-		//public List<SPItemField> TrackFieldsSingleMailSPItemField;
-
 		public ERItem(SPItemEventProperties properties) : base(properties)
 		{
-			//SetAllAttributes(listItem.ParentList);
-			SetBaseAttributes(listItem.ParentList);
+			SetMailAttributes(listItem.ParentList);
+
+			if (UserNotifyFields.Count == 0 && mailcc.Count == 0 && mailbcc.Count == 0)
+			{
+				NotifiersPresent = false;
+
+				return;
+			}
+
+			NotifiersPresent = true;
 
 			List<SPPrincipal> principals = this.GetUsersFromUsersFields(UserNotifyFields);
 			UserNotifyFieldsMails = SPCommon.GetUserMails(principals);
 
-			SetAttributesByERType();
-
-			//if (properties.EventType.ToString().Contains("Attachment"))
-			//{
-			//	return;
-			//}
-
-			//TrackSPItemFields = TrackFields
-			//	//.AsParallel()
-			//	.Select(f => SPItemFieldFactory.create(this, f))
-			//	.Where(t => t.IsChanged)
-			//	.ToList();
-
-			//TrackSingleMailSPItemFields = TrackFieldsSingleMail
-			//	//.AsParallel()
-			//	.Select(f => SPItemFieldFactory.create(this, f.Key))
-			//	.Where(t => t.IsChanged)
-			//	.ToDictionary(t => t, t => TrackFieldsSingleMail[t.fieldTitle]);
+			SetSPItemFieldsAttributesByERType();
 		}
 
 		public ERItem(SPList listSP)
 		{
-			//SetAllAttributes(listSP);
-			SetAllFieldsAttributes(listSP);
-		}
+			SetMailAttributes(listSP);
 
-		private void SetBaseAttributes(SPList listSP)
-		{
-			this.SetAttribute(listSP, out UserNotifyFields, NotifCommonConfig.LIST_PROPERTY_USER_FIELDS, true);
-			this.SetAttribute(listSP, out mailcc, NotifCommonConfig.LIST_PROPERTY_MAIL_CC);
-			this.SetAttribute(listSP, out mailbcc, NotifCommonConfig.LIST_PROPERTY_MAIL_BCC);
-			this.SetAttribute(listItem.ParentList, out TrackFields, NotifCommonConfig.LIST_PROPERTY_TRACK_FIELDS_BY_ERTYPE[eventType], true);
-
-			//this.SetAttribute(listSP, out TrackFields, NotifCommonConfig.LIST_PROPERTY_TRACK_FIELDS, true);
-			//this.SetAttribute(listSP, out TrackFieldsSingleMail, NotifCommonConfig.LIST_PROPERTY_TRACK_FIELDS_SINGLEMAIL, true);
-		}
-
-		private void SetAllFieldsAttributes(SPList listSP)
-		{
-			this.SetAttribute(listSP, out UserNotifyFields, NotifCommonConfig.LIST_PROPERTY_USER_FIELDS, true);
-			this.SetAttribute(listSP, out mailcc, NotifCommonConfig.LIST_PROPERTY_MAIL_CC);
-			this.SetAttribute(listSP, out mailbcc, NotifCommonConfig.LIST_PROPERTY_MAIL_BCC);
 			this.SetAttribute(listSP, out TrackFields, NotifCommonConfig.LIST_PROPERTY_TRACK_FIELDS, true);
-			this.SetAttribute(listSP, out TrackFieldsSingleMail, NotifCommonConfig.LIST_PROPERTY_TRACK_FIELDS_SINGLEMAIL, true);
 			this.SetAttribute(listSP, out ItemCreateFields, NotifCommonConfig.LIST_PROPERTY_TRACK_FIELDS_ITEMCREATE, true);
+			this.SetAttribute(listSP, out TrackFieldsSingleMail, NotifCommonConfig.LIST_PROPERTY_TRACK_FIELDS_SINGLEMAIL, true);
 		}
 
-		private void SetAttributesByERType()
+		private void SetMailAttributes(SPList listSP)
+		{
+			this.SetAttribute(listSP, out UserNotifyFields, NotifCommonConfig.LIST_PROPERTY_USER_FIELDS, true);
+			this.SetAttribute(listSP, out mailcc, NotifCommonConfig.LIST_PROPERTY_MAIL_CC);
+			this.SetAttribute(listSP, out mailbcc, NotifCommonConfig.LIST_PROPERTY_MAIL_BCC);
+		}
+
+		private void SetSPItemFieldsAttributesByERType()
 		{
 			string SetAttributesMethodName = "SetAttributes" + eventType;
 
@@ -100,7 +79,7 @@ namespace ListsNotifications
 
 		private void SetAttributesItemUpdating()
 		{
-			//this.SetAttribute(listItem.ParentList, out TrackFields, NotifCommonConfig.LIST_PROPERTY_TRACK_FIELDS_BY_ERTYPE["ItemUpdating"], true);
+			this.SetAttribute(listItem.ParentList, out TrackFields, NotifCommonConfig.LIST_PROPERTY_TRACK_FIELDS, true);
 
 			TrackSPItemFields = TrackFields
 				//.AsParallel()
@@ -108,10 +87,9 @@ namespace ListsNotifications
 				.Where(t => t.IsChanged)
 				.ToList();
 		}
-
 		private void SetAttributesItemUpdated()
 		{
-			//this.SetAttribute(listItem.ParentList, out TrackFieldsSingleMail, NotifCommonConfig.LIST_PROPERTY_TRACK_FIELDS_BY_ERTYPE["ItemUpdated"], true);
+			this.SetAttribute(listItem.ParentList, out TrackFieldsSingleMail, NotifCommonConfig.LIST_PROPERTY_TRACK_FIELDS_SINGLEMAIL, true);
 
 			TrackSingleMailSPItemFields = TrackFieldsSingleMail
 				//.AsParallel()
@@ -119,10 +97,9 @@ namespace ListsNotifications
 				.Where(t => t.IsChanged)
 				.ToDictionary(t => t, t => TrackFieldsSingleMail[t.fieldTitle]);
 		}
-
 		private void SetAttributesItemAdded()
 		{
-			//this.SetAttribute(listItem.ParentList, out TrackFields, NotifCommonConfig.LIST_PROPERTY_TRACK_FIELDS_BY_ERTYPE["ItemAdded"], true);
+			this.SetAttribute(listItem.ParentList, out TrackFields, NotifCommonConfig.LIST_PROPERTY_TRACK_FIELDS_ITEMCREATE, true);
 
 			TrackSPItemFields = TrackFields
 				//.AsParallel()
@@ -130,15 +107,9 @@ namespace ListsNotifications
 				.Where(t => t.IsChanged)
 				.ToList();
 		}
-
 		private void SetAttributesAttachmentAdding(SPList listSP)
 		{
 
 		}
-
-		//private void GetSPItemFieldsChanges()
-		//{
-		//	TrackSPItemField = TrackFields.Select(f => SPItemFieldFactory.create(this, f)).Where(t => t.IsChanged).ToList();
-		//}
 	}
 }

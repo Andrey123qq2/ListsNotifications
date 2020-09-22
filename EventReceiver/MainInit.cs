@@ -24,18 +24,56 @@ namespace ListsNotifications
                 throw new Exception("ERItem constructor exception: " + e.Message);
             }
 
+            if (itemER.NotifiersPresent == false)
+            {
+                return;
+            }
+
+            if (itemER.eventType.Contains("Attachment"))
+            {
+            
+            }
+
+        }
+        public static void Notifications(SPItemEventProperties properties)
+        {
+            ERItem itemER;
+            try
+            {
+                itemER = new ERItem(properties);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("ERItem constructor exception: " + e.Message);
+            }
+
+            if (itemER.NotifiersPresent == false)
+            {
+                return;
+            }
+
             NotificationsTrackFields(itemER);
             NotificationsSingleField(itemER);
         }
 
         public static void NotificationsAttachment(SPItemEventProperties properties)
         {
-            ERItem itemER = new ERItem(properties);
-
-            if (itemER.listItem == null)
+            ERItem itemER;
+            try
             {
-                return;
+                itemER = new ERItem(properties);
             }
+            catch (Exception e)
+            {
+                throw new Exception("ERItem constructor exception: " + e.Message);
+            }
+
+            //ERItem itemER = new ERItem(properties);
+
+            //if (itemER.listItem == null)
+            //{
+            //    return;
+            //}
 
             NotificationsAttachments(itemER);
         }
