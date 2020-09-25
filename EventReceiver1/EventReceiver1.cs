@@ -26,13 +26,7 @@ namespace ListsNotifications.EventReceiver1
             {
                 base.EventFiringEnabled = false;
 
-                if (!SPCommon.IsUpdatingBySystem(properties))
-                {
-                    SPSecurity.RunWithElevatedPrivileges(delegate ()
-                    {
-                        MainInit.Notifications(properties);
-                    });
-                }
+                MainInit.Init(properties);
             }
             catch (Exception ex)
             {
@@ -52,17 +46,31 @@ namespace ListsNotifications.EventReceiver1
             {
                 base.EventFiringEnabled = false;
 
-                if (!SPCommon.IsUpdatingBySystem(properties))
-                {
-                    SPSecurity.RunWithElevatedPrivileges(delegate ()
-                    {
-                        MainInit.Notifications(properties);
-                    });
-                }
+                MainInit.Init(properties);
             }
             catch (Exception ex)
             {
                 throw new Exception("CustomEventReceiver, ItemUpdated(): Exception: [" + ex.ToString() + "].");
+            }
+            finally
+            {
+                base.EventFiringEnabled = true;
+            }
+        }
+
+        public override void ItemAdded(SPItemEventProperties properties)
+        {
+            base.ItemAdded(properties);
+
+            try
+            {
+                base.EventFiringEnabled = false;
+
+                MainInit.Init(properties);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("CustomEventReceiver, ItemAdded(): Exception: [" + ex.ToString() + "].");
             }
             finally
             {
@@ -77,13 +85,7 @@ namespace ListsNotifications.EventReceiver1
             {
                 base.EventFiringEnabled = false;
 
-                if (!SPCommon.IsUpdatingBySystem(properties) && !SPCommon.IsJustCreated(properties))
-                {
-                    SPSecurity.RunWithElevatedPrivileges(delegate ()
-                    {
-                        MainInit.NotificationsAttachment(properties);
-                    });
-                }
+                MainInit.Init(properties);
             }
             catch (Exception ex)
             {

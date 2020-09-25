@@ -147,7 +147,7 @@ namespace ListsNotifications
         }
 
         //TO ERItem !!
-        public static dynamic GetFieldValue(this ERItem item, string fieldTitle, bool valueAfter = true)
+        public static dynamic GetFieldValue(this ERItem item, string fieldTitle)
         {
             dynamic ChangedFieldValue;
             string fieldInternalName;
@@ -164,7 +164,7 @@ namespace ListsNotifications
                 fieldStaticName = fieldTitle;
             }
 
-            if (SPCommon.IsEventIng(item.eventProperties) && valueAfter)
+            if (item.eventType.Contains("ing"))
             {
                 ChangedFieldValue = item.eventProperties.AfterProperties[fieldInternalName];
 

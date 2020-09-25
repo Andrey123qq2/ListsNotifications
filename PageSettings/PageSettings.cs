@@ -32,7 +32,7 @@ namespace ListsNotifications
 
             list = GetSPList();
             listFields = list.Fields;
-            listERConfig = new ERItem(list);
+            listERConfig = ERItemFactory.Create(list);
         }
 
         public void CreateSettingsControls()

@@ -15,13 +15,13 @@ namespace ListsNotifications
 
 		public static readonly string LIST_PROPERTY_TRACK_FIELDS = "er_notif_track_fields";
 		public static readonly string LIST_PROPERTY_TRACK_FIELDS_SINGLEMAIL = "er_notif_track_fields_singlemail";
-		public static readonly string LIST_PROPERTY_TRACK_FIELDS_ITEMCREATE = "er_notif_track_fields_itemcreate";
+		public static readonly string LIST_PROPERTY_TRACK_FIELDS_ITEMADDED = "er_notif_track_fields_itemcreate";
 
 		public static Dictionary<string, string> LIST_PROPERTY_TRACK_FIELDS_BY_ERTYPE = new Dictionary<string, string>()
 		{
 			["ItemUpdating"] = LIST_PROPERTY_TRACK_FIELDS,
 			["ItemUpdated"] = LIST_PROPERTY_TRACK_FIELDS_SINGLEMAIL,
-			["ItemAdded"] = LIST_PROPERTY_TRACK_FIELDS_ITEMCREATE,
+			["ItemAdded"] = LIST_PROPERTY_TRACK_FIELDS_ITEMADDED,
 			["ItemAttachmentAdded"] = ""
 		};
 

@@ -28,20 +28,26 @@ namespace ListsNotifications
             };
             TableHeaderCell headerTableCell2 = new TableHeaderCell
             {
-                Text = "Track",
+                Text = "TrackUpdating",
                 Width = 100
             };
+
             TableHeaderCell headerTableCell3 = new TableHeaderCell
             {
-                Text = "Separate Mail",
+                Text = "TrackAdded",
                 Width = 100
             };
             TableHeaderCell headerTableCell4 = new TableHeaderCell
             {
+                Text = "Separate Mail",
+                Width = 100
+            };
+            TableHeaderCell headerTableCell5 = new TableHeaderCell
+            {
                 Text = "Subject For Separate Mail",
                 Width = 200
             };
-            TableHeaderCell headerTableCell5 = new TableHeaderCell
+            TableHeaderCell headerTableCell6 = new TableHeaderCell
             {
                 Text = "Notify",
                 Width = 100
@@ -52,6 +58,7 @@ namespace ListsNotifications
             header.Cells.Add(headerTableCell3);
             header.Cells.Add(headerTableCell4);
             header.Cells.Add(headerTableCell5);
+            header.Cells.Add(headerTableCell6);
 
             return header;
         }
@@ -77,6 +84,7 @@ namespace ListsNotifications
                 TableCell td3 = new TableCell();
                 TableCell td4 = new TableCell();
                 TableCell td5 = new TableCell();
+                TableCell td6 = new TableCell();
                 tr.CssClass = (i % 2 == 0) ? "ms-alternatingstrong ms-itmhover" : "ms-itmhover";
 
                 tr.Cells.Add(td1);
@@ -84,6 +92,7 @@ namespace ListsNotifications
                 tr.Cells.Add(td3);
                 tr.Cells.Add(td4);
                 tr.Cells.Add(td5);
+                tr.Cells.Add(td6);
 
                 Label fieldLabel1 = new Label
                 {
@@ -100,11 +109,18 @@ namespace ListsNotifications
 
                 CheckBox checkbox2 = new CheckBox
                 {
+                    ID = "checkBoxTrackAddedField" + i.ToString(),
+                    Checked = listERConfig.ItemAddedFields.Contains(field.Title),
+                };
+                checkbox1.Attributes.Add("Title", field.Title);
+
+                CheckBox checkbox3 = new CheckBox
+                {
                     ID = "checkBoxFieldSingleMail" + i.ToString(),
                     Checked = listERConfig.TrackFieldsSingleMail.ContainsKey(field.Title),
                 };
-                checkbox2.Attributes.Add("Title", field.Title);
-                checkbox2.Attributes.Add("onclick", "checkBoxSingleMailHandler()");
+                checkbox3.Attributes.Add("Title", field.Title);
+                checkbox3.Attributes.Add("onclick", "checkBoxSingleMailHandler()");
 
                 TextBox textBox1 = new TextBox
                 {
@@ -116,22 +132,23 @@ namespace ListsNotifications
                 };
                 textBox1.Attributes.Add("Title", field.Title);
 
-                CheckBox checkbox3;
+                CheckBox checkbox4;
                 if (field.TypeAsString.Contains("User"))
                 {
-                    checkbox3 = new CheckBox
+                    checkbox4 = new CheckBox
                     {
                         ID = "checkBoxFieldNotify" + i.ToString(),
                         Checked = listERConfig.UserNotifyFields.Contains(field.Title)
                     };
-                    checkbox3.Attributes.Add("Title", field.Title);
-                    td5.Controls.Add(checkbox3);
+                    checkbox4.Attributes.Add("Title", field.Title);
+                    td6.Controls.Add(checkbox4);
                 };
 
                 td1.Controls.Add(fieldLabel1);
                 td2.Controls.Add(checkbox1);
                 td3.Controls.Add(checkbox2);
-                td4.Controls.Add(textBox1);
+                td4.Controls.Add(checkbox2);
+                td5.Controls.Add(textBox1);
 
                 tableRows.Add(tr);
             };
@@ -142,6 +159,7 @@ namespace ListsNotifications
         public void SaveTableSettings(SPList list)
         {
             List<string> trackFieldsList = new List<string> { };
+            List<string> trackFieldsAddedList = new List<string> { };
             List<string> UserNotifyFields = new List<string> { };
             List<string> TrackFieldsSingleMail = new List<string> { };
 
@@ -175,6 +193,11 @@ namespace ListsNotifications
                                 trackFieldsList.Add(controlTitle);
                             }
 
+                            if (ctrID.Contains("TrackAddedField") && ((CheckBox)ctr).Checked)
+                            {
+                                trackFieldsAddedList.Add(controlTitle);
+                            }
+
                             if (ctrID.Contains("FieldNotify") && ((CheckBox)ctr).Checked)
                             {
                                 UserNotifyFields.Add(controlTitle);
@@ -185,6 +208,7 @@ namespace ListsNotifications
             };
 
             list.RootFolder.Properties[NotifCommonConfig.LIST_PROPERTY_TRACK_FIELDS] = String.Join(",", trackFieldsList.ToArray());
+            list.RootFolder.Properties[NotifCommonConfig.LIST_PROPERTY_TRACK_FIELDS_ITEMADDED] = String.Join(",", trackFieldsAddedList.ToArray());
             list.RootFolder.Properties[NotifCommonConfig.LIST_PROPERTY_TRACK_FIELDS_SINGLEMAIL] = String.Join(",", TrackFieldsSingleMail.ToArray());
             list.RootFolder.Properties[NotifCommonConfig.LIST_PROPERTY_USER_FIELDS] = String.Join(",", UserNotifyFields.ToArray());
             list.Update();
