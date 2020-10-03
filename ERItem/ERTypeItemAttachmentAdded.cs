@@ -7,8 +7,8 @@ using Microsoft.SharePoint;
 
 namespace ListsNotifications.ReadConfig
 {
-    class ERTypeItemAttachmentAdded : ERItem
-    {
+    class ERTypeItemAttachmentAdded : ERItemNotifHandler
+	{
 		public ERTypeItemAttachmentAdded(SPItemEventProperties properties) : base(properties)
 		{
 			SetSPItemFieldsAttributesByERType();

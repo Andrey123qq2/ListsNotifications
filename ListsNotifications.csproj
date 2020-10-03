@@ -40,6 +40,9 @@
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Office.Server.UserProfiles, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL" />
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -47,10 +50,35 @@
       <HintPath>..\..\..\..\..\Windows\Microsoft.NET\assembly\GAC_MSIL\Newtonsoft.Json\v4.0_4.5.0.0__30ad4fe6b2a6aeed\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Runtime.CompilerServices.Unsafe.4.7.1\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Encodings.Web, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Text.Encodings.Web.4.7.1\lib\net461\System.Text.Encodings.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Json, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Text.Json.4.7.2\lib\net461\System.Text.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
@@ -58,12 +86,18 @@
     <Reference Include="Microsoft.SharePoint.Client.ServerRuntime" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ReadConfig\ERItemFactory.cs" />
-    <Compile Include="ReadConfig\ERTypeItemAdded.cs" />
-    <Compile Include="ReadConfig\ERTypeItemAttachmentAdded.cs" />
-    <Compile Include="ReadConfig\ERTypeItemPageSettings.cs" />
-    <Compile Include="ReadConfig\ERTypeItemUpdated.cs" />
-    <Compile Include="ReadConfig\ERTypeItemUpdating.cs" />
+    <Compile Include="ERItem\ERItemNotifHandler.cs" />
+    <Compile Include="ReadConfig\IERItem.cs" />
+    <Compile Include="ReadConfig\ERItem.cs" />
+    <Compile Include="ReadConfig\IERConf.cs" />
+    <Compile Include="ReadConfig\ERConfNotifications.cs" />
+    <Compile Include="ReadConfig\ERConfFactory.cs" />
+    <Compile Include="ERItem\ERItemFactory.cs" />
+    <Compile Include="ERItem\ERTypeItemAdded.cs" />
+    <Compile Include="ERItem\ERTypeItemAttachmentAdded.cs" />
+    <Compile Include="ERItem\ERTypeItemPageSettings.cs" />
+    <Compile Include="ERItem\ERTypeItemUpdated.cs" />
+    <Compile Include="ERItem\ERTypeItemUpdating.cs" />
     <Compile Include="SPItemField\SPItemFieldTypeString.cs" />
     <Compile Include="SPItemField\SPItemFieldTypeSPFieldLookupValueCollection.cs" />
     <Compile Include="SPItemField\SPItemFieldTypeSPFieldUserValue.cs" />
@@ -88,7 +122,7 @@
     </Compile>
     <Compile Include="EventReceiver\SPCommon.cs" />
     <Compile Include="EventReceiver\MailItem.cs" />
-    <Compile Include="ReadConfig\ERItem.cs" />
+    <Compile Include="ReadConfig\ERItemBak.cs" />
     <Compile Include="EventReceiver\SPListExtension.cs" />
     <Compile Include="EventReceiver\ERItemSPExtension.cs" />
     <Compile Include="ReadConfig\ERItemConfigMethods.cs" />
@@ -97,6 +131,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="EventReceiver1\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{67b80b59-61be-4de9-b4ea-e9a69468c076}</SharePointProjectItemId>
     </None>
@@ -131,6 +166,7 @@
     <None Include="List4\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{9785b80b-6421-488c-a17c-0341e7c171a2}</SharePointProjectItemId>
     </None>
+    <None Include="packages.config" />
     <None Include="Package\Package.package">
       <PackageId>{911e29b7-4433-439e-98a5-ed3b8e2bc805}</PackageId>
     </None>

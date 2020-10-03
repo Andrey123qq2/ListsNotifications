@@ -7,7 +7,7 @@ using Microsoft.SharePoint;
 
 namespace ListsNotifications
 {
-    class ERTypeItemUpdating : ERItem
+    class ERTypeItemUpdating : ERItemNotifHandler
 	{
 		public ERTypeItemUpdating(SPItemEventProperties properties) : base(properties)
 		{

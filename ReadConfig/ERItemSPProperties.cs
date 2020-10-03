@@ -13,12 +13,43 @@ using Microsoft.Office.Server.UserProfiles;
 
 namespace ListsNotifications
 {
-    public class ERItemSPProperties : ERItemConfigMethods
+    public class ERItemSPProperties : IERItem
     {
-        public SPListItem listItem;
-        public SPItemEventProperties eventProperties;
-        public string eventType;
-        public string itemTitle;
+        private SPListItem listitem;
+        private SPItemEventProperties eventproperties;
+        private string eventtype;
+        private string itemtitle;
+
+        public SPListItem listItem
+        {
+            get
+            {
+                return listitem;
+            }
+        }
+
+        public SPItemEventProperties eventProperties
+        {
+            get
+            {
+                return eventproperties;
+            }
+        }
+        public string eventType
+        {
+            get
+            {
+                return eventtype;
+            }
+        }
+        
+        public string itemTitle
+        {
+            get
+            {
+                return itemtitle;
+            }
+        }
 
         public ERItemSPProperties(SPItemEventProperties properties)
         {
@@ -30,25 +61,25 @@ namespace ListsNotifications
 
                     try
                     {
-                        listItem = web.Lists[properties.ListId].GetItemById(properties.ListItemId);
+                        listitem = web.Lists[properties.ListId].GetItemById(properties.ListItemId);
                     }
                     catch
                     {
-                        listItem = properties.ListItem;
+                        listitem = properties.ListItem;
                     }
 
-                    if (listItem == null)
+                    if (listitem == null)
                     {
                         throw new Exception("ListItem not found");
                     }
                 }
             }
 
-            eventProperties = properties;
+            eventproperties = properties;
 
-            eventType = properties.EventType.ToString();
+            eventtype = properties.EventType.ToString();
 
-            itemTitle = (listItem.Title != "" && listItem.Title != null) ? listItem.Title : listItem["FileLeafRef"].ToString();
+            itemtitle = (listItem.Title != "" && listItem.Title != null) ? listItem.Title : listItem["FileLeafRef"].ToString();
         }
 
         public ERItemSPProperties()
