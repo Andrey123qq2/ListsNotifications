@@ -58,7 +58,12 @@
     <Reference Include="Microsoft.SharePoint.Client.ServerRuntime" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ReadConfig\ERItemPageSettings.cs" />
+    <Compile Include="ReadConfig\ERItemFactory.cs" />
+    <Compile Include="ReadConfig\ERTypeItemAdded.cs" />
+    <Compile Include="ReadConfig\ERTypeItemAttachmentAdded.cs" />
+    <Compile Include="ReadConfig\ERTypeItemPageSettings.cs" />
+    <Compile Include="ReadConfig\ERTypeItemUpdated.cs" />
+    <Compile Include="ReadConfig\ERTypeItemUpdating.cs" />
     <Compile Include="SPItemField\SPItemFieldTypeString.cs" />
     <Compile Include="SPItemField\SPItemFieldTypeSPFieldLookupValueCollection.cs" />
     <Compile Include="SPItemField\SPItemFieldTypeSPFieldUserValue.cs" />

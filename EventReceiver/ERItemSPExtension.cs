@@ -25,6 +25,7 @@ namespace ListsNotifications
             string removePattern = @"\d+;#";
 
             CodeNameValues = item.GetFieldValue(DeptCodeFieldName);
+
             if (CodeNameValues.GetType().Name == "String")
             {
                 if (CodeNameValues == "")
@@ -184,6 +185,11 @@ namespace ListsNotifications
             else
             {
                 ChangedFieldValue = item.listItem[fieldInternalName];
+            }
+
+            if (ChangedFieldValue == null)
+            {
+                ChangedFieldValue = String.Empty;
             }
 
             return ChangedFieldValue;
