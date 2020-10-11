@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ListsNotifications
 {
-    public class ERConfNotifications
+    public class ERConfNotifications0
     {
         public List<string> cc { get; set; } = new List<string> { };
         public List<string> bcc { get; set; } = new List<string> { };

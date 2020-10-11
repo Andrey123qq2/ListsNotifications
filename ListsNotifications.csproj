@@ -86,18 +86,22 @@
     <Reference Include="Microsoft.SharePoint.Client.ServerRuntime" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ERItem\ERItemNotifHandler.cs" />
-    <Compile Include="ReadConfig\IERItem.cs" />
-    <Compile Include="ReadConfig\ERItem.cs" />
+    <Compile Include="ERItem0\ERItemNotifHandler.cs" />
+    <Compile Include="ERItemSubTypes\ERItemNotifications.cs" />
+    <Compile Include="ERItemReadConfig2\ERConfNotifications.cs" />
+    <Compile Include="ERItemReadConfig2\ERItem.cs" />
+    <Compile Include="ERItemReadConfig2\ERListConf.cs" />
+    <Compile Include="ReadConfig\IERItem0.cs" />
+    <Compile Include="ReadConfig\ERItem0.cs" />
     <Compile Include="ReadConfig\IERConf.cs" />
-    <Compile Include="ReadConfig\ERConfNotifications.cs" />
+    <Compile Include="ReadConfig\ERConfNotifications0.cs" />
     <Compile Include="ReadConfig\ERConfFactory.cs" />
-    <Compile Include="ERItem\ERItemFactory.cs" />
-    <Compile Include="ERItem\ERTypeItemAdded.cs" />
-    <Compile Include="ERItem\ERTypeItemAttachmentAdded.cs" />
-    <Compile Include="ERItem\ERTypeItemPageSettings.cs" />
-    <Compile Include="ERItem\ERTypeItemUpdated.cs" />
-    <Compile Include="ERItem\ERTypeItemUpdating.cs" />
+    <Compile Include="ERItem0\ERItemFactory.cs" />
+    <Compile Include="ERItem0\ERTypeItemAdded.cs" />
+    <Compile Include="ERItem0\ERTypeItemAttachmentAdded.cs" />
+    <Compile Include="ERItem0\ERTypeItemPageSettings.cs" />
+    <Compile Include="ERItem0\ERTypeItemUpdated.cs" />
+    <Compile Include="ERItem0\ERTypeItemUpdating.cs" />
     <Compile Include="SPItemField\SPItemFieldTypeString.cs" />
     <Compile Include="SPItemField\SPItemFieldTypeSPFieldLookupValueCollection.cs" />
     <Compile Include="SPItemField\SPItemFieldTypeSPFieldUserValue.cs" />
@@ -111,7 +115,7 @@
     <Compile Include="PageSettings\PageSettings.cs" />
     <Compile Include="PageSettings\SettingsTable.cs" />
     <Compile Include="PageSettings\TrackFieldsTable.cs" />
-    <Compile Include="ReadConfig\NotifCommonConfig.cs" />
+    <Compile Include="ERItemReadConfig2\CommonConfigNotif.cs" />
     <Compile Include="ReadConfig\ERItemSPProperties.cs" />
     <Compile Include="Layouts\ERListsSettings\ERListsSettings.aspx.cs">
       <DependentUpon>ERListsSettings.aspx</DependentUpon>

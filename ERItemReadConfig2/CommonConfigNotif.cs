@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ListsNotifications
 {
-	static class NotifCommonConfig
-    {
-		public static readonly string ROOT_FOLDER_PROPERTY_NAME = "er_config";
+	static class CommonConfigNotif
+	{
+		public static readonly string LIST_PROPERTY_JSON_CONF = "er_notif_json_conf";
 
 		//public static readonly string CODE_FIELD_NAME = "Підрозділ";
 		//public static readonly string CODE_FIELD_SUFFIX = "_сотрудники";

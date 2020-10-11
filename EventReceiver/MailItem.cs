@@ -29,36 +29,36 @@ namespace ListsNotifications
         string EditorDisplayName;
         string ModifiedByBlock;
 
-        public MailItem(ERItem item, List<SPItemField> fieldsToTrack, string mailSubjectMode = "", bool showBeforeValuesParam = true)
+        public MailItem(ERItem<ERConfNotifications> item, List<SPItemField> fieldsToTrack, string mailSubjectMode = "", bool showBeforeValuesParam = true)
         {
             showBeforeValues = showBeforeValuesParam;
             InitCommonAttributes(item);
 
             body = CreateBody(fieldsToTrack);
-            subject = String.Format("{0}: {1}", item.itemTitle, mailSubjectMode != "" ? mailSubjectMode: NotifCommonConfig.MAIL_SUBJECT_ITEMS); 
+            subject = String.Format("{0}: {1}", item.itemTitle, mailSubjectMode != "" ? mailSubjectMode: CommonConfigNotif.MAIL_SUBJECT_ITEMS); 
             headers = GetHeaders();
         }
 
-        public MailItem(ERItem item)
+        public MailItem(ERItem<ERConfNotifications> item)
         {
             attachmentUrl = item.listItem.Web.Url + "/" + item.eventProperties.AfterUrl.ToString();
 
             InitCommonAttributes(item);
 
             body = CreateBody();
-            subject = String.Format("{0}: {1}", item.itemTitle, NotifCommonConfig.MAIL_SUBJECT_ATTACHMENTS);
+            subject = String.Format("{0}: {1}", item.itemTitle, CommonConfigNotif.MAIL_SUBJECT_ATTACHMENTS);
             headers = GetHeaders();
         }
 
-        private void InitCommonAttributes(ERItem item)
+        private void InitCommonAttributes(ERItem<ERConfNotifications> item)
         {
             to = String.Join(",", item.UserNotifyFieldsMails);
             cc = String.Join(",", item.mailcc);
             bcc = String.Join(",", item.mailbcc);
 
-            itemUrlBlock = String.Format(NotifCommonConfig.MAIL_URL_TEMPLATE, item.listItem.GetItemFullUrl(), item.itemTitle);
+            itemUrlBlock = String.Format(CommonConfigNotif.MAIL_URL_TEMPLATE, item.listItem.GetItemFullUrl(), item.itemTitle);
             EditorDisplayName = item.eventProperties.UserDisplayName;
-            ModifiedByBlock = String.Format(NotifCommonConfig.MAIL_MODIFIED_BY_TEMPLATE, EditorDisplayName);
+            ModifiedByBlock = String.Format(CommonConfigNotif.MAIL_MODIFIED_BY_TEMPLATE, EditorDisplayName);
         }
         private StringDictionary GetHeaders()
         {
@@ -73,7 +73,7 @@ namespace ListsNotifications
         private string GetChangedFieldsBlock(List<SPItemField> itemFields)
         {
             string ChangedFieldsBlock = "";
-            string fieldStringTemplate = showBeforeValues ? NotifCommonConfig.MAIL_FIELDS_TEMPLATE_ITEMS_BEFORE : NotifCommonConfig.MAIL_FIELDS_TEMPLATE_ITEMS_NOTBEFORE;
+            string fieldStringTemplate = showBeforeValues ? CommonConfigNotif.MAIL_FIELDS_TEMPLATE_ITEMS_BEFORE : CommonConfigNotif.MAIL_FIELDS_TEMPLATE_ITEMS_NOTBEFORE;
 
             foreach (SPItemField field in itemFields)
             {
@@ -90,7 +90,7 @@ namespace ListsNotifications
         private string GetChangedFieldsBlock()
         {
             string attachmentName = Regex.Replace(attachmentUrl, @"^.*\/", "");
-            string ChangedFieldsBlock = String.Format(NotifCommonConfig.MAIL_FIELDS_TEMPLATE_ATTACHMENTS, NotifCommonConfig.MAIL_BODY_ATTACHMENTS, attachmentUrl, attachmentName);
+            string ChangedFieldsBlock = String.Format(CommonConfigNotif.MAIL_FIELDS_TEMPLATE_ATTACHMENTS, CommonConfigNotif.MAIL_BODY_ATTACHMENTS, attachmentUrl, attachmentName);
 
             return ChangedFieldsBlock;
         }
@@ -101,7 +101,7 @@ namespace ListsNotifications
 
             ChangedFieldsBlock = GetChangedFieldsBlock(fields);
 
-            mailBodyString = ChangedFieldsBlock != "" ? String.Format(NotifCommonConfig.MAIL_BODY_TEMPLATE, ChangedFieldsBlock, itemUrlBlock, ModifiedByBlock) : "";
+            mailBodyString = ChangedFieldsBlock != "" ? String.Format(CommonConfigNotif.MAIL_BODY_TEMPLATE, ChangedFieldsBlock, itemUrlBlock, ModifiedByBlock) : "";
 
             return mailBodyString;
         }
@@ -112,7 +112,7 @@ namespace ListsNotifications
             string mailBodyString;
 
             ChangedFieldsBlock = GetChangedFieldsBlock();
-            mailBodyString = String.Format(NotifCommonConfig.MAIL_BODY_TEMPLATE, ChangedFieldsBlock, itemUrlBlock, ModifiedByBlock);
+            mailBodyString = String.Format(CommonConfigNotif.MAIL_BODY_TEMPLATE, ChangedFieldsBlock, itemUrlBlock, ModifiedByBlock);
 
             return mailBodyString;
         }

@@ -7,7 +7,7 @@ using Microsoft.SharePoint;
 
 namespace ListsNotifications
 {
-    interface IERItem
+    interface IERItem0
     {
         SPListItem listItem { get; }
         SPItemEventProperties eventProperties { get; }

@@ -7,7 +7,7 @@ using Microsoft.SharePoint;
 
 namespace ListsNotifications
 {
-    public class ERItem : ERItemSPProperties, IERConf
+    public class ERItem0 : ERItemSPProperties, IERConf
     {
         private readonly ERConfNotifications erconf;
         public ERConfNotifications ERConf {
@@ -16,12 +16,12 @@ namespace ListsNotifications
             }
         }
 
-        public ERItem(SPItemEventProperties properties) : base(properties)
+        public ERItem0(SPItemEventProperties properties) : base(properties)
         {
             erconf = ERConfFactory<ERConfNotifications>.Create(NotifCommonConfig.ROOT_FOLDER_PROPERTY_NAME, listItem.ParentList);
         }
 
-        public ERItem(SPList List)
+        public ERItem0(SPList List)
         {
             erconf = ERConfFactory<ERConfNotifications>.Create(NotifCommonConfig.ROOT_FOLDER_PROPERTY_NAME, List);
         }
