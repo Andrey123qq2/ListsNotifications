@@ -12,7 +12,7 @@ namespace ListsNotifications
 {
     static class ERConfFactory<T>
     {
-        public static T Create(string RootFolderPropertyName, SPList List)
+        public static T Get(SPList List, string RootFolderPropertyName)
         {
             string RootFolderPropertyValue;
             T ERConfByType;
@@ -32,6 +32,10 @@ namespace ListsNotifications
             
             return ERConfByType;
         }
-
+        public static void Set(SPList List, string RootFolderPropertyName, T RootFolderPropertyValue)
+        {
+            string RootFolderPropertyValueString = JsonSerializer.Serialize<T>(RootFolderPropertyValue);
+            List.RootFolder.Properties[RootFolderPropertyName] = RootFolderPropertyValueString;
+        }
     }
 }
