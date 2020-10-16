@@ -24,29 +24,38 @@ namespace ListsNotifications
         private string attachmentUrl;
 
         private bool showBeforeValues;
+        private bool itemAdded;
 
+        string modifiedByBlockTemplate;
         string itemUrlBlock;
         string EditorDisplayName;
         string ModifiedByBlock;
 
-        public MailItem(ERItemNotifications item, List<SPItemField> fieldsToTrack, string mailSubjectMode = "", bool showBeforeValuesParam = true)
+        public MailItem(
+            ERItemNotifications item, 
+            List<SPItemField> fieldsToTrack, 
+            string mailSubjectMode,
+            string ModifiedByBlockTemplate,
+            bool showBeforeValuesParam = true
+        )
         {
             showBeforeValues = showBeforeValuesParam;
+            modifiedByBlockTemplate = ModifiedByBlockTemplate;
             InitCommonAttributes(item);
 
             body = CreateBody(fieldsToTrack);
-            subject = String.Format("{0}: {1}", item.itemTitle, mailSubjectMode != "" ? mailSubjectMode: CommonConfigNotif.MAIL_SUBJECT_ITEMS); 
+            subject = String.Format("{0}: {1}", item.itemTitle, mailSubjectMode); 
             headers = GetHeaders();
         }
 
-        public MailItem(ERItemNotifications item)
+        public MailItem(ERItemNotifications item, string mailSubjectMode)
         {
             attachmentUrl = item.listItem.Web.Url + "/" + item.eventProperties.AfterUrl.ToString();
 
             InitCommonAttributes(item);
 
             body = CreateBody();
-            subject = String.Format("{0}: {1}", item.itemTitle, CommonConfigNotif.MAIL_SUBJECT_ATTACHMENTS);
+            subject = String.Format("{0}: {1}", item.itemTitle, mailSubjectMode);
             headers = GetHeaders();
         }
 
@@ -56,9 +65,12 @@ namespace ListsNotifications
             cc = String.Join(",", item.ERConf.cc);
             bcc = String.Join(",", item.ERConf.bcc);
 
+            itemAdded = item.eventType.Contains("Added");
+
             itemUrlBlock = String.Format(CommonConfigNotif.MAIL_URL_TEMPLATE, item.listItem.GetItemFullUrl(), item.itemTitle);
             EditorDisplayName = item.eventProperties.UserDisplayName;
-            ModifiedByBlock = String.Format(CommonConfigNotif.MAIL_MODIFIED_BY_TEMPLATE, EditorDisplayName);
+            //string ModifiedByBlockTemplate = itemAdded ? CommonConfigNotif.MAIL_CREATED_BY_TEMPLATE : CommonConfigNotif.MAIL_MODIFIED_BY_TEMPLATE;
+            ModifiedByBlock = String.Format(modifiedByBlockTemplate, EditorDisplayName);
         }
         private StringDictionary GetHeaders()
         {
@@ -77,6 +89,7 @@ namespace ListsNotifications
 
             foreach (SPItemField field in itemFields)
             {
+                // TODO: Move condition block to another/field class
                 if (!showBeforeValues && (field.friendlyFieldValueAfter == "-" || field.friendlyFieldValueAfter == ""))
                 {
                     continue;

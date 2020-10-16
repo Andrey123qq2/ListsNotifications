@@ -7,35 +7,78 @@ using Microsoft.SharePoint;
 using Microsoft.SharePoint.Utilities;
 using Microsoft.SharePoint.Workflow;
 using Microsoft.CSharp.RuntimeBinder;
+using ListsNotifications.ReadConfig;
 
 namespace ListsNotifications
 {
-    class MainInit
+    static class MainInit
     {
-        public static void Init(SPItemEventProperties properties)
+        public static void InitItemUpdating(SPItemEventProperties properties)
         {
             if (!SPCommon.IsUpdatingBySystem(properties) && !SPCommon.IsJustCreated(properties))
             {
                 SPSecurity.RunWithElevatedPrivileges(delegate ()
                 {
-                    Notifications(properties);
+                    ERItemNotifications itemER;
+
+                    try
+                    {
+                        itemER = new ERItemNotificationsItemUpdating(properties);
+                    }
+                    catch (Exception e)
+                    {
+                        throw new Exception("ERItem constructor exception: " + e.Message);
+                    }
+
+                    itemER.SendNotifications();
                 });
             }
         }
-        public static void Notifications(SPItemEventProperties properties)
+        public static void InitItemAdded(SPItemEventProperties properties)
         {
-
-            ERItemNotifications itemER;
-
-            try
+            if (!SPCommon.IsUpdatingBySystem(properties))
             {
-                itemER = ERItemFactory.Create(properties);
-            }
-            catch (Exception e)
-            {
-                throw new Exception("ERItem constructor exception: " + e.Message);
-            }
+                SPSecurity.RunWithElevatedPrivileges(delegate ()
+                {
+                    ERItemNotifications itemER;
 
+                    try
+                    {
+                        itemER = new ERItemNotificationsItemAdded(properties);
+                    }
+                    catch (Exception e)
+                    {
+                        throw new Exception("ERItem constructor exception: " + e.Message);
+                    }
+
+                    itemER.SendNotifications();
+                });
+            }
+        }
+
+        public static void InitItemAttachmentAdded(SPItemEventProperties properties)
+        {
+            if (!SPCommon.IsUpdatingBySystem(properties) && !SPCommon.IsJustCreated(properties))
+            {
+                SPSecurity.RunWithElevatedPrivileges(delegate ()
+                {
+                    ERItemNotifications itemER;
+
+                    try
+                    {
+                        itemER = new ERItemNotificationsItemAttachmentAdded(properties);
+                    }
+                    catch (Exception e)
+                    {
+                        throw new Exception("ERItem constructor exception: " + e.Message);
+                    }
+
+                    itemER.SendNotifications();
+                });
+            }
+        }
+        public static void Notifications(ERItemNotifications itemER)
+        {
             if (itemER.NotifiersPresent == false)
             {
                 return;

@@ -25,29 +25,39 @@ namespace ListsNotifications
 
 		abstract public void SetSPItemFieldsAttributesByERType();
 
-		protected void NotificationsTrackFields()
+		protected void NotificationsTrackFields(string subject, string modifiedByTemplate)
 		{
-			if (TrackSPItemFields.Count == 0)
+			if (TrackSPItemFields.Count == 0 || !NotifiersPresent)
 			{
 				return;
 			}
-			MailItem mailToNotify = new MailItem(this, TrackSPItemFields, "", eventType.Contains("ing"));
+			MailItem mailToNotify = new MailItem(this, TrackSPItemFields, subject, modifiedByTemplate, eventType.Contains("ing"));
 
 			mailToNotify.SendMail(listItem.ParentList.ParentWeb);
 		}
 
-		protected void NotificationsSingleField()
+		protected void NotificationsTrackFieldsSingleMail(string modifiedByTemplate)
 		{
+			if (!NotifiersPresent)
+			{
+				return;
+			}
+
 			foreach (KeyValuePair<SPItemField, string> trackField in TrackSingleMailSPItemFields)
 			{
-				MailItem mailToNotifySingleField = new MailItem(this, new List<SPItemField> { trackField.Key }, trackField.Value, false);
+				MailItem mailToNotifySingleField = new MailItem(this, new List<SPItemField> { trackField.Key }, trackField.Value, modifiedByTemplate, false);
 				mailToNotifySingleField.SendMail(listItem.ParentList.ParentWeb);
 			}
 		}
 
-		protected void NotificationsAttachments()
+		protected void NotificationsAttachments(string subject)
 		{
-			MailItem mailToNotify = new MailItem(this);
+			if (!NotifiersPresent)
+			{
+				return;
+			}
+
+			MailItem mailToNotify = new MailItem(this, subject);
 			mailToNotify.SendMail(listItem.ParentList.ParentWeb);
 		}
 	}

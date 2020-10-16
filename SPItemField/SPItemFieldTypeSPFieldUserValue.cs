@@ -14,7 +14,7 @@ namespace ListsNotifications
         }
         public override void GetFieldValuesToStringForCompare()
         {
-            fieldValueBeforeToStringForCompare = (fieldValueBefore != null) ? new SPFieldUserValue(item.listItem.Web, fieldValueBefore.ToString()).User.LoginName : "";
+            fieldValueBeforeToStringForCompare = (fieldValueBefore != null && fieldValueBefore.ToString() != "") ? new SPFieldUserValue(item.listItem.Web, fieldValueBefore.ToString()).User.LoginName : "";
             fieldValueAfterToStringForCompare = (fieldValueAfter != null && fieldValueAfter.ToString() != "") ? new SPFieldUserValue(item.listItem.Web, fieldValueAfter.ToString()).LookupValue : "";
             if (fieldValueAfter != null && fieldValueAfter.ToString() != "" && fieldValueAfterToStringForCompare == "")
             {

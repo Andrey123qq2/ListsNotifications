@@ -9,7 +9,7 @@
         <SequenceNumber>10000</SequenceNumber>
       </Receiver>
   </Receivers>
-  <Receivers ListTemplateId="100">
+  <!--<Receivers ListTemplateId="100">
     <Receiver>
       <Name>EventReceiver1ItemUpdated</Name>
       <Type>ItemUpdated</Type>
@@ -17,7 +17,7 @@
       <Class>ListsNotifications.EventReceiver1.EventReceiver1</Class>
       <SequenceNumber>10000</SequenceNumber>
     </Receiver>
-  </Receivers>
+  </Receivers>-->
   <Receivers ListTemplateId="100">
     <Receiver>
       <Name>EventReceiver1ItemAdded</Name>
@@ -45,7 +45,7 @@
       <SequenceNumber>10000</SequenceNumber>
     </Receiver>
   </Receivers>
-  <Receivers ListTemplateId="101">
+  <!--<Receivers ListTemplateId="101">
     <Receiver>
       <Name>LibsEventReceiver1ItemUpdated</Name>
       <Type>ItemUpdated</Type>
@@ -53,7 +53,7 @@
       <Class>ListsNotifications.EventReceiver1.EventReceiver1</Class>
       <SequenceNumber>10000</SequenceNumber>
     </Receiver>
-  </Receivers>
+  </Receivers>-->
   <Receivers ListTemplateId="101">
     <Receiver>
       <Name>LibsEventReceiver1ItemAdded</Name>
@@ -72,7 +72,7 @@
       <SequenceNumber>10000</SequenceNumber>
     </Receiver>
   </Receivers>
-  <Receivers ListTemplateId="107">
+  <!--<Receivers ListTemplateId="107">
     <Receiver>
       <Name>TasksEventReceiver1ItemUpdated</Name>
       <Type>ItemUpdated</Type>
@@ -80,7 +80,7 @@
       <Class>ListsNotifications.EventReceiver1.EventReceiver1</Class>
       <SequenceNumber>10000</SequenceNumber>
     </Receiver>
-  </Receivers>
+  </Receivers>-->
   <Receivers ListTemplateId="107">
     <Receiver>
       <Name>TasksEventReceiver1ItemAdded</Name>
@@ -99,7 +99,7 @@
       <SequenceNumber>10000</SequenceNumber>
     </Receiver>
   </Receivers>
-  <Receivers ListTemplateId="171">
+  <!--<Receivers ListTemplateId="171">
     <Receiver>
       <Name>TasksNewEventReceiver1ItemUpdated</Name>
       <Type>ItemUpdated</Type>
@@ -107,7 +107,7 @@
       <Class>ListsNotifications.EventReceiver1.EventReceiver1</Class>
       <SequenceNumber>10000</SequenceNumber>
     </Receiver>
-  </Receivers>
+  </Receivers>-->
   <Receivers ListTemplateId="171">
     <Receiver>
       <Name>TasksNewEventReceiver1ItemAdded</Name>

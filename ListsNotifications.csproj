@@ -98,11 +98,11 @@
     <Compile Include="ReadConfig\IERConf0.cs" />
     <Compile Include="ReadConfig\ERConfNotifications0.cs" />
     <Compile Include="ReadConfig\ERConfFactory0.cs" />
-    <Compile Include="ERItemReadConfig2\ERItemFactory.cs" />
+    <Compile Include="ERItemSubTypes\ERItemNotificationsFactory.cs" />
     <Compile Include="ERItemSubTypes\ERItemNotificationsItemAdded.cs" />
     <Compile Include="ERItemSubTypes\ERItemNotificationsItemAttachmentAdded.cs" />
     <Compile Include="ERItem0\ERTypeItemPageSettings0.cs" />
-    <Compile Include="ERItemSubTypes\ERItemNotificationsItemUpdated.cs" />
+    <Compile Include="ERItemSubTypes\ERItemNotificationsItemUpdated0.cs" />
     <Compile Include="ERItemSubTypes\ERItemNotificationsItemUpdating.cs" />
     <Compile Include="SPItemField\SPItemFieldTypeString.cs" />
     <Compile Include="SPItemField\SPItemFieldTypeSPFieldLookupValueCollection.cs" />

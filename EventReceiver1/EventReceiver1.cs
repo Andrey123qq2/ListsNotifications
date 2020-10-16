@@ -26,7 +26,7 @@ namespace ListsNotifications.EventReceiver1
             {
                 base.EventFiringEnabled = false;
 
-                MainInit.Init(properties);
+                MainInit.InitItemUpdating(properties);
             }
             catch (Exception ex)
             {
@@ -38,25 +38,25 @@ namespace ListsNotifications.EventReceiver1
             }
         }
 
-        public override void ItemUpdated(SPItemEventProperties properties)
-        {
-            base.ItemUpdated(properties);
+        //public override void ItemUpdated(SPItemEventProperties properties)
+        //{
+        //    base.ItemUpdated(properties);
 
-            try
-            {
-                base.EventFiringEnabled = false;
+        //    try
+        //    {
+        //        base.EventFiringEnabled = false;
 
-                MainInit.Init(properties);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("CustomEventReceiver, ItemUpdated(): Exception: [" + ex.ToString() + "].");
-            }
-            finally
-            {
-                base.EventFiringEnabled = true;
-            }
-        }
+        //        MainInit.Init(properties);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("CustomEventReceiver, ItemUpdated(): Exception: [" + ex.ToString() + "].");
+        //    }
+        //    finally
+        //    {
+        //        base.EventFiringEnabled = true;
+        //    }
+        //}
 
         public override void ItemAdded(SPItemEventProperties properties)
         {
@@ -66,7 +66,7 @@ namespace ListsNotifications.EventReceiver1
             {
                 base.EventFiringEnabled = false;
 
-                MainInit.Init(properties);
+                MainInit.InitItemAdded(properties);
             }
             catch (Exception ex)
             {
@@ -85,7 +85,7 @@ namespace ListsNotifications.EventReceiver1
             {
                 base.EventFiringEnabled = false;
 
-                MainInit.Init(properties);
+                MainInit.InitItemAttachmentAdded(properties);
             }
             catch (Exception ex)
             {

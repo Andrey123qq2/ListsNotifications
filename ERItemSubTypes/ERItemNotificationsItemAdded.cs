@@ -27,7 +27,7 @@ namespace ListsNotifications
 
 		public override void SendNotifications()
 		{
-			NotificationsTrackFields();
+			NotificationsTrackFields(CommonConfigNotif.MAIL_SUBJECT_ITEMS_ADDED, CommonConfigNotif.MAIL_CREATED_BY_TEMPLATE);
 		}
 	}
 }

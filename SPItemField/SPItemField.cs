@@ -46,6 +46,7 @@ namespace ListsNotifications
             }
 
             GetFieldValuesToStringForFriendly();
+            
             if (friendlyFieldValueAfter != "-")
             {
                 GetFriendlyFieldValues(fieldValueAfterToStringForFriendly, out friendlyFieldValueAfter);
@@ -54,6 +55,11 @@ namespace ListsNotifications
             {
                 GetFriendlyFieldValues(fieldValueBeforeToStringForFriendly, out friendlyFieldValueBefore);
             }
+
+            if (item.eventType.Contains("Added"))
+            {
+                friendlyFieldValueAfter = friendlyFieldValueBefore;
+            }
         }
 
         abstract public void GetFieldValuesToStringForCompare();
@@ -61,6 +67,12 @@ namespace ListsNotifications
 
         private bool FieldIsChanged()
         {
+            if (item.eventType.Contains("Added") && fieldValueBeforeToStringForCompare != null && fieldValueBeforeToStringForCompare != "")
+            {
+                
+                return true;
+            }
+
             if (fieldValueAfterToStringForCompare != fieldValueBeforeToStringForCompare)
             {
                 return true;

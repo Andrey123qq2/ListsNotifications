@@ -117,7 +117,7 @@ namespace ListsNotifications
                 CheckBox checkbox3 = new CheckBox
                 {
                     ID = "checkBoxFieldSingleMail" + i.ToString(),
-                    Checked = pageSettings.ERConf.ItemUpdatedTrackFields.ContainsKey(field.Title),
+                    Checked = pageSettings.ERConf.ItemUpdatingTrackFieldsSingleMail.ContainsKey(field.Title),
                 };
                 checkbox3.Attributes.Add("Title", field.Title);
                 checkbox3.Attributes.Add("onclick", "checkBoxSingleMailHandler()");
@@ -126,7 +126,7 @@ namespace ListsNotifications
                 {
                     ID = "subjectSingleMail" + i.ToString(),
                     Width = 200,
-                    Text = (checkbox3.Checked) ? pageSettings.ERConf.ItemUpdatedTrackFields[field.Title] : "",
+                    Text = (checkbox3.Checked) ? pageSettings.ERConf.ItemUpdatingTrackFieldsSingleMail[field.Title] : "",
                     BorderColor = (checkbox3.Checked) ? Color.FromArgb(171, 171, 171) : Color.FromArgb(225, 225, 225),
                     CssClass = (!checkbox3.Checked) ? "readonly" : ""
                 };
@@ -213,7 +213,7 @@ namespace ListsNotifications
             {
                 ItemAddedTrackFields = trackFieldsAddedList,
                 ItemUpdatingTrackFields = trackFieldsList,
-                ItemUpdatedTrackFields = trackFieldsSingleMail,
+                ItemUpdatingTrackFieldsSingleMail = trackFieldsSingleMail,
                 to = userNotifyFields
             };
 

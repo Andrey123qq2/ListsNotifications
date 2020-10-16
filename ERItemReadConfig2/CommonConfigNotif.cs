@@ -33,8 +33,10 @@ namespace ListsNotifications
 
 		public static readonly string MAIL_URL_TEMPLATE = "<p>Элемент: <a href='{0}'>{1}</a></p>";
 		public static readonly string MAIL_MODIFIED_BY_TEMPLATE = "<p>Кем изменено: {0}</p>";
+		public static readonly string MAIL_CREATED_BY_TEMPLATE = "<p>Кем создано: {0}</p>";
 		public static readonly string MAIL_SUBJECT_ATTACHMENTS = "добавлено вложение";
 		public static readonly string MAIL_SUBJECT_ITEMS = "элемент изменен";
+		public static readonly string MAIL_SUBJECT_ITEMS_ADDED = "элемент добавлен";
 		public static readonly string MAIL_FIELDS_TEMPLATE_ATTACHMENTS = "<p>{0}: <a href=\"{1}\">{2}</a></p>";
 		public static readonly string MAIL_FIELDS_TEMPLATE_ITEMS_BEFORE = "<p>{0}: <strike>{1}</strike> {2}</p>";
 		public static readonly string MAIL_FIELDS_TEMPLATE_ITEMS_NOTBEFORE = "<p>{0}: {2}</p>";

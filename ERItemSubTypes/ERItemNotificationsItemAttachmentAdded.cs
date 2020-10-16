@@ -20,7 +20,7 @@ namespace ListsNotifications.ReadConfig
 
 		public override void SendNotifications()
 		{
-			NotificationsAttachments();
+			NotificationsAttachments(CommonConfigNotif.MAIL_SUBJECT_ATTACHMENTS);
 		}
 	}
 }

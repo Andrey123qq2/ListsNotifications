@@ -22,11 +22,18 @@ namespace ListsNotifications
 				.Select(f => SPItemFieldFactory.create(this, f))
 				.Where(t => t.IsChanged)
 				.ToList();
+
+            TrackSingleMailSPItemFields = this.ERConf.ItemUpdatingTrackFieldsSingleMail
+                //.AsParallel()
+                .Select(f => SPItemFieldFactory.create(this, f.Key))
+                .Where(t => t.IsChanged)
+                .ToDictionary(t => t, t => this.ERConf.ItemUpdatingTrackFieldsSingleMail[t.fieldTitle]);
 		}
 
 		public override void SendNotifications()
 		{
-			NotificationsTrackFields();
+			NotificationsTrackFields(CommonConfigNotif.MAIL_SUBJECT_ITEMS, CommonConfigNotif.MAIL_MODIFIED_BY_TEMPLATE);
+			NotificationsTrackFieldsSingleMail(CommonConfigNotif.MAIL_MODIFIED_BY_TEMPLATE);
 		}
 	}
 }
