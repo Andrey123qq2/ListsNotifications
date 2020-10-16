@@ -6,11 +6,10 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Microsoft.SharePoint;
-using Microsoft.SharePoint.WebControls;
 
 namespace ListsNotifications
 {
-    class PageSettings
+    class PageSettings : IERConf<ERConfNotifications>
     {
         //Table TableSettings;
         Panel SettingsPanel;
@@ -19,10 +18,15 @@ namespace ListsNotifications
 
         public SPList list;
         public SPFieldCollection listFields;
-        public ERItem listERConfig;
+        public ERConfNotifications _ERConf;
 
         TrackFieldsTable trackFieldsTable;
         AdditionalFieldsTable additionalFieldsTable;
+
+        public ERConfNotifications ERConf
+        {
+            get { return _ERConf; }
+        }
 
         public PageSettings(Panel settingsPanel, HttpRequest request, HttpResponse response)
         {
@@ -32,7 +36,7 @@ namespace ListsNotifications
 
             list = GetSPList();
             listFields = list.Fields;
-            listERConfig = ERItemFactory.Create(list);
+            _ERConf = ERListConf<ERConfNotifications>.Get(list, CommonConfigNotif.LIST_PROPERTY_JSON_CONF);
         }
 
         public void CreateSettingsControls()
@@ -79,12 +83,22 @@ namespace ListsNotifications
 
         protected void ButtonOK_Click(object sender, System.EventArgs e)
         {
-            trackFieldsTable.SaveTableSettings(list);
-            additionalFieldsTable.SaveTableSettings(list);
+            ERConfNotifications ConfFromAllTables = GetConfFromAllTables();
+            ERListConf<ERConfNotifications>.Set(list, CommonConfigNotif.LIST_PROPERTY_JSON_CONF, ConfFromAllTables);
 
             string currentUrl = HttpContext.Current.Request.UrlReferrer.OriginalString;
-            string listSettingsUrl = currentUrl.Replace("ERListsSettings/ERListsSettings.aspx", "listedit.aspx");
+            string listSettingsUrl = currentUrl.Replace("ERListsSettings/Notifications.aspx", "listedit.aspx");
             Response.Redirect(listSettingsUrl);
+        }
+        private ERConfNotifications GetConfFromAllTables()
+        {
+            ERConfNotifications trackFieldsTableSettings = trackFieldsTable.GetTableSettings(list);
+            ERConfNotifications additionalFieldsTableSettings = additionalFieldsTable.GetTableSettings(list);
+
+            trackFieldsTableSettings.cc = additionalFieldsTableSettings.cc;
+            trackFieldsTableSettings.bcc = additionalFieldsTableSettings.bcc;
+
+            return trackFieldsTableSettings;
         }
     }
 }

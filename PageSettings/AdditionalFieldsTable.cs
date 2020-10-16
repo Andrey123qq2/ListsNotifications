@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Drawing;
+using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.UI;
@@ -12,7 +13,7 @@ namespace ListsNotifications
 {
     class AdditionalFieldsTable : SettingsTable
     {
-        List<string> tableFields = new List<string> { "mailcc", "mailbcc" };
+        List<string> tableFields = new List<string> { "cc", "bcc" };
         public AdditionalFieldsTable(PageSettings pageSettings) : base(pageSettings)
         {
         }
@@ -40,7 +41,7 @@ namespace ListsNotifications
             return header;
         }
 
-        public override TableRow[] CreateRowsAndFillParams(SPFieldCollection listFields, ERItem listERConfig)
+        public override TableRow[] CreateRowsAndFillParams(PageSettings pageSettings)
         {
             List<TableRow> tableRows = new List<TableRow>();
 
@@ -63,7 +64,7 @@ namespace ListsNotifications
                     Text = field
                 };
 
-                List<string> textBoxValueList = (List<string>)listERConfig.GetType().GetField(field).GetValue(listERConfig);
+                List<string> textBoxValueList = (List<string>)pageSettings.ERConf.GetType().GetProperty(field).GetValue(pageSettings.ERConf);
                 string textBoxValue = String.Join(",", textBoxValueList.ToArray());
                 TextBox textBox1 = new TextBox
                 {
@@ -81,8 +82,13 @@ namespace ListsNotifications
             return tableRows.ToArray();
         }
 
-        public void SaveTableSettings(SPList list)
+        public ERConfNotifications GetTableSettings(SPList list)
         {
+            List<string> cc = new List<string> { };
+            List<string> bcc = new List<string> { };
+
+            ERConfNotifications ERConf = new ERConfNotifications();
+
             foreach (TableRow tr in table.Rows)
             {
                 foreach (TableCell tc in tr.Cells)
@@ -92,13 +98,29 @@ namespace ListsNotifications
                         if (ctr is TextBox)
                         {
                             string ctrID = ((Control)ctr).ID;
-                            list.RootFolder.Properties["er_notif_" + ctrID.ToLower()] = ((TextBox)ctr).Text;
+                            List<string> ctrIDList = ((TextBox)ctr).Text.Split(',').ToList<string>();
+                            ERConf.GetType().GetProperty(ctrID.ToLower()).SetValue(ERConf, ctrIDList);
+
+                            //ERConf[ctrID.ToLower()] = ((TextBox)ctr).Text;
+                            //list.RootFolder.Properties["er_notif_" + ctrID.ToLower()] = ((TextBox)ctr).Text;
+                            //if (ctrID.Contains("cc")
+                            //{
+                            //    cc.Add(((TextBox)ctr).Text);
+                            //}
                         }
                     }
                 }
             };
 
-            list.Update();
+            //ERConfNotifications ERConf = new ERConfNotifications
+            //{
+            //    ItemAddedTrackFields = trackFieldsAddedList,
+            //    ItemUpdatingTrackFields = trackFieldsList,
+            //    ItemUpdatedTrackFields = trackFieldsSingleMail,
+            //    to = userNotifyFields
+            //};
+
+            return ERConf;
         }
     }
 }

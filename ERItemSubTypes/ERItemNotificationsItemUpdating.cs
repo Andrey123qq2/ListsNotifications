@@ -7,17 +7,17 @@ using Microsoft.SharePoint;
 
 namespace ListsNotifications
 {
-    class ERTypeItemUpdating : ERItemNotifHandler
+    class ERItemNotificationsItemUpdating : ERItemNotifications
 	{
-		public ERTypeItemUpdating(SPItemEventProperties properties) : base(properties)
+		public ERItemNotificationsItemUpdating(SPItemEventProperties properties) : base(properties)
 		{
 			SetSPItemFieldsAttributesByERType();
 		}
 		public override void SetSPItemFieldsAttributesByERType()
 		{
-			this.SetAttribute(listItem.ParentList, out TrackFields, NotifCommonConfig.LIST_PROPERTY_TRACK_FIELDS, true);
+			//this.SetAttribute(listItem.ParentList, out TrackFields, NotifCommonConfig.LIST_PROPERTY_TRACK_FIELDS, true);
 
-			TrackSPItemFields = TrackFields
+			TrackSPItemFields = this.ERConf.ItemUpdatingTrackFields
 				//.AsParallel()
 				.Select(f => SPItemFieldFactory.create(this, f))
 				.Where(t => t.IsChanged)

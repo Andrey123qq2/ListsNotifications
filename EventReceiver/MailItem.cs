@@ -29,7 +29,7 @@ namespace ListsNotifications
         string EditorDisplayName;
         string ModifiedByBlock;
 
-        public MailItem(ERItem<ERConfNotifications> item, List<SPItemField> fieldsToTrack, string mailSubjectMode = "", bool showBeforeValuesParam = true)
+        public MailItem(ERItemNotifications item, List<SPItemField> fieldsToTrack, string mailSubjectMode = "", bool showBeforeValuesParam = true)
         {
             showBeforeValues = showBeforeValuesParam;
             InitCommonAttributes(item);
@@ -39,7 +39,7 @@ namespace ListsNotifications
             headers = GetHeaders();
         }
 
-        public MailItem(ERItem<ERConfNotifications> item)
+        public MailItem(ERItemNotifications item)
         {
             attachmentUrl = item.listItem.Web.Url + "/" + item.eventProperties.AfterUrl.ToString();
 
@@ -50,11 +50,11 @@ namespace ListsNotifications
             headers = GetHeaders();
         }
 
-        private void InitCommonAttributes(ERItem<ERConfNotifications> item)
+        private void InitCommonAttributes(ERItemNotifications item)
         {
-            to = String.Join(",", item.UserNotifyFieldsMails);
-            cc = String.Join(",", item.mailcc);
-            bcc = String.Join(",", item.mailbcc);
+            to = String.Join(",", item.toMails);
+            cc = String.Join(",", item.ERConf.cc);
+            bcc = String.Join(",", item.ERConf.bcc);
 
             itemUrlBlock = String.Format(CommonConfigNotif.MAIL_URL_TEMPLATE, item.listItem.GetItemFullUrl(), item.itemTitle);
             EditorDisplayName = item.eventProperties.UserDisplayName;

@@ -31,12 +31,12 @@ namespace ListsNotifications
             TableHeaderRow tableHeader = CreateTableHeader();
             table.Rows.Add(tableHeader);
 
-            TableRow[] tableRows = CreateRowsAndFillParams(pageSettings.listFields, pageSettings.listERConfig);
+            TableRow[] tableRows = CreateRowsAndFillParams(pageSettings);
             table.Rows.AddRange(tableRows);
         }
 
         abstract public TableHeaderRow CreateTableHeader();
 
-        abstract public TableRow[] CreateRowsAndFillParams(SPFieldCollection listFields, ERItem listERConfig);
+        abstract public TableRow[] CreateRowsAndFillParams(PageSettings pageSettings);
     }
 }

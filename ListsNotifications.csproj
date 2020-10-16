@@ -86,22 +86,24 @@
     <Reference Include="Microsoft.SharePoint.Client.ServerRuntime" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ERItem0\ERItemNotifHandler.cs" />
+    <Compile Include="ERItem0\ERItemNotifHandler0.cs" />
+    <Compile Include="ERItemReadConfig2\IERItem.cs" />
+    <Compile Include="ERItemReadConfig2\IERConf.cs" />
     <Compile Include="ERItemSubTypes\ERItemNotifications.cs" />
     <Compile Include="ERItemReadConfig2\ERConfNotifications.cs" />
     <Compile Include="ERItemReadConfig2\ERItem.cs" />
     <Compile Include="ERItemReadConfig2\ERListConf.cs" />
     <Compile Include="ReadConfig\IERItem0.cs" />
     <Compile Include="ReadConfig\ERItem0.cs" />
-    <Compile Include="ReadConfig\IERConf.cs" />
+    <Compile Include="ReadConfig\IERConf0.cs" />
     <Compile Include="ReadConfig\ERConfNotifications0.cs" />
-    <Compile Include="ReadConfig\ERConfFactory.cs" />
-    <Compile Include="ERItem0\ERItemFactory.cs" />
-    <Compile Include="ERItem0\ERTypeItemAdded.cs" />
-    <Compile Include="ERItem0\ERTypeItemAttachmentAdded.cs" />
-    <Compile Include="ERItem0\ERTypeItemPageSettings.cs" />
-    <Compile Include="ERItem0\ERTypeItemUpdated.cs" />
-    <Compile Include="ERItem0\ERTypeItemUpdating.cs" />
+    <Compile Include="ReadConfig\ERConfFactory0.cs" />
+    <Compile Include="ERItemReadConfig2\ERItemFactory.cs" />
+    <Compile Include="ERItemSubTypes\ERItemNotificationsItemAdded.cs" />
+    <Compile Include="ERItemSubTypes\ERItemNotificationsItemAttachmentAdded.cs" />
+    <Compile Include="ERItem0\ERTypeItemPageSettings0.cs" />
+    <Compile Include="ERItemSubTypes\ERItemNotificationsItemUpdated.cs" />
+    <Compile Include="ERItemSubTypes\ERItemNotificationsItemUpdating.cs" />
     <Compile Include="SPItemField\SPItemFieldTypeString.cs" />
     <Compile Include="SPItemField\SPItemFieldTypeSPFieldLookupValueCollection.cs" />
     <Compile Include="SPItemField\SPItemFieldTypeSPFieldUserValue.cs" />
@@ -116,20 +118,20 @@
     <Compile Include="PageSettings\SettingsTable.cs" />
     <Compile Include="PageSettings\TrackFieldsTable.cs" />
     <Compile Include="ERItemReadConfig2\CommonConfigNotif.cs" />
-    <Compile Include="ReadConfig\ERItemSPProperties.cs" />
-    <Compile Include="Layouts\ERListsSettings\ERListsSettings.aspx.cs">
-      <DependentUpon>ERListsSettings.aspx</DependentUpon>
+    <Compile Include="ReadConfig\ERItemSPProperties0.cs" />
+    <Compile Include="Layouts\ERListsSettings\Notifications.aspx.cs">
+      <DependentUpon>Notifications.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Layouts\ERListsSettings\ERListsSettings.aspx.designer.cs">
-      <DependentUpon>ERListsSettings.aspx.cs</DependentUpon>
+    <Compile Include="Layouts\ERListsSettings\Notifications.aspx.designer.cs">
+      <DependentUpon>Notifications.aspx.cs</DependentUpon>
     </Compile>
     <Compile Include="EventReceiver\SPCommon.cs" />
     <Compile Include="EventReceiver\MailItem.cs" />
-    <Compile Include="ReadConfig\ERItemBak.cs" />
+    <Compile Include="ReadConfig\ERItemBak0.cs" />
     <Compile Include="EventReceiver\SPListExtension.cs" />
     <Compile Include="EventReceiver\ERItemSPExtension.cs" />
-    <Compile Include="ReadConfig\ERItemConfigMethods.cs" />
+    <Compile Include="ReadConfig\ERItemConfigMethods0.cs" />
     <Compile Include="EventReceiver\MainInit.cs" />
     <Compile Include="EventReceiver1\EventReceiver1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -184,8 +186,8 @@
     <Content Include="Features\Feature1\Feature1.Template.xml">
       <DependentUpon>Feature1.feature</DependentUpon>
     </Content>
-    <Content Include="Layouts\ERListsSettings\ERListsSettings.aspx" />
-    <Content Include="Layouts\ERListsSettings\ListSettings.js" />
+    <Content Include="Layouts\ERListsSettings\Notifications.aspx" />
+    <Content Include="Layouts\ERListsSettings\Notifications.js" />
     <Content Include="List1\Elements.xml" />
     <Content Include="List1\List1Instance\Elements.xml" />
     <Content Include="List1\Schema.xml" />

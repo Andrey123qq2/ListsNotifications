@@ -8,7 +8,7 @@ namespace ListsNotifications
 {
     class SPItemFieldFactory
     {
-        public static SPItemField create(ERItem item, string fieldTitle, bool valueAfterParam = true)
+        public static SPItemField create(IERItem item, string fieldTitle, bool valueAfterParam = true)
         {
             object[] SPItemFieldParams = { item, fieldTitle, valueAfterParam };
 
@@ -17,7 +17,7 @@ namespace ListsNotifications
             return (SPItemField)Activator.CreateInstance(SPItemFieldType, SPItemFieldParams);
         }
 
-        private static Type GetSPItemFieldType(ERItem item, string fieldTitle)
+        private static Type GetSPItemFieldType(IERItem item, string fieldTitle)
         {
             Type SPItemFieldType;
             string SPItemFieldTypeName;

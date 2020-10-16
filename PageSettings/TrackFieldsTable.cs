@@ -63,12 +63,12 @@ namespace ListsNotifications
             return header;
         }
 
-        public override TableRow[] CreateRowsAndFillParams(SPFieldCollection listFields, ERItem listERConfig)
+        public override TableRow[] CreateRowsAndFillParams(PageSettings pageSettings)
         {
             List<TableRow> tableRows = new List<TableRow>();
 
             int i = 0;
-            foreach (SPField field in listFields)
+            foreach (SPField field in pageSettings.listFields)
             {
                 if (field.ReadOnlyField || field.Hidden)
                 {
@@ -103,21 +103,21 @@ namespace ListsNotifications
                 CheckBox checkbox1 = new CheckBox
                 {
                     ID = "checkBoxTrackField" + i.ToString(),
-                    Checked = listERConfig.TrackFields.Contains(field.Title),
+                    Checked = pageSettings.ERConf.ItemUpdatingTrackFields.Contains(field.Title),
                 };
                 checkbox1.Attributes.Add("Title", field.Title);
 
                 CheckBox checkbox2 = new CheckBox
                 {
                     ID = "checkBoxTrackAddedField" + i.ToString(),
-                    Checked = listERConfig.ItemAddedFields.Contains(field.Title),
+                    Checked = pageSettings.ERConf.ItemAddedTrackFields.Contains(field.Title),
                 };
-                checkbox1.Attributes.Add("Title", field.Title);
+                checkbox2.Attributes.Add("Title", field.Title);
 
                 CheckBox checkbox3 = new CheckBox
                 {
                     ID = "checkBoxFieldSingleMail" + i.ToString(),
-                    Checked = listERConfig.TrackFieldsSingleMail.ContainsKey(field.Title),
+                    Checked = pageSettings.ERConf.ItemUpdatedTrackFields.ContainsKey(field.Title),
                 };
                 checkbox3.Attributes.Add("Title", field.Title);
                 checkbox3.Attributes.Add("onclick", "checkBoxSingleMailHandler()");
@@ -126,9 +126,9 @@ namespace ListsNotifications
                 {
                     ID = "subjectSingleMail" + i.ToString(),
                     Width = 200,
-                    Text = (checkbox2.Checked) ? listERConfig.TrackFieldsSingleMail[field.Title] : "",
-                    BorderColor = (checkbox2.Checked) ? Color.FromArgb(171, 171, 171) : Color.FromArgb(225, 225, 225),
-                    CssClass = (!checkbox2.Checked) ? "readonly" : ""
+                    Text = (checkbox3.Checked) ? pageSettings.ERConf.ItemUpdatedTrackFields[field.Title] : "",
+                    BorderColor = (checkbox3.Checked) ? Color.FromArgb(171, 171, 171) : Color.FromArgb(225, 225, 225),
+                    CssClass = (!checkbox3.Checked) ? "readonly" : ""
                 };
                 textBox1.Attributes.Add("Title", field.Title);
 
@@ -138,7 +138,7 @@ namespace ListsNotifications
                     checkbox4 = new CheckBox
                     {
                         ID = "checkBoxFieldNotify" + i.ToString(),
-                        Checked = listERConfig.UserNotifyFields.Contains(field.Title)
+                        Checked = pageSettings.ERConf.to.Contains(field.Title)
                     };
                     checkbox4.Attributes.Add("Title", field.Title);
                     td6.Controls.Add(checkbox4);
@@ -147,7 +147,7 @@ namespace ListsNotifications
                 td1.Controls.Add(fieldLabel1);
                 td2.Controls.Add(checkbox1);
                 td3.Controls.Add(checkbox2);
-                td4.Controls.Add(checkbox2);
+                td4.Controls.Add(checkbox3);
                 td5.Controls.Add(textBox1);
 
                 tableRows.Add(tr);
@@ -156,12 +156,13 @@ namespace ListsNotifications
             return tableRows.ToArray();
         }
 
-        public void SaveTableSettings(SPList list)
+        public ERConfNotifications GetTableSettings(SPList list)
         {
             List<string> trackFieldsList = new List<string> { };
             List<string> trackFieldsAddedList = new List<string> { };
-            List<string> UserNotifyFields = new List<string> { };
-            List<string> TrackFieldsSingleMail = new List<string> { };
+            List<string> userNotifyFields = new List<string> { };
+            //List<string> TrackFieldsSingleMail = new List<string> { };
+            Dictionary<string, string> trackFieldsSingleMail = new Dictionary<string, string> { };
 
             foreach (TableRow tr in table.Rows)
             {
@@ -179,8 +180,9 @@ namespace ListsNotifications
 
                             if (ctrID.Contains("SingleMail") && textBoxValue != "")
                             {
-                                string singleMailFieldParam = controlTitle + "=" + textBoxValue;
-                                TrackFieldsSingleMail.Add(singleMailFieldParam);
+                                trackFieldsSingleMail.Add(controlTitle, textBoxValue);
+                                //string singleMailFieldParam = controlTitle + "=" + textBoxValue;
+                                ///TrackFieldsSingleMail.Add(singleMailFieldParam);
                             }
                         }
 
@@ -200,18 +202,28 @@ namespace ListsNotifications
 
                             if (ctrID.Contains("FieldNotify") && ((CheckBox)ctr).Checked)
                             {
-                                UserNotifyFields.Add(controlTitle);
+                                userNotifyFields.Add(controlTitle);
                             }
                         }
                     }
                 }
             };
 
-            list.RootFolder.Properties[NotifCommonConfig.LIST_PROPERTY_TRACK_FIELDS] = String.Join(",", trackFieldsList.ToArray());
-            list.RootFolder.Properties[NotifCommonConfig.LIST_PROPERTY_TRACK_FIELDS_ITEMADDED] = String.Join(",", trackFieldsAddedList.ToArray());
-            list.RootFolder.Properties[NotifCommonConfig.LIST_PROPERTY_TRACK_FIELDS_SINGLEMAIL] = String.Join(",", TrackFieldsSingleMail.ToArray());
-            list.RootFolder.Properties[NotifCommonConfig.LIST_PROPERTY_USER_FIELDS] = String.Join(",", UserNotifyFields.ToArray());
-            list.Update();
+            ERConfNotifications ERConf = new ERConfNotifications
+            {
+                ItemAddedTrackFields = trackFieldsAddedList,
+                ItemUpdatingTrackFields = trackFieldsList,
+                ItemUpdatedTrackFields = trackFieldsSingleMail,
+                to = userNotifyFields
+            };
+
+            return ERConf;
+
+            //list.RootFolder.Properties[NotifCommonConfig.LIST_PROPERTY_TRACK_FIELDS] = String.Join(",", trackFieldsList.ToArray());
+            //list.RootFolder.Properties[NotifCommonConfig.LIST_PROPERTY_TRACK_FIELDS_ITEMADDED] = String.Join(",", trackFieldsAddedList.ToArray());
+            //list.RootFolder.Properties[NotifCommonConfig.LIST_PROPERTY_TRACK_FIELDS_SINGLEMAIL] = String.Join(",", TrackFieldsSingleMail.ToArray());
+            //list.RootFolder.Properties[NotifCommonConfig.LIST_PROPERTY_USER_FIELDS] = String.Join(",", UserNotifyFields.ToArray());
+            //list.Update();
         }
     }
 }

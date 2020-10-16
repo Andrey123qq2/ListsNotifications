@@ -16,7 +16,7 @@ namespace ListsNotifications
     public static class ERItemSPExtension
     {
         static SPUser svcUserForEmptyResponse;
-        public static string[] GetCodesFromDeptCodeField<T>(this ERItem<T> item, string DeptCodeFieldName)
+        public static string[] GetCodesFromDeptCodeField(this IERItem item, string DeptCodeFieldName)
         {
             dynamic CodeNameValues;
             string[] CodeNames = new String[] { };
@@ -48,7 +48,7 @@ namespace ListsNotifications
             return CodeNames;
         }
 
-        public static List<SPPrincipal> GetGroupsByDeptCodeField<T>(this ERItem<T> item, string DeptCodeFieldName, string GroupSuffix)
+        public static List<SPPrincipal> GetGroupsByDeptCodeField(this IERItem item, string DeptCodeFieldName, string GroupSuffix)
         {
             List<SPPrincipal> codeFieldGroups = new List<SPPrincipal>();
             string[] codeNames;
@@ -78,7 +78,7 @@ namespace ListsNotifications
             return codeFieldGroups;
         }
 
-        public static List<SPPrincipal> GetUsersFromUsersFields<T>(this ERItem<T> item, List<string> usersFields, bool valueAfter = true )
+        public static List<SPPrincipal> GetUsersFromUsersFields(this IERItem item, List<string> usersFields, bool valueAfter = true )
         {
             List<SPPrincipal> fieldsPrincipals = new List<SPPrincipal>();
             string userLogin;
@@ -148,7 +148,7 @@ namespace ListsNotifications
         }
 
         //TO ERItem !!
-        public static dynamic GetFieldValue<T>(this ERItem<T> item, string fieldTitle)
+        public static dynamic GetFieldValue(this IERItem item, string fieldTitle, bool valueAfter = true)
         {
             dynamic ChangedFieldValue;
             string fieldInternalName;
@@ -165,7 +165,7 @@ namespace ListsNotifications
                 fieldStaticName = fieldTitle;
             }
 
-            if (item.eventType.Contains("ing"))
+            if (item.eventType.Contains("ing") && valueAfter)
             {
                 ChangedFieldValue = item.eventProperties.AfterProperties[fieldInternalName];
 
@@ -195,7 +195,7 @@ namespace ListsNotifications
             return ChangedFieldValue;
         }
 
-        public static List<SPPrincipal> GetRelatedItemUsers<T>(this ERItem<T> item)
+        public static List<SPPrincipal> GetRelatedItemUsers(this IERItem item)
         {
             List<SPPrincipal> arrRealtedItemUsers = new List<SPPrincipal>();
             dynamic relatedItems;

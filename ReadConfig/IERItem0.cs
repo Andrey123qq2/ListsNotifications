@@ -7,11 +7,11 @@ using Microsoft.SharePoint;
 
 namespace ListsNotifications
 {
-    interface IERItem0
-    {
-        SPListItem listItem { get; }
-        SPItemEventProperties eventProperties { get; }
-        string eventType { get; }
-        string itemTitle { get; }
-    }
+    //interface IERItem0
+    //{
+    //    SPListItem listItem { get; }
+    //    SPItemEventProperties eventProperties { get; }
+    //    string eventType { get; }
+    //    string itemTitle { get; }
+    //}
 }

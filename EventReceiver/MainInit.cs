@@ -25,7 +25,7 @@ namespace ListsNotifications
         public static void Notifications(SPItemEventProperties properties)
         {
 
-            ERItem itemER;
+            ERItemNotifications itemER;
 
             try
             {

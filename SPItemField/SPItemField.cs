@@ -14,7 +14,7 @@ namespace ListsNotifications
         public string friendlyFieldValueBefore;
         public string friendlyFieldValueAfter;
 
-        protected readonly ERItem item;
+        protected IERItem item;
         protected readonly bool valueAfter;
 
         protected dynamic fieldValueAfter;
@@ -30,12 +30,12 @@ namespace ListsNotifications
         
         public SPItemField(params object[] attributes)
         {
-            item = (ERItem)attributes[0];
+            item = (IERItem)attributes[0];
             fieldTitle = (string)attributes[1];
             valueAfter = (bool)attributes[2];
 
-            fieldValueAfter = valueAfter ? item.GetFieldValue(fieldTitle) : null;
-            fieldValueBefore = item.GetFieldValue(fieldTitle);
+            fieldValueAfter = valueAfter ? item.GetFieldValue(fieldTitle, valueAfter) : null;
+            fieldValueBefore = item.GetFieldValue(fieldTitle, false);
 
             GetFieldValuesToStringForCompare();
             IsChanged = FieldIsChanged();

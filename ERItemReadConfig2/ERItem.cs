@@ -7,14 +7,36 @@ using Microsoft.SharePoint;
 
 namespace ListsNotifications
 {
-    class ERItem<T>
+    public class ERItem<T> : IERItem, IERConf<T>
     {
-        public SPListItem listItem;
-        public SPItemEventProperties eventProperties;
-        public readonly string itemTitle;
-        public readonly string eventType;
+        private SPListItem _listItem;
+        private SPItemEventProperties _eventProperties;
+        private string _itemTitle;
+        private string _eventType;
 
-        public T ERConf;
+        private T _ERConf;
+
+        public SPListItem listItem
+        {
+            get { return _listItem; }
+        }
+        public SPItemEventProperties eventProperties
+        {
+            get { return _eventProperties; }
+        }
+        public string itemTitle
+        {
+            get { return _itemTitle; }
+        }
+        public string eventType
+        {
+            get { return _eventType; }
+        }
+        public T ERConf
+        {
+            get { return _ERConf; }
+        }
+
 
         public ERItem(SPItemEventProperties properties)
         {
@@ -26,27 +48,28 @@ namespace ListsNotifications
 
                     try
                     {
-                        listItem = web.Lists[properties.ListId].GetItemById(properties.ListItemId);
+                        _listItem = web.Lists[properties.ListId].GetItemById(properties.ListItemId);
                     }
                     catch
                     {
-                        listItem = properties.ListItem;
+                        _listItem = properties.ListItem;
                     }
 
-                    if (listItem == null)
+                    if (_listItem == null)
                     {
                         throw new Exception("ListItem not found");
                     }
                 }
             }
 
-            eventProperties = properties;
+            _eventProperties = properties;
 
-            itemTitle = (listItem.Title != "" && listItem.Title != null) ? listItem.Title : listItem["FileLeafRef"].ToString();
+            _itemTitle = (_listItem.Title != "" && _listItem.Title != null) ? _listItem.Title : _listItem["FileLeafRef"].ToString();
 
-            eventType = properties.EventType.ToString();
+            _eventType = properties.EventType.ToString();
 
-            ERConf = ERListConf<T>.Get(listItem.ParentList, CommonConfigNotif.LIST_PROPERTY_JSON_CONF);
+            _ERConf = ERListConf<T>.Get(_listItem.ParentList, CommonConfigNotif.LIST_PROPERTY_JSON_CONF);
         }
+
     }
 }

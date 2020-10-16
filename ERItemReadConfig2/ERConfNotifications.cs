@@ -12,7 +12,7 @@ namespace ListsNotifications
         public List<string> cc { get; set; } = new List<string> { };
         public List<string> bcc { get; set; } = new List<string> { };
         public List<string> ItemAddedTrackFields { get; set; } = new List<string> { };
-        public List<string> ItemUpdatedTrackFields { get; set; } = new List<string> { };
-        public Dictionary<string, string> ItemUpdatingTrackFields { get; set; } = new Dictionary<string, string> { };
+        public List<string> ItemUpdatingTrackFields { get; set; } = new List<string> { };
+        public Dictionary<string, string> ItemUpdatedTrackFields { get; set; } = new Dictionary<string, string> { };
     }
 }

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace ListsNotifications
 {
-    interface IERConf
+    interface IERConf<T>
     {
-        ERConfNotifications ERConf { get; }
+        T ERConf { get; }
     }
 }
