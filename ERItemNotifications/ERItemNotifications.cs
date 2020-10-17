@@ -18,7 +18,7 @@ namespace ListsNotifications
 		{
 			NotifiersPresent = ERConf.to.Count > 0 || ERConf.cc.Count > 0 || ERConf.bcc.Count > 0;
 
-			List<SPPrincipal> principals = this.GetUsersFromUsersFields(ERConf.to);
+			List<SPPrincipal> principals = this.listItem.GetUsersFromUsersFields(ERConf.to);
 			toMails = SPCommon.GetUserMails(principals);
 		}
 		abstract public void SendNotifications();

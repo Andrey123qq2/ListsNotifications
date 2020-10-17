@@ -24,7 +24,7 @@ namespace ListsNotifications
         private string attachmentUrl;
 
         private bool showBeforeValues;
-        private bool itemAdded;
+        //private bool itemAdded;
 
         string modifiedByBlockTemplate;
         string itemUrlBlock;
@@ -65,7 +65,7 @@ namespace ListsNotifications
             cc = String.Join(",", item.ERConf.cc);
             bcc = String.Join(",", item.ERConf.bcc);
 
-            itemAdded = item.eventType.Contains("Added");
+            //itemAdded = item.eventType.Contains("Added");
 
             itemUrlBlock = String.Format(CommonConfigNotif.MAIL_URL_TEMPLATE, item.listItem.GetItemFullUrl(), item.itemTitle);
             EditorDisplayName = item.eventProperties.UserDisplayName;

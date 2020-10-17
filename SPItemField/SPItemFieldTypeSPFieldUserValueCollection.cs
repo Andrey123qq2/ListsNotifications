@@ -24,7 +24,7 @@ namespace ListsNotifications
         public override void GetFriendlyFieldValues(string fieldValueString, out string friendlyFieldValue)
         {
             bool valueAfterParam = friendlyFieldValueAfter == null;
-            List<SPPrincipal> fieldPrincipals = item.GetUsersFromUsersFields(new List<string> { fieldTitle }, valueAfterParam);
+            List<SPPrincipal> fieldPrincipals = valueAfterParam ? item.GetUsersFromUsersFieldsAfter(new List<string> { fieldTitle }) : item.listItem.GetUsersFromUsersFields(new List<string> { fieldTitle });
             friendlyFieldValue = String.Join(", ", SPCommon.GetUserNames(fieldPrincipals).ToArray());
         }
     }

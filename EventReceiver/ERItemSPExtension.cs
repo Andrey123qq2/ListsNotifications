@@ -8,15 +8,13 @@ using Microsoft.SharePoint.Utilities;
 using System.Web;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
-using Microsoft.Office.Server;
-using Microsoft.Office.Server.UserProfiles;
 
 namespace ListsNotifications
 {
     public static class ERItemSPExtension
     {
         static SPUser svcUserForEmptyResponse;
-        public static string[] GetCodesFromDeptCodeField(this IERItem item, string DeptCodeFieldName)
+        public static string[] GetCodesFromDeptCodeField(this SPListItem item, string DeptCodeFieldName)
         {
             dynamic CodeNameValues;
             string[] CodeNames = new String[] { };
@@ -48,12 +46,12 @@ namespace ListsNotifications
             return CodeNames;
         }
 
-        public static List<SPPrincipal> GetGroupsByDeptCodeField(this IERItem item, string DeptCodeFieldName, string GroupSuffix)
+        public static List<SPPrincipal> GetGroupsByDeptCodeField(this SPListItem item, string DeptCodeFieldName, string GroupSuffix)
         {
             List<SPPrincipal> codeFieldGroups = new List<SPPrincipal>();
             string[] codeNames;
 
-            if (!item.listItem.ParentList.Fields.ContainsField(DeptCodeFieldName))
+            if (!item.ParentList.Fields.ContainsField(DeptCodeFieldName))
             {
                 return codeFieldGroups;
             }
@@ -66,7 +64,7 @@ namespace ListsNotifications
                 SPPrincipal CodeGroup;
                 try
                 {
-                    CodeGroup = item.listItem.ParentList.ParentWeb.SiteGroups.GetByName(groupName);
+                    CodeGroup = item.ParentList.ParentWeb.SiteGroups.GetByName(groupName);
                 }
                 catch
                 {
@@ -78,19 +76,51 @@ namespace ListsNotifications
             return codeFieldGroups;
         }
 
-        public static List<SPPrincipal> GetUsersFromUsersFields(this IERItem item, List<string> usersFields, bool valueAfter = true )
+        public static List<SPPrincipal> GetUsersFromUsersFieldsAfter(this IERItem item, List<string> usersFields)
+        {
+            return GetUsersFromUsersFieldsByType<IERItem>(usersFields, item);
+        }
+
+        public static List<SPPrincipal> GetUsersFromUsersFields(this SPListItem item, List<string> usersFields)
+        {
+            return GetUsersFromUsersFieldsByType<SPListItem>(usersFields, item);
+        }
+
+        private static List<SPPrincipal> GetUsersFromUsersFieldsByType<T>(List<string> usersFields, T itemT)
         {
             List<SPPrincipal> fieldsPrincipals = new List<SPPrincipal>();
             string userLogin;
             dynamic fieldValue;
+            SPListItem item;
+            
+            bool valueAfter;
+
+            Type itemType = typeof(T);
+            if (itemType == typeof(IERItem))
+            {
+                item = ((IERItem)itemT).listItem;
+                valueAfter = true;
+            }
+            else if (itemType == typeof(SPListItem))
+            {
+                item = itemT as SPListItem;
+                valueAfter = false;
+            }
+            else
+            {
+                throw new Exception("Not supported item type");
+            }
+
+
             if (svcUserForEmptyResponse == null)
             {
-                svcUserForEmptyResponse = item.listItem.Web.EnsureUser("app@sharepoint");
+                svcUserForEmptyResponse = item.Web.EnsureUser("app@sharepoint");
             }
 
             foreach (string fieldTitle in usersFields)
             {
-                fieldValue = item.GetFieldValue(fieldTitle);
+                fieldValue = valueAfter ? ((IERItem)itemT).GetFieldValueAfter(fieldTitle): item.GetFieldValue(fieldTitle);
+
                 if (fieldValue == null || (fieldValue.GetType().Name == "String" && fieldValue == ""))
                 {
                     continue;
@@ -98,12 +128,12 @@ namespace ListsNotifications
 
                 if ((fieldValue.GetType().Name == "Int32") || (fieldValue.GetType().Name == "String" && Regex.IsMatch(fieldValue, @"^\d+$")))
                 {
-                    SPPrincipal principal = item.listItem.ParentList.ParentWeb.SiteUsers.GetByID(int.Parse(fieldValue.ToString()));
+                    SPPrincipal principal = item.ParentList.ParentWeb.SiteUsers.GetByID(int.Parse(fieldValue.ToString()));
                     fieldsPrincipals.Add(principal);
                 }
                 else
                 {
-                    SPFieldUserValueCollection fieldValueUsers = new SPFieldUserValueCollection(item.listItem.Web, fieldValue.ToString());
+                    SPFieldUserValueCollection fieldValueUsers = new SPFieldUserValueCollection(item.Web, fieldValue.ToString());
                     foreach (SPFieldUserValue fieldUser in fieldValueUsers)
                     {
                         SPPrincipal principal;
@@ -120,13 +150,13 @@ namespace ListsNotifications
 
                         try
                         {
-                            principal = item.listItem.Web.EnsureUser(userLogin);
+                            principal = item.Web.EnsureUser(userLogin);
                         }
                         catch
                         {
                             try
                             {
-                                principal = item.listItem.ParentList.ParentWeb.SiteGroups.GetByName(userLogin);
+                                principal = item.ParentList.ParentWeb.SiteGroups.GetByName(userLogin);
                             }
                             catch
                             {
@@ -148,9 +178,33 @@ namespace ListsNotifications
         }
 
         //TO ERItem !!
-        public static dynamic GetFieldValue(this IERItem item, string fieldTitle, bool valueAfter = true)
+        public static dynamic GetFieldValue(this SPListItem item, string fieldTitle)
         {
-            dynamic ChangedFieldValue;
+            dynamic fieldValue;
+            string fieldInternalName;
+
+            try
+            {
+                fieldInternalName = item.ParentList.Fields[fieldTitle].InternalName;
+            }
+            catch
+            {
+                fieldInternalName = fieldTitle;
+            }
+
+            fieldValue = item[fieldInternalName];
+
+            if (fieldValue == null)
+            {
+                fieldValue = String.Empty;
+            }
+
+            return fieldValue;
+        }
+
+        public static dynamic GetFieldValueAfter(this IERItem item, string fieldTitle)
+        {
+            dynamic fieldValueAfter;
             string fieldInternalName;
             string fieldStaticName;
 
@@ -165,46 +219,39 @@ namespace ListsNotifications
                 fieldStaticName = fieldTitle;
             }
 
-            if (item.eventType.Contains("ing") && valueAfter)
-            {
-                ChangedFieldValue = item.eventProperties.AfterProperties[fieldInternalName];
+            fieldValueAfter = item.eventProperties.AfterProperties[fieldInternalName];
 
-                if (ChangedFieldValue == null)
+            if (fieldValueAfter == null)
+            {
+                fieldValueAfter = item.eventProperties.AfterProperties[fieldTitle];
+                if (fieldValueAfter == null)
                 {
-                    ChangedFieldValue = item.eventProperties.AfterProperties[fieldTitle];
-                    if (ChangedFieldValue == null)
+                    fieldValueAfter = item.eventProperties.AfterProperties[fieldStaticName];
+                    if (fieldValueAfter == null)
                     {
-                        ChangedFieldValue = item.eventProperties.AfterProperties[fieldStaticName];
-                        if (ChangedFieldValue == null)
-                        {
-                            ChangedFieldValue = item.listItem[fieldTitle];
-                        }
+                        fieldValueAfter = item.listItem[fieldTitle];
                     }
                 }
             }
-            else
+
+            if (fieldValueAfter == null)
             {
-                ChangedFieldValue = item.listItem[fieldInternalName];
+                fieldValueAfter = String.Empty;
             }
 
-            if (ChangedFieldValue == null)
-            {
-                ChangedFieldValue = String.Empty;
-            }
-
-            return ChangedFieldValue;
+            return fieldValueAfter;
         }
 
-        public static List<SPPrincipal> GetRelatedItemUsers(this IERItem item)
+        public static List<SPPrincipal> GetRelatedItemUsers(this SPListItem item)
         {
             List<SPPrincipal> arrRealtedItemUsers = new List<SPPrincipal>();
             dynamic relatedItems;
             try
             {
-                relatedItems = item.listItem[SPBuiltInFieldId.RelatedItems];
+                relatedItems = item[SPBuiltInFieldId.RelatedItems];
                 if (relatedItems == null)
                 {
-                    relatedItems = item.eventProperties.ListItem[SPBuiltInFieldId.RelatedItems];
+                    relatedItems = item[SPBuiltInFieldId.RelatedItems];
                 }
             }
             catch
@@ -227,7 +274,7 @@ namespace ListsNotifications
                 String relatedlistIdString = relItem["ListId"];
                 Guid relatedlistId = new Guid(relatedlistIdString);
 
-                SPList relatedList = item.listItem.Web.Lists[relatedlistId];
+                SPList relatedList = item.Web.Lists[relatedlistId];
                 SPListItem relatedItem = relatedList.GetItemById(relatedItemId);
 
                 arrRelatedListUserFields = relatedList.GetListUserFields();

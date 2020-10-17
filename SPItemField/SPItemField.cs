@@ -34,8 +34,8 @@ namespace ListsNotifications
             fieldTitle = (string)attributes[1];
             valueAfter = (bool)attributes[2];
 
-            fieldValueAfter = valueAfter ? item.GetFieldValue(fieldTitle, valueAfter) : null;
-            fieldValueBefore = item.GetFieldValue(fieldTitle, false);
+            fieldValueAfter = valueAfter ? item.GetFieldValueAfter(fieldTitle) : null;
+            fieldValueBefore = item.listItem.GetFieldValue(fieldTitle);
 
             GetFieldValuesToStringForCompare();
             IsChanged = FieldIsChanged();
