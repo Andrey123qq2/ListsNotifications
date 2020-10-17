@@ -17,8 +17,8 @@ namespace ListsNotifications
             SPFieldUserValue[] FieldValueBeforeArr = (fieldValueBefore != null) ? fieldValueBefore.ToArray() : new SPFieldUserValue[] { };
             SPFieldUserValue[] FieldValueAfterArr = (fieldValueAfter != null) ? (new SPFieldUserValueCollection(item.listItem.Web, fieldValueAfter.ToString())).ToArray() : new SPFieldUserValue[] { };
             
-            fieldValueBeforeToStringForCompare = (FieldValueBeforeArr.Length > 0) ? String.Join(",", Array.ConvertAll(FieldValueBeforeArr, p => p.LookupId)) : "";
-            fieldValueAfterToStringForCompare = (FieldValueAfterArr.Length > 0) ? String.Join(",", Array.ConvertAll(FieldValueAfterArr, p => p.LookupId)) : "";
+            fieldValueBeforeToStringForCompare = (FieldValueBeforeArr.Length > 0) ? String.Join(",", Array.ConvertAll(FieldValueBeforeArr, p => p.User.LoginName)) : "";
+            fieldValueAfterToStringForCompare = (FieldValueAfterArr.Length > 0) ? String.Join(",", Array.ConvertAll(FieldValueAfterArr, p => p.LookupValue)) : "";
         }
 
         public override void GetFriendlyFieldValues(string fieldValueString, out string friendlyFieldValue)

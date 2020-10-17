@@ -7,7 +7,7 @@ using Microsoft.SharePoint;
 
 namespace ListsNotifications
 {
-    abstract class ERItemNotifications : ERItem<ERConfNotifications> //where T: ListsNotifications.ERConfNotifications
+    abstract class ERItemNotifications : ERItem<ERConfNotifications>
 	{
         public List<SPItemField> TrackSPItemFields;
         public Dictionary<SPItemField, string> TrackSingleMailSPItemFields;

@@ -86,13 +86,12 @@
     <Reference Include="Microsoft.SharePoint.Client.ServerRuntime" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ERItemReadConfig\IERItem.cs" />
-    <Compile Include="ERItemReadConfig\IERConf.cs" />
+    <Compile Include="ERItem\IERItem.cs" />
+    <Compile Include="ERConf\IERConf.cs" />
     <Compile Include="ERItemNotifications\ERItemNotifications.cs" />
-    <Compile Include="ERItemReadConfig\ERConfNotifications.cs" />
-    <Compile Include="ERItemReadConfig\ERItem.cs" />
-    <Compile Include="ERItemReadConfig\ERListConf.cs" />
-    <Compile Include="ERItemNotifications\ERItemNotificationsFactory.cs" />
+    <Compile Include="ERConf\ERConfNotifications.cs" />
+    <Compile Include="ERItem\ERItem.cs" />
+    <Compile Include="ERConf\ERListConf.cs" />
     <Compile Include="ERItemNotifications\ERItemNotificationsItemAdded.cs" />
     <Compile Include="ERItemNotifications\ERItemNotificationsItemAttachmentAdded.cs" />
     <Compile Include="ERItemNotifications\ERItemNotificationsItemUpdated0.cs" />
@@ -110,7 +109,7 @@
     <Compile Include="PageSettings\PageSettings.cs" />
     <Compile Include="PageSettings\SettingsTable.cs" />
     <Compile Include="PageSettings\TrackFieldsTable.cs" />
-    <Compile Include="ERItemReadConfig\CommonConfigNotif.cs" />
+    <Compile Include="ERConf\CommonConfigNotif.cs" />
     <Compile Include="Layouts\ERListsSettings\Notifications.aspx.cs">
       <DependentUpon>Notifications.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -118,11 +117,11 @@
     <Compile Include="Layouts\ERListsSettings\Notifications.aspx.designer.cs">
       <DependentUpon>Notifications.aspx.cs</DependentUpon>
     </Compile>
-    <Compile Include="EventReceiver\SPCommon.cs" />
-    <Compile Include="EventReceiver\MailItem.cs" />
-    <Compile Include="EventReceiver\SPListExtension.cs" />
-    <Compile Include="EventReceiver\ERItemSPExtension.cs" />
-    <Compile Include="EventReceiver\MainInit.cs" />
+    <Compile Include="SPCustomExtensions\SPCommon.cs" />
+    <Compile Include="SPCustomExtensions\MailItem.cs" />
+    <Compile Include="SPCustomExtensions\SPListExtension.cs" />
+    <Compile Include="SPCustomExtensions\ERItemSPExtension.cs" />
+    <Compile Include="MainInit.cs" />
     <Compile Include="EventReceiver1\EventReceiver1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -162,6 +161,12 @@
     <None Include="List4\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{9785b80b-6421-488c-a17c-0341e7c171a2}</SharePointProjectItemId>
     </None>
+    <None Include="List5\List5Instance\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{6fb2d77f-7115-49bc-8731-e17bf6e85014}</SharePointProjectItemId>
+    </None>
+    <None Include="List5\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{220659c0-acca-4fc9-a523-9860d967a1e6}</SharePointProjectItemId>
+    </None>
     <None Include="packages.config" />
     <None Include="Package\Package.package">
       <PackageId>{911e29b7-4433-439e-98a5-ed3b8e2bc805}</PackageId>
@@ -190,6 +195,9 @@
     <Content Include="List4\Elements.xml" />
     <Content Include="List4\List4Instance\Elements.xml" />
     <Content Include="List4\Schema.xml" />
+    <Content Include="List5\Elements.xml" />
+    <Content Include="List5\List5Instance\Elements.xml" />
+    <Content Include="List5\Schema.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

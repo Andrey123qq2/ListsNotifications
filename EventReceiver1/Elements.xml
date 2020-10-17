@@ -9,15 +9,6 @@
         <SequenceNumber>10000</SequenceNumber>
       </Receiver>
   </Receivers>
-  <!--<Receivers ListTemplateId="100">
-    <Receiver>
-      <Name>EventReceiver1ItemUpdated</Name>
-      <Type>ItemUpdated</Type>
-      <Assembly>$SharePoint.Project.AssemblyFullName$</Assembly>
-      <Class>ListsNotifications.EventReceiver1.EventReceiver1</Class>
-      <SequenceNumber>10000</SequenceNumber>
-    </Receiver>
-  </Receivers>-->
   <Receivers ListTemplateId="100">
     <Receiver>
       <Name>EventReceiver1ItemAdded</Name>
@@ -45,15 +36,6 @@
       <SequenceNumber>10000</SequenceNumber>
     </Receiver>
   </Receivers>
-  <!--<Receivers ListTemplateId="101">
-    <Receiver>
-      <Name>LibsEventReceiver1ItemUpdated</Name>
-      <Type>ItemUpdated</Type>
-      <Assembly>$SharePoint.Project.AssemblyFullName$</Assembly>
-      <Class>ListsNotifications.EventReceiver1.EventReceiver1</Class>
-      <SequenceNumber>10000</SequenceNumber>
-    </Receiver>
-  </Receivers>-->
   <Receivers ListTemplateId="101">
     <Receiver>
       <Name>LibsEventReceiver1ItemAdded</Name>
@@ -72,15 +54,6 @@
       <SequenceNumber>10000</SequenceNumber>
     </Receiver>
   </Receivers>
-  <!--<Receivers ListTemplateId="107">
-    <Receiver>
-      <Name>TasksEventReceiver1ItemUpdated</Name>
-      <Type>ItemUpdated</Type>
-      <Assembly>$SharePoint.Project.AssemblyFullName$</Assembly>
-      <Class>ListsNotifications.EventReceiver1.EventReceiver1</Class>
-      <SequenceNumber>10000</SequenceNumber>
-    </Receiver>
-  </Receivers>-->
   <Receivers ListTemplateId="107">
     <Receiver>
       <Name>TasksEventReceiver1ItemAdded</Name>
@@ -99,18 +72,27 @@
       <SequenceNumber>10000</SequenceNumber>
     </Receiver>
   </Receivers>
-  <!--<Receivers ListTemplateId="171">
+  <Receivers ListTemplateId="171">
     <Receiver>
-      <Name>TasksNewEventReceiver1ItemUpdated</Name>
-      <Type>ItemUpdated</Type>
+      <Name>TasksNewEventReceiver1ItemAdded</Name>
+      <Type>ItemAdded</Type>
       <Assembly>$SharePoint.Project.AssemblyFullName$</Assembly>
       <Class>ListsNotifications.EventReceiver1.EventReceiver1</Class>
       <SequenceNumber>10000</SequenceNumber>
     </Receiver>
-  </Receivers>-->
-  <Receivers ListTemplateId="171">
+  </Receivers>
+  <Receivers ListTemplateId="106">
     <Receiver>
-      <Name>TasksNewEventReceiver1ItemAdded</Name>
+      <Name>CalendarEventReceiver1ItemUpdating</Name>
+      <Type>ItemUpdating</Type>
+      <Assembly>$SharePoint.Project.AssemblyFullName$</Assembly>
+      <Class>ListsNotifications.EventReceiver1.EventReceiver1</Class>
+      <SequenceNumber>10000</SequenceNumber>
+    </Receiver>
+  </Receivers>
+  <Receivers ListTemplateId="106">
+    <Receiver>
+      <Name>CalendarEventReceiver1ItemAdded</Name>
       <Type>ItemAdded</Type>
       <Assembly>$SharePoint.Project.AssemblyFullName$</Assembly>
       <Class>ListsNotifications.EventReceiver1.EventReceiver1</Class>
