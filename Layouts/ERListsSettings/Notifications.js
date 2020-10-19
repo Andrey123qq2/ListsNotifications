@@ -20,7 +20,9 @@
 }
 
 function disableTextBoxes() {
-    document.querySelectorAll(".readonly").forEach(function (element) {
+    var readOnlyElements = document.querySelectorAll(".readonly");
+
+    Array.prototype.forEach.call(readOnlyElements, function (element) {
         element.setAttribute("readonly", true);
-    })
+    });
 }

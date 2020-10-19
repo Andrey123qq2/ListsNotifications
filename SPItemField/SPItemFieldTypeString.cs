@@ -13,8 +13,8 @@ namespace ListsNotifications
         }
         public override void GetFieldValuesToStringForCompare()
         {
-            fieldValueBeforeToStringForCompare = (fieldValueBefore != null) ? ((string)fieldValueBefore).Replace("\r\n", "\n") : "";
-            fieldValueAfterToStringForCompare = (fieldValueAfter != null) ? ((string)fieldValueAfter).Replace("\r\n", "\n") : "";
+            fieldValueBeforeToStringForCompare = (fieldValueBefore != null && fieldValueBefore.ToString() != "") ? ((string)fieldValueBefore).Replace("\r\n", "\n") : "";
+            fieldValueAfterToStringForCompare = (fieldValueAfter != null && fieldValueAfter.ToString() != "") ? ((string)fieldValueAfter).Replace("\r\n", "\n") : "";
         }
         public override void GetFriendlyFieldValues(string fieldValueString, out string friendlyFieldValue)
         {
