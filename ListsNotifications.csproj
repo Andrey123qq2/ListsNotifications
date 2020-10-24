@@ -131,9 +131,6 @@
     <None Include="Features\Feature1\Feature1.feature">
       <FeatureId>{dbd2d127-831e-43da-94e0-cc062eff2e20}</FeatureId>
     </None>
-    <None Include="Features\Feature2\Feature2.feature">
-      <FeatureId>{1f77a3ed-62d5-433b-9852-25a65cc37378}</FeatureId>
-    </None>
     <None Include="key.snk" />
     <None Include="Layouts\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{b7c1a2ff-5609-4d04-89e6-eecce3660939}</SharePointProjectItemId>
@@ -181,9 +178,6 @@
     <Content Include="EventReceiver1\Elements.xml" />
     <Content Include="Features\Feature1\Feature1.Template.xml">
       <DependentUpon>Feature1.feature</DependentUpon>
-    </Content>
-    <Content Include="Features\Feature2\Feature2.Template.xml">
-      <DependentUpon>Feature2.feature</DependentUpon>
     </Content>
     <Content Include="Layouts\ERListsSettings\Notifications.aspx" />
     <Content Include="Layouts\ERListsSettings\Notifications.js" />
