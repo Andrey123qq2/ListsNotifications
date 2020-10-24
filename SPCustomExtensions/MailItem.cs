@@ -41,6 +41,7 @@ namespace ListsNotifications
         {
             showBeforeValues = showBeforeValuesParam;
             modifiedByBlockTemplate = ModifiedByBlockTemplate;
+
             InitCommonAttributes(item);
 
             body = CreateBody(fieldsToTrack);
@@ -48,8 +49,9 @@ namespace ListsNotifications
             headers = GetHeaders();
         }
 
-        public MailItem(ERItemNotifications item, string mailSubjectMode)
+        public MailItem(ERItemNotifications item, string mailSubjectMode, string ModifiedByBlockTemplate)
         {
+            modifiedByBlockTemplate = ModifiedByBlockTemplate;
             attachmentUrl = item.listItem.Web.Url + "/" + item.eventProperties.AfterUrl.ToString();
 
             InitCommonAttributes(item);

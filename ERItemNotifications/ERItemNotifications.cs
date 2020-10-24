@@ -50,14 +50,14 @@ namespace ListsNotifications
 			}
 		}
 
-		protected void NotificationsAttachments(string subject)
+		protected void NotificationsAttachments(string subject, string modifiedByTemplate)
 		{
 			if (!NotifiersPresent)
 			{
 				return;
 			}
 
-			MailItem mailToNotify = new MailItem(this, subject);
+			MailItem mailToNotify = new MailItem(this, subject, modifiedByTemplate);
 			mailToNotify.SendMail(listItem.ParentList.ParentWeb);
 		}
 	}
