@@ -15,7 +15,7 @@ namespace ListsNotifications
     {
         public static void InitItemUpdating(SPItemEventProperties properties)
         {
-            if (!SPCommon.IsUpdatingBySystem(properties) && !SPCommon.IsJustCreated(properties))
+            if (!SPCommon.IsUpdatingBySystem(properties) && properties.ListItem != null && !SPCommon.IsJustCreated(properties.ListItem))
             {
                 SPSecurity.RunWithElevatedPrivileges(delegate ()
                 {
@@ -25,10 +25,12 @@ namespace ListsNotifications
                     {
                         itemER = new ERItemNotificationsItemUpdating(properties);
                     }
+                    catch (ERItemListItemNullException e) {
+                        return;
+                    }
                     catch (Exception e)
                     {
-                        //throw new Exception("ERItem constructor exception: " + e.Message);
-                        return;
+                        throw new Exception("ERItem constructor exception: " + e.Message);
                     }
 
                     itemER.SendNotifications();
@@ -47,10 +49,13 @@ namespace ListsNotifications
                     {
                         itemER = new ERItemNotificationsItemAdded(properties);
                     }
+                    catch (ERItemListItemNullException e)
+                    {
+                        return;
+                    }
                     catch (Exception e)
                     {
-                        //throw new Exception("ERItem constructor exception: " + e.Message);
-                        return;
+                        throw new Exception("ERItem constructor exception: " + e.Message);
                     }
 
                     itemER.SendNotifications();
@@ -60,7 +65,7 @@ namespace ListsNotifications
 
         public static void InitItemAttachmentAdded(SPItemEventProperties properties)
         {
-            if (!SPCommon.IsUpdatingBySystem(properties) && !SPCommon.IsJustCreated(properties))
+            if (!SPCommon.IsUpdatingBySystem(properties) && !SPCommon.IsJustCreated(properties.ListItem))
             {
                 SPSecurity.RunWithElevatedPrivileges(delegate ()
                 {
@@ -70,10 +75,13 @@ namespace ListsNotifications
                     {
                         itemER = new ERItemNotificationsItemAttachmentAdded(properties);
                     }
+                    catch (ERItemListItemNullException e)
+                    {
+                        return;
+                    }
                     catch (Exception e)
                     {
-                        //throw new Exception("ERItem constructor exception: " + e.Message);
-                        return;
+                        throw new Exception("ERItem constructor exception: " + e.Message);
                     }
 
                     itemER.SendNotifications();

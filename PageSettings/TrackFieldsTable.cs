@@ -52,6 +52,11 @@ namespace ListsNotifications
                 Text = "Notify",
                 Width = 100
             };
+            TableHeaderCell headerTableCell7 = new TableHeaderCell
+            {
+                Text = "NotifyManagers",
+                Width = 100
+            };
 
             header.Cells.Add(headerTableCell1);
             header.Cells.Add(headerTableCell2);
@@ -59,6 +64,7 @@ namespace ListsNotifications
             header.Cells.Add(headerTableCell4);
             header.Cells.Add(headerTableCell5);
             header.Cells.Add(headerTableCell6);
+            header.Cells.Add(headerTableCell7);
 
             return header;
         }
@@ -85,6 +91,7 @@ namespace ListsNotifications
                 TableCell td4 = new TableCell();
                 TableCell td5 = new TableCell();
                 TableCell td6 = new TableCell();
+                TableCell td7 = new TableCell();
                 tr.CssClass = (i % 2 == 0) ? "ms-alternatingstrong ms-itmhover" : "ms-itmhover";
 
                 tr.Cells.Add(td1);
@@ -93,6 +100,7 @@ namespace ListsNotifications
                 tr.Cells.Add(td4);
                 tr.Cells.Add(td5);
                 tr.Cells.Add(td6);
+                tr.Cells.Add(td7);
 
                 Label fieldLabel1 = new Label
                 {
@@ -132,7 +140,7 @@ namespace ListsNotifications
                 };
                 textBox1.Attributes.Add("Title", field.Title);
 
-                CheckBox checkbox4;
+                CheckBox checkbox4, checkbox5;
                 if (field.TypeAsString.Contains("User"))
                 {
                     checkbox4 = new CheckBox
@@ -142,6 +150,14 @@ namespace ListsNotifications
                     };
                     checkbox4.Attributes.Add("Title", field.Title);
                     td6.Controls.Add(checkbox4);
+
+                    checkbox5 = new CheckBox
+                    {
+                        ID = "checkBoxFieldManagersNotify" + i.ToString(),
+                        Checked = pageSettings.ERConf.toManagers.Contains(field.Title)
+                    };
+                    checkbox5.Attributes.Add("Title", field.Title);
+                    td7.Controls.Add(checkbox5);
                 };
 
                 td1.Controls.Add(fieldLabel1);
@@ -161,6 +177,7 @@ namespace ListsNotifications
             List<string> trackFieldsList = new List<string> { };
             List<string> trackFieldsAddedList = new List<string> { };
             List<string> userNotifyFields = new List<string> { };
+            List<string> userManagersNotifyFields = new List<string> { };
             //List<string> TrackFieldsSingleMail = new List<string> { };
             Dictionary<string, string> trackFieldsSingleMail = new Dictionary<string, string> { };
 
@@ -204,6 +221,11 @@ namespace ListsNotifications
                             {
                                 userNotifyFields.Add(controlTitle);
                             }
+
+                            if (ctrID.Contains("FieldManagersNotify") && ((CheckBox)ctr).Checked)
+                            {
+                                userManagersNotifyFields.Add(controlTitle);
+                            }
                         }
                     }
                 }
@@ -214,7 +236,8 @@ namespace ListsNotifications
                 ItemAddedTrackFields = trackFieldsAddedList,
                 ItemUpdatingTrackFields = trackFieldsList,
                 ItemUpdatingTrackFieldsSingleMail = trackFieldsSingleMail,
-                to = userNotifyFields
+                to = userNotifyFields,
+                toManagers = userManagersNotifyFields
             };
 
             return ERConf;

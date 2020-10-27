@@ -13,7 +13,7 @@ namespace ListsNotifications
 {
     public static class ERItemSPExtension
     {
-        static SPUser svcUserForEmptyResponse;
+        //static SPUser svcUserForEmptyResponse;
         public static string[] GetCodesFromDeptCodeField(this SPListItem item, string DeptCodeFieldName)
         {
             dynamic CodeNameValues;
@@ -88,7 +88,7 @@ namespace ListsNotifications
 
         private static List<SPPrincipal> GetUsersFromUsersFieldsByType<T>(List<string> usersFields, T itemT)
         {
-            List<SPPrincipal> fieldsPrincipals = new List<SPPrincipal>();
+            List<SPPrincipal> fieldsPrincipals = new List<SPPrincipal>() { };
             string userLogin;
             dynamic fieldValue;
             SPListItem item;
@@ -112,10 +112,10 @@ namespace ListsNotifications
             }
 
 
-            if (svcUserForEmptyResponse == null)
-            {
-                svcUserForEmptyResponse = item.Web.EnsureUser("app@sharepoint");
-            }
+            //if (svcUserForEmptyResponse == null)
+            //{
+            //    svcUserForEmptyResponse = item.Web.EnsureUser("app@sharepoint");
+            //}
 
             foreach (string fieldTitle in usersFields)
             {
@@ -169,10 +169,10 @@ namespace ListsNotifications
                 }
             }
 
-            if (fieldsPrincipals.Count == 0)
-            {
-                fieldsPrincipals.Add(svcUserForEmptyResponse);
-            }
+            //if (fieldsPrincipals.Count == 0)
+            //{
+            //    fieldsPrincipals.Add(svcUserForEmptyResponse);
+            //}
 
             return fieldsPrincipals;
         }

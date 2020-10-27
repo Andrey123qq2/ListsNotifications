@@ -25,12 +25,7 @@ namespace ListsNotifications
 
             foreach (SPPrincipal principal in principalsList)
             {
-                if (principal.GetType().Name != "SPUser")
-                {
-                    continue;
-                }
-                SPUser user = (SPUser)principal;
-                userNames.Add(user.Name);
+                userNames.Add(principal.Name);
             }
 
             return userNames;
@@ -38,16 +33,21 @@ namespace ListsNotifications
 
         public static List<string> GetUserMails(List<SPPrincipal> principalsList)
         {
-            List<string> toMailsList = new List<string>();
+            List<string> toMailsList = new List<string>() { };
 
             foreach (SPPrincipal principal in principalsList)
             {
-                if (principal.GetType().Name != "SPUser")
+                if (principal.GetType().Name == "SPUser")
                 {
-                    continue;
+                    SPUser user = (SPUser)principal;
+                    toMailsList.Add(user.Email);
                 }
-                SPUser user = (SPUser)principal;
-                toMailsList.Add(user.Email);
+
+                if (principal.GetType().Name == "SPGroup")
+                {
+                    List<string> groupMembersMails = GetUserMails((((SPGroup)principal).Users).Cast<SPPrincipal>().ToList());
+                    toMailsList.AddRange(groupMembersMails);
+                }
             }
 
             return toMailsList;
@@ -83,10 +83,10 @@ namespace ListsNotifications
             }
         }
 
-        public static bool IsJustCreated(SPItemEventProperties properties)
+        public static bool IsJustCreated(SPListItem listItem)
         {
-            DateTime itemTimeCreated = (DateTime)properties.ListItem["Created"];
-            DateTime itemTimeModified = (DateTime)properties.ListItem["Modified"];
+            DateTime itemTimeCreated = (DateTime)listItem["Created"];
+            DateTime itemTimeModified = (DateTime)listItem["Modified"];
             Double diffInSeconds = (itemTimeModified - itemTimeCreated).TotalSeconds;
 
             if (diffInSeconds < 2)

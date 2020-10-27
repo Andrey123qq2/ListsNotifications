@@ -9,6 +9,7 @@ namespace ListsNotifications
     class ERConfNotifications
     {
         public List<string> to { get; set; } = new List<string> { };
+        public List<string> toManagers { get; set; } = new List<string> { };
         public List<string> cc { get; set; } = new List<string> { };
         public List<string> bcc { get; set; } = new List<string> { };
         public List<string> ItemAddedTrackFields { get; set; } = new List<string> { };

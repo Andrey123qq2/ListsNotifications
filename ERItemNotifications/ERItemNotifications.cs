@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.SharePoint;
+using Microsoft.SharePoint.WebControls;
 
 namespace ListsNotifications
 {
@@ -16,10 +17,30 @@ namespace ListsNotifications
 
 		public ERItemNotifications(SPItemEventProperties properties) : base(properties)
 		{
-			NotifiersPresent = ERConf.to.Count > 0 || ERConf.cc.Count > 0 || ERConf.bcc.Count > 0;
+			NotifiersPresent = ERConf.to.Count > 0 || ERConf.cc.Count > 0 || ERConf.bcc.Count > 0 || ERConf.toManagers.Count > 0;
 
-			List<SPPrincipal> principals = this.listItem.GetUsersFromUsersFields(ERConf.to);
-			toMails = SPCommon.GetUserMails(principals);
+			toMails = GetToMails();
+		}
+
+		private List<string> GetToMails()
+		{
+			List<string> mails = new List<string> { };
+			List<SPPrincipal> fieldsPrincipalsManagers = new List<SPPrincipal> { };
+
+			List <SPPrincipal> fieldsPrincipals = this.listItem.GetUsersFromUsersFields(ERConf.to);
+			List<string> fieldsPrincipalsMails = SPCommon.GetUserMails(fieldsPrincipals);
+
+			List<SPPrincipal> ManagersFieldsUsers = this.listItem.GetUsersFromUsersFields(this.ERConf.toManagers);
+			List<List<SPPrincipal>> ManagersFieldsManagers = ManagersFieldsUsers
+				.Where(p => p.GetType().Name == "SPUser")
+				.Select(u => ((SPUser)u).GetUserManagers()).ToList<List<SPPrincipal>>();
+			ManagersFieldsManagers.ForEach(lp => { fieldsPrincipalsManagers.AddRange(lp); });
+			List<string> fieldsPrincipalsManagersMails = SPCommon.GetUserMails(fieldsPrincipalsManagers);
+
+			mails.AddRange(fieldsPrincipalsMails);
+			mails.AddRange(fieldsPrincipalsManagersMails);
+
+			return mails;
 		}
 		abstract public void SendNotifications();
 

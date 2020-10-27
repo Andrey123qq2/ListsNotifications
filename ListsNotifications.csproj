@@ -44,6 +44,7 @@
       <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Office.Server, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Office.Server.UserProfiles, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL" />
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -85,6 +86,7 @@
     <Reference Include="Microsoft.SharePoint.Client.ServerRuntime" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ERItem\ERItemListItemNullException.cs" />
     <Compile Include="ERItem\IERItem.cs" />
     <Compile Include="ERConf\IERConf.cs" />
     <Compile Include="ERItemNotifications\ERItemNotifications.cs" />
@@ -94,6 +96,7 @@
     <Compile Include="ERItemNotifications\ERItemNotificationsItemAdded.cs" />
     <Compile Include="ERItemNotifications\ERItemNotificationsItemAttachmentAdded.cs" />
     <Compile Include="ERItemNotifications\ERItemNotificationsItemUpdating.cs" />
+    <Compile Include="SPCustomExtensions\SPUserExtension.cs" />
     <Compile Include="SPItemField\SPItemFieldTypeString.cs" />
     <Compile Include="SPItemField\SPItemFieldTypeSPFieldLookupValueCollection.cs" />
     <Compile Include="SPItemField\SPItemFieldTypeSPFieldUserValue.cs" />

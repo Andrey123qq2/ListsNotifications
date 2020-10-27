@@ -16,8 +16,8 @@ namespace ListsNotifications
         {
             SPFieldUserValue[] FieldValueBeforeArr = (fieldValueBefore != null && fieldValueBefore.ToString() != "") ? fieldValueBefore.ToArray() : new SPFieldUserValue[] { };
             SPFieldUserValue[] FieldValueAfterArr = (fieldValueAfter != null && fieldValueAfter.ToString() != "") ? (new SPFieldUserValueCollection(item.listItem.Web, fieldValueAfter.ToString())).ToArray() : new SPFieldUserValue[] { };
-            
-            fieldValueBeforeToStringForCompare = (FieldValueBeforeArr.Length > 0) ? String.Join(",", Array.ConvertAll(FieldValueBeforeArr, p => p.User.LoginName)) : "";
+
+            fieldValueBeforeToStringForCompare = (FieldValueBeforeArr.Length > 0) ? String.Join(",", Array.ConvertAll(FieldValueBeforeArr, p => (p.User != null) ? p.User.LoginName : p.LookupValue )) : "";
             fieldValueAfterToStringForCompare = (FieldValueAfterArr.Length > 0) ? String.Join(",", Array.ConvertAll(FieldValueAfterArr, p => p.LookupValue)) : "";
         }
 

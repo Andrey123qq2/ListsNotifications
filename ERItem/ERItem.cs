@@ -57,7 +57,7 @@ namespace ListsNotifications
 
                     if (_listItem == null)
                     {
-                        throw new Exception("ListItem not found");
+                        throw new ERItemListItemNullException("ERItem ListItem not found");
                     }
                 }
             }
