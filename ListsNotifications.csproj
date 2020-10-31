@@ -88,7 +88,6 @@
   <ItemGroup>
     <Compile Include="ERItem\ERItemListItemNullException.cs" />
     <Compile Include="ERItem\IERItem.cs" />
-    <Compile Include="ERConf\IERConf.cs" />
     <Compile Include="ERItemNotifications\ERItemNotifications.cs" />
     <Compile Include="ERConf\ERConfNotifications.cs" />
     <Compile Include="ERItem\ERItem.cs" />
