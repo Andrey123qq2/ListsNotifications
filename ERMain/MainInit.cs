@@ -8,6 +8,7 @@ using Microsoft.SharePoint.Utilities;
 using Microsoft.SharePoint.Workflow;
 using Microsoft.CSharp.RuntimeBinder;
 using ListsNotifications.ReadConfig;
+using SPERCommonLib;
 
 namespace ListsNotifications
 {
@@ -15,7 +16,7 @@ namespace ListsNotifications
     {
         public static void InitItemUpdating(SPItemEventProperties properties)
         {
-            if (!SPCommon.IsUpdatingBySystem(properties) && properties.ListItem != null && !SPCommon.IsJustCreated(properties.ListItem))
+            if (!SPCommon.IsUpdatingByAccountMatch(properties, "svc_") && properties.ListItem != null && !SPCommon.IsJustCreated(properties.ListItem))
             {
                 SPSecurity.RunWithElevatedPrivileges(delegate ()
                 {
@@ -39,7 +40,7 @@ namespace ListsNotifications
         }
         public static void InitItemAdded(SPItemEventProperties properties)
         {
-            if (!SPCommon.IsUpdatingBySystem(properties))
+            if (!SPCommon.IsUpdatingByAccountMatch(properties, "svc_"))
             {
                 SPSecurity.RunWithElevatedPrivileges(delegate ()
                 {
@@ -65,7 +66,7 @@ namespace ListsNotifications
 
         public static void InitItemAttachmentAdded(SPItemEventProperties properties)
         {
-            if (!SPCommon.IsUpdatingBySystem(properties) && !SPCommon.IsJustCreated(properties.ListItem))
+            if (!SPCommon.IsUpdatingByAccountMatch(properties, "svc_") && !SPCommon.IsJustCreated(properties.ListItem))
             {
                 SPSecurity.RunWithElevatedPrivileges(delegate ()
                 {

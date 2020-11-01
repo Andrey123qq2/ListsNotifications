@@ -49,6 +49,10 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="SPERCommonLib, Version=1.0.7609.22311, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SPERCommonLib\bin\Debug\SPERCommonLib.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
@@ -86,30 +90,25 @@
     <Reference Include="Microsoft.SharePoint.Client.ServerRuntime" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ERItem\ERItemListItemNullException.cs" />
-    <Compile Include="ERItem\IERItem.cs" />
-    <Compile Include="ERItemNotifications\ERItemNotifications.cs" />
-    <Compile Include="ERConf\ERConfNotifications.cs" />
-    <Compile Include="ERItem\ERItem.cs" />
-    <Compile Include="ERConf\ERListConf.cs" />
-    <Compile Include="ERItemNotifications\ERItemNotificationsItemAdded.cs" />
-    <Compile Include="ERItemNotifications\ERItemNotificationsItemAttachmentAdded.cs" />
-    <Compile Include="ERItemNotifications\ERItemNotificationsItemUpdating.cs" />
-    <Compile Include="SPCustomExtensions\SPUserExtension.cs" />
-    <Compile Include="SPItemField\SPItemFieldTypeString.cs" />
-    <Compile Include="SPItemField\SPItemFieldTypeSPFieldLookupValueCollection.cs" />
-    <Compile Include="SPItemField\SPItemFieldTypeSPFieldUserValue.cs" />
-    <Compile Include="SPItemField\SPItemFieldTypeSPFieldUserValueCollection.cs" />
-    <Compile Include="SPItemField\SPItemFieldTypeDouble.cs" />
-    <Compile Include="SPItemField\SPItemFieldTypeCommon.cs" />
-    <Compile Include="SPItemField\SPItemFieldTypeDateTime.cs" />
-    <Compile Include="SPItemField\SPItemField.cs" />
-    <Compile Include="SPItemField\SPItemFieldFactory.cs" />
-    <Compile Include="PageSettings\AdditionalFieldsTable.cs" />
-    <Compile Include="PageSettings\PageSettings.cs" />
-    <Compile Include="PageSettings\SettingsTable.cs" />
-    <Compile Include="PageSettings\TrackFieldsTable.cs" />
-    <Compile Include="ERConf\CommonConfigNotif.cs" />
+    <Compile Include="ERMain\ERItemNotifications\ERItemNotifications.cs" />
+    <Compile Include="ERMain\ERConfNotifications.cs" />
+    <Compile Include="ERMain\ERItemNotifications\ERItemNotificationsItemAdded.cs" />
+    <Compile Include="ERMain\ERItemNotifications\ERItemNotificationsItemAttachmentAdded.cs" />
+    <Compile Include="ERMain\ERItemNotifications\ERItemNotificationsItemUpdating.cs" />
+    <Compile Include="ERMain\SPItemField\SPItemFieldTypeString.cs" />
+    <Compile Include="ERMain\SPItemField\SPItemFieldTypeSPFieldLookupValueCollection.cs" />
+    <Compile Include="ERMain\SPItemField\SPItemFieldTypeSPFieldUserValue.cs" />
+    <Compile Include="ERMain\SPItemField\SPItemFieldTypeSPFieldUserValueCollection.cs" />
+    <Compile Include="ERMain\SPItemField\SPItemFieldTypeDouble.cs" />
+    <Compile Include="ERMain\SPItemField\SPItemFieldTypeCommon.cs" />
+    <Compile Include="ERMain\SPItemField\SPItemFieldTypeDateTime.cs" />
+    <Compile Include="ERMain\SPItemField\SPItemField.cs" />
+    <Compile Include="ERMain\SPItemField\SPItemFieldFactory.cs" />
+    <Compile Include="ERMain\PageSettings\AdditionalFieldsTable.cs" />
+    <Compile Include="ERMain\PageSettings\PageSettings.cs" />
+    <Compile Include="ERMain\PageSettings\SettingsTable.cs" />
+    <Compile Include="ERMain\PageSettings\TrackFieldsTable.cs" />
+    <Compile Include="ERMain\CommonConfigNotif.cs" />
     <Compile Include="Layouts\ERListsSettings\Notifications.aspx.cs">
       <DependentUpon>Notifications.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -117,11 +116,8 @@
     <Compile Include="Layouts\ERListsSettings\Notifications.aspx.designer.cs">
       <DependentUpon>Notifications.aspx.cs</DependentUpon>
     </Compile>
-    <Compile Include="SPCustomExtensions\SPCommon.cs" />
-    <Compile Include="SPCustomExtensions\MailItem.cs" />
-    <Compile Include="SPCustomExtensions\SPListExtension.cs" />
-    <Compile Include="SPCustomExtensions\ERItemSPExtension.cs" />
-    <Compile Include="MainInit.cs" />
+    <Compile Include="ERMain\ERItemNotifications\MailItem.cs" />
+    <Compile Include="ERMain\MainInit.cs" />
     <Compile Include="EventReceiver1\EventReceiver1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -137,34 +133,34 @@
     <None Include="Layouts\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{b7c1a2ff-5609-4d04-89e6-eecce3660939}</SharePointProjectItemId>
     </None>
-    <None Include="List1\List1Instance\SharePointProjectItem.spdata">
+    <None Include="ListsDefinitions\List1\List1Instance\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{667fc318-d60a-461a-850c-6279fe1531f1}</SharePointProjectItemId>
     </None>
-    <None Include="List1\SharePointProjectItem.spdata">
+    <None Include="ListsDefinitions\List1\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{5d6ebe51-e50b-40cc-8142-39788dc93876}</SharePointProjectItemId>
     </None>
-    <None Include="List2\List2Instance\SharePointProjectItem.spdata">
+    <None Include="ListsDefinitions\List2\List2Instance\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{f27151da-93b4-4095-b672-44f3c5739130}</SharePointProjectItemId>
     </None>
-    <None Include="List2\SharePointProjectItem.spdata">
+    <None Include="ListsDefinitions\List2\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{b5916c02-7717-404e-aab0-08512517932e}</SharePointProjectItemId>
     </None>
-    <None Include="List3\List3Instance\SharePointProjectItem.spdata">
+    <None Include="ListsDefinitions\List3\List3Instance\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{320a7a78-8441-4e3a-a804-d3fbf223dbd0}</SharePointProjectItemId>
     </None>
-    <None Include="List3\SharePointProjectItem.spdata">
+    <None Include="ListsDefinitions\List3\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{e37d7421-4a29-4c0e-95b8-6cbbe441a1f8}</SharePointProjectItemId>
     </None>
-    <None Include="List4\List4Instance\SharePointProjectItem.spdata">
+    <None Include="ListsDefinitions\List4\List4Instance\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{7c45c934-7d02-4e4c-8154-22d7319c8d23}</SharePointProjectItemId>
     </None>
-    <None Include="List4\SharePointProjectItem.spdata">
+    <None Include="ListsDefinitions\List4\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{9785b80b-6421-488c-a17c-0341e7c171a2}</SharePointProjectItemId>
     </None>
-    <None Include="List5\List5Instance\SharePointProjectItem.spdata">
+    <None Include="ListsDefinitions\List5\List5Instance\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{6fb2d77f-7115-49bc-8731-e17bf6e85014}</SharePointProjectItemId>
     </None>
-    <None Include="List5\SharePointProjectItem.spdata">
+    <None Include="ListsDefinitions\List5\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{220659c0-acca-4fc9-a523-9860d967a1e6}</SharePointProjectItemId>
     </None>
     <None Include="packages.config" />
@@ -183,21 +179,21 @@
     </Content>
     <Content Include="Layouts\ERListsSettings\Notifications.aspx" />
     <Content Include="Layouts\ERListsSettings\Notifications.js" />
-    <Content Include="List1\Elements.xml" />
-    <Content Include="List1\List1Instance\Elements.xml" />
-    <Content Include="List1\Schema.xml" />
-    <Content Include="List2\Elements.xml" />
-    <Content Include="List2\List2Instance\Elements.xml" />
-    <Content Include="List2\Schema.xml" />
-    <Content Include="List3\Elements.xml" />
-    <Content Include="List3\List3Instance\Elements.xml" />
-    <Content Include="List3\Schema.xml" />
-    <Content Include="List4\Elements.xml" />
-    <Content Include="List4\List4Instance\Elements.xml" />
-    <Content Include="List4\Schema.xml" />
-    <Content Include="List5\Elements.xml" />
-    <Content Include="List5\List5Instance\Elements.xml" />
-    <Content Include="List5\Schema.xml" />
+    <Content Include="ListsDefinitions\List1\Elements.xml" />
+    <Content Include="ListsDefinitions\List1\List1Instance\Elements.xml" />
+    <Content Include="ListsDefinitions\List1\Schema.xml" />
+    <Content Include="ListsDefinitions\List2\Elements.xml" />
+    <Content Include="ListsDefinitions\List2\List2Instance\Elements.xml" />
+    <Content Include="ListsDefinitions\List2\Schema.xml" />
+    <Content Include="ListsDefinitions\List3\Elements.xml" />
+    <Content Include="ListsDefinitions\List3\List3Instance\Elements.xml" />
+    <Content Include="ListsDefinitions\List3\Schema.xml" />
+    <Content Include="ListsDefinitions\List4\Elements.xml" />
+    <Content Include="ListsDefinitions\List4\List4Instance\Elements.xml" />
+    <Content Include="ListsDefinitions\List4\Schema.xml" />
+    <Content Include="ListsDefinitions\List5\Elements.xml" />
+    <Content Include="ListsDefinitions\List5\List5Instance\Elements.xml" />
+    <Content Include="ListsDefinitions\List5\Schema.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.WebControls;
+using SPERCommonLib;
 
 namespace ListsNotifications
 {
@@ -15,7 +16,7 @@ namespace ListsNotifications
 		public readonly bool NotifiersPresent;
 		public List<string> toMails;
 
-		public ERItemNotifications(SPItemEventProperties properties) : base(properties)
+		public ERItemNotifications(SPItemEventProperties properties) : base(properties, CommonConfigNotif.LIST_PROPERTY_JSON_CONF)
 		{
 			NotifiersPresent = ERConf.to.Count > 0 || ERConf.cc.Count > 0 || ERConf.bcc.Count > 0 || ERConf.toManagers.Count > 0;
 

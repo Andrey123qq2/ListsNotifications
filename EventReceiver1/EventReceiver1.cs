@@ -30,7 +30,7 @@ namespace ListsNotifications.EventReceiver1
             }
             catch (Exception ex)
             {
-                throw new Exception("CustomEventReceiver, ItemUpdating(): Exception: [" + ex.ToString() + "].");
+                throw new Exception("CustomER Exception (ItemUpdating): " + properties.ListId + ", " + properties.ListItemId + ", " + "[ " + ex.ToString() + "].");
             }
             finally
             {
@@ -70,7 +70,7 @@ namespace ListsNotifications.EventReceiver1
             }
             catch (Exception ex)
             {
-                throw new Exception("CustomEventReceiver, ItemAdded(): Exception: [" + ex.ToString() + "].");
+                throw new Exception("CustomER Exception (ItemAdded): " + properties.ListId + ", " + properties.ListItemId + ", " + "[ " + ex.ToString() + "].");
             }
             finally
             {
@@ -89,7 +89,7 @@ namespace ListsNotifications.EventReceiver1
             }
             catch (Exception ex)
             {
-                throw new Exception("CustomEventReceiver, ItemAttachmentAdding(): Exception: [" + ex.ToString() + "].");
+                throw new Exception("CustomER Exception (ItemAttachmentAdding): " + properties.ListId + ", " + properties.ListItemId + ", " + "[ " + ex.ToString() + "].");
             }
             finally
             {

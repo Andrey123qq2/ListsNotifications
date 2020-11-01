@@ -2,10 +2,10 @@
 <package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="911e29b7-4433-439e-98a5-ed3b8e2bc805" solutionId="911e29b7-4433-439e-98a5-ed3b8e2bc805" resetWebServer="false" sharePointProductVersion="15.0" name="ListsNotifications" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
   <assemblies>
     <customAssembly location="Newtonsoft.Json.dll" deploymentTarget="GlobalAssemblyCache" sourcePath="bin\Debug\Newtonsoft.Json.dll" />
+    <customAssembly location="SPERCommonLib.dll" deploymentTarget="GlobalAssemblyCache" sourcePath="..\SPERCommonLib\bin\Debug\SPERCommonLib.dll" />
   </assemblies>
   <features>
     <featureReference itemId="dbd2d127-831e-43da-94e0-cc062eff2e20" />
-    <featureReference itemId="662afe15-9e94-4d6d-9c10-bd0ce163005a" />
   </features>
   <projectItems>
     <projectItemReference itemId="b7c1a2ff-5609-4d04-89e6-eecce3660939" />

@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Microsoft.SharePoint;
+using SPERCommonLib;
 
 namespace ListsNotifications
 {
@@ -18,15 +19,11 @@ namespace ListsNotifications
 
         public SPList list;
         public SPFieldCollection listFields;
-        public ERConfNotifications _ERConf;
 
         TrackFieldsTable trackFieldsTable;
         AdditionalFieldsTable additionalFieldsTable;
 
-        public ERConfNotifications ERConf
-        {
-            get { return _ERConf; }
-        }
+        public ERConfNotifications ERConf { get; }
 
         public PageSettings(Panel settingsPanel, HttpRequest request, HttpResponse response)
         {
@@ -36,7 +33,7 @@ namespace ListsNotifications
 
             list = GetSPList();
             listFields = list.Fields;
-            _ERConf = ERListConf<ERConfNotifications>.Get(list, CommonConfigNotif.LIST_PROPERTY_JSON_CONF);
+            ERConf = ERListConf<ERConfNotifications>.Get(list, CommonConfigNotif.LIST_PROPERTY_JSON_CONF);
         }
 
         public void CreateSettingsControls()
