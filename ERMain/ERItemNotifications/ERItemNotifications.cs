@@ -28,10 +28,10 @@ namespace ListsNotifications
 			List<string> mails = new List<string> { };
 			List<SPPrincipal> fieldsPrincipalsManagers = new List<SPPrincipal> { };
 
-			List <SPPrincipal> fieldsPrincipals = this.listItem.GetUsersFromUsersFields(ERConf.to);
+			List <SPPrincipal> fieldsPrincipals = this.GetUsersFromUsersFieldsAfter(ERConf.to);
 			List<string> fieldsPrincipalsMails = SPCommon.GetUserMails(fieldsPrincipals);
 
-			List<SPPrincipal> ManagersFieldsUsers = this.listItem.GetUsersFromUsersFields(this.ERConf.toManagers);
+			List<SPPrincipal> ManagersFieldsUsers = this.GetUsersFromUsersFieldsAfter(this.ERConf.toManagers);
 			List<List<SPPrincipal>> ManagersFieldsManagers = ManagersFieldsUsers
 				.Where(p => p.GetType().Name == "SPUser")
 				.Select(u => ((SPUser)u).GetUserManagers()).ToList<List<SPPrincipal>>();
