@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.WebControls;
+using SPERCommonLib;
 
 namespace ListsNotifications
 {
@@ -15,7 +16,7 @@ namespace ListsNotifications
 		public readonly bool NotifiersPresent;
 		public List<string> toMails;
 
-		public ERItemNotifications(SPItemEventProperties properties) : base(properties)
+		public ERItemNotifications(SPItemEventProperties properties) : base(properties, CommonConfigNotif.LIST_PROPERTY_JSON_CONF)
 		{
 			NotifiersPresent = ERConf.to.Count > 0 || ERConf.cc.Count > 0 || ERConf.bcc.Count > 0 || ERConf.toManagers.Count > 0;
 
@@ -27,10 +28,10 @@ namespace ListsNotifications
 			List<string> mails = new List<string> { };
 			List<SPPrincipal> fieldsPrincipalsManagers = new List<SPPrincipal> { };
 
-			List <SPPrincipal> fieldsPrincipals = this.listItem.GetUsersFromUsersFields(ERConf.to);
+			List <SPPrincipal> fieldsPrincipals = this.GetUsersFromUsersFieldsAfter(ERConf.to);
 			List<string> fieldsPrincipalsMails = SPCommon.GetUserMails(fieldsPrincipals);
 
-			List<SPPrincipal> ManagersFieldsUsers = this.listItem.GetUsersFromUsersFields(this.ERConf.toManagers);
+			List<SPPrincipal> ManagersFieldsUsers = this.GetUsersFromUsersFieldsAfter(this.ERConf.toManagers);
 			List<List<SPPrincipal>> ManagersFieldsManagers = ManagersFieldsUsers
 				.Where(p => p.GetType().Name == "SPUser")
 				.Select(u => ((SPUser)u).GetUserManagers()).ToList<List<SPPrincipal>>();

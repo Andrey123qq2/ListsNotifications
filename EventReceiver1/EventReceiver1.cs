@@ -26,37 +26,17 @@ namespace ListsNotifications.EventReceiver1
             {
                 base.EventFiringEnabled = false;
 
-                MainInit.InitItemUpdating(properties);
+                MainInitNotif.InitItemUpdating(properties);
             }
             catch (Exception ex)
             {
-                throw new Exception("CustomEventReceiver, ItemUpdating(): Exception: [" + ex.ToString() + "].");
+                throw new Exception("CustomER Exception (ItemUpdating): " + properties.ListId + ", " + properties.ListItemId + ", " + "[ " + ex.ToString() + "].");
             }
             finally
             {
                 base.EventFiringEnabled = true;
             }
         }
-
-        //public override void ItemUpdated(SPItemEventProperties properties)
-        //{
-        //    base.ItemUpdated(properties);
-
-        //    try
-        //    {
-        //        base.EventFiringEnabled = false;
-
-        //        MainInit.Init(properties);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception("CustomEventReceiver, ItemUpdated(): Exception: [" + ex.ToString() + "].");
-        //    }
-        //    finally
-        //    {
-        //        base.EventFiringEnabled = true;
-        //    }
-        //}
 
         public override void ItemAdded(SPItemEventProperties properties)
         {
@@ -66,11 +46,11 @@ namespace ListsNotifications.EventReceiver1
             {
                 base.EventFiringEnabled = false;
 
-                MainInit.InitItemAdded(properties);
+                MainInitNotif.InitItemAdded(properties);
             }
             catch (Exception ex)
             {
-                throw new Exception("CustomEventReceiver, ItemAdded(): Exception: [" + ex.ToString() + "].");
+                throw new Exception("CustomER Exception (ItemAdded): " + properties.ListId + ", " + properties.ListItemId + ", " + "[ " + ex.ToString() + "].");
             }
             finally
             {
@@ -85,11 +65,11 @@ namespace ListsNotifications.EventReceiver1
             {
                 base.EventFiringEnabled = false;
 
-                MainInit.InitItemAttachmentAdded(properties);
+                MainInitNotif.InitItemAttachmentAdded(properties);
             }
             catch (Exception ex)
             {
-                throw new Exception("CustomEventReceiver, ItemAttachmentAdding(): Exception: [" + ex.ToString() + "].");
+                throw new Exception("CustomER Exception (ItemAttachmentAdding): " + properties.ListId + ", " + properties.ListItemId + ", " + "[ " + ex.ToString() + "].");
             }
             finally
             {

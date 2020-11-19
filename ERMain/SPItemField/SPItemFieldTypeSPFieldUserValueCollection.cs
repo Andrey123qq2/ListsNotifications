@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.SharePoint;
+using SPERCommonLib;
 
 namespace ListsNotifications
 {
@@ -18,7 +19,7 @@ namespace ListsNotifications
             SPFieldUserValue[] FieldValueAfterArr = (fieldValueAfter != null && fieldValueAfter.ToString() != "") ? (new SPFieldUserValueCollection(item.listItem.Web, fieldValueAfter.ToString())).ToArray() : new SPFieldUserValue[] { };
 
             fieldValueBeforeToStringForCompare = (FieldValueBeforeArr.Length > 0) ? String.Join(",", Array.ConvertAll(FieldValueBeforeArr, p => (p.User != null) ? p.User.LoginName : p.LookupValue )) : "";
-            fieldValueAfterToStringForCompare = (FieldValueAfterArr.Length > 0) ? String.Join(",", Array.ConvertAll(FieldValueAfterArr, p => p.LookupValue)) : "";
+            fieldValueAfterToStringForCompare = (FieldValueAfterArr.Length > 0) ? String.Join(",", Array.ConvertAll(FieldValueAfterArr, p => (p.User != null) ? p.User.LoginName : p.LookupValue)) : "";
         }
 
         public override void GetFriendlyFieldValues(string fieldValueString, out string friendlyFieldValue)

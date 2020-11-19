@@ -10,27 +10,6 @@ namespace ListsNotifications
 	{
 		public static readonly string LIST_PROPERTY_JSON_CONF = "er_notif_json_conf";
 
-		//public static readonly string CODE_FIELD_NAME = "Підрозділ";
-		//public static readonly string CODE_FIELD_SUFFIX = "_сотрудники";
-
-		//public static readonly string LIST_PROPERTY_USER_FIELDS = "er_notif_user_fields";
-
-		//public static readonly string LIST_PROPERTY_TRACK_FIELDS = "er_notif_track_fields";
-		//public static readonly string LIST_PROPERTY_TRACK_FIELDS_SINGLEMAIL = "er_notif_track_fields_singlemail";
-		//public static readonly string LIST_PROPERTY_TRACK_FIELDS_ITEMADDED = "er_notif_track_fields_itemcreate";
-
-		//public static Dictionary<string, string> LIST_PROPERTY_TRACK_FIELDS_BY_ERTYPE = new Dictionary<string, string>()
-		//{
-		//	["ItemUpdating"] = LIST_PROPERTY_TRACK_FIELDS,
-		//	["ItemUpdated"] = LIST_PROPERTY_TRACK_FIELDS_SINGLEMAIL,
-		//	["ItemAdded"] = LIST_PROPERTY_TRACK_FIELDS_ITEMADDED,
-		//	["ItemAttachmentAdded"] = ""
-		//};
-
-
-		//public static readonly string LIST_PROPERTY_MAIL_BCC = "er_notif_mailbcc";
-		//public static readonly string LIST_PROPERTY_MAIL_CC = "er_notif_mailcc";
-
 		public static readonly string MAIL_URL_TEMPLATE = "<p>Элемент: <a href='{0}'>{1}</a></p>";
 		public static readonly string MAIL_MODIFIED_BY_TEMPLATE = "<p>Кем изменено: {0}</p>";
 		public static readonly string MAIL_CREATED_BY_TEMPLATE = "<p>Кем создано: {0}</p>";
