@@ -26,7 +26,7 @@ namespace ListsNotifications.EventReceiver1
             {
                 base.EventFiringEnabled = false;
 
-                MainInit.InitItemUpdating(properties);
+                MainInitNotif.InitItemUpdating(properties);
             }
             catch (Exception ex)
             {
@@ -46,7 +46,7 @@ namespace ListsNotifications.EventReceiver1
             {
                 base.EventFiringEnabled = false;
 
-                MainInit.InitItemAdded(properties);
+                MainInitNotif.InitItemAdded(properties);
             }
             catch (Exception ex)
             {
@@ -65,7 +65,7 @@ namespace ListsNotifications.EventReceiver1
             {
                 base.EventFiringEnabled = false;
 
-                MainInit.InitItemAttachmentAdded(properties);
+                MainInitNotif.InitItemAttachmentAdded(properties);
             }
             catch (Exception ex)
             {

@@ -117,7 +117,7 @@
       <DependentUpon>Notifications.aspx.cs</DependentUpon>
     </Compile>
     <Compile Include="ERMain\ERItemNotifications\MailItem.cs" />
-    <Compile Include="ERMain\MainInit.cs" />
+    <Compile Include="ERMain\MainInitNotif.cs" />
     <Compile Include="EventReceiver1\EventReceiver1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
