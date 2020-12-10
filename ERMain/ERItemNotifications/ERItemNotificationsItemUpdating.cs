@@ -15,8 +15,6 @@ namespace ListsNotifications
 		}
 		public override void SetSPItemFieldsAttributesByERType()
 		{
-			//this.SetAttribute(listItem.ParentList, out TrackFields, NotifCommonConfig.LIST_PROPERTY_TRACK_FIELDS, true);
-
 			TrackSPItemFields = this.ERConf.ItemUpdatingTrackFields
 				//.AsParallel()
 				.Select(f => SPItemFieldFactory.create(this, f))
@@ -24,10 +22,34 @@ namespace ListsNotifications
 				.ToList();
 
             TrackSingleMailSPItemFields = this.ERConf.ItemUpdatingTrackFieldsSingleMail
-                //.AsParallel()
-                .Select(f => SPItemFieldFactory.create(this, f.Key))
+				//.AsParallel()
+				.Select(f => SPItemFieldFactory.create(this, f.Key))
                 .Where(t => t.IsChanged)
                 .ToDictionary(t => t, t => this.ERConf.ItemUpdatingTrackFieldsSingleMail[t.fieldTitle]);
+
+			if (TrackSPItemFields.Count == 0 && TrackSingleMailSPItemFields.Count == 0)
+			{
+				return;
+			}
+
+			var updatingFixedFields = this.ERConf.ItemUpdatingFixedFields
+				//.AsParallel()
+				.Select(f => {
+					var itemField = SPItemFieldFactory.create(this, f);
+
+					if (String.IsNullOrEmpty(itemField.friendlyFieldValueAfter))
+					{
+						itemField.GetFriendlyFieldValues(itemField.fieldValueAfter, out itemField.friendlyFieldValueAfter);
+					};
+					itemField.friendlyFieldValueBefore = "";
+
+					return itemField;
+				})
+				.Where(f => !String.IsNullOrEmpty(f.friendlyFieldValueAfter))
+				.ToList();
+
+			TrackSPItemFields.AddRange(updatingFixedFields);
+
 		}
 
 		public override void SendNotifications()

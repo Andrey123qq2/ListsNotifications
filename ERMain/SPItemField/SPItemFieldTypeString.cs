@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ListsNotifications
@@ -18,7 +19,9 @@ namespace ListsNotifications
         }
         public override void GetFriendlyFieldValues(string fieldValueString, out string friendlyFieldValue)
         {
-            friendlyFieldValue = fieldValueString;
+            friendlyFieldValue = Regex.Replace(fieldValueString, @"href=""/", @"href=""" + item.listItem.Web.Site.Url + "/");
+
+            //friendlyFieldValue = fieldValueString;
         }
     }
 }

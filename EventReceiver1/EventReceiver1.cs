@@ -30,7 +30,7 @@ namespace ListsNotifications.EventReceiver1
             }
             catch (Exception ex)
             {
-                throw new Exception("CustomER Exception (ItemUpdating): " + properties.ListId + ", " + properties.ListItemId + ", " + "[ " + ex.ToString() + "].");
+                throw new Exception("CustomER Exception (ItemUpdating): " + properties.ListItemId + ", " + "[ " + ex.ToString() + "].");
             }
             finally
             {

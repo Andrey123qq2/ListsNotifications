@@ -7,7 +7,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ListsNotifications</RootNamespace>
-    <AssemblyName>ListsNotifications</AssemblyName>
+    <AssemblyName>ERCustom.SPS.ListsNotifications</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <TargetOfficeVersion>15.0</TargetOfficeVersion>
     <FileAlignment>512</FileAlignment>
@@ -163,6 +163,12 @@
     <None Include="ListsDefinitions\List5\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{220659c0-acca-4fc9-a523-9860d967a1e6}</SharePointProjectItemId>
     </None>
+    <None Include="ListsDefinitions\List6\List6Instance\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{dfcbb3a6-d362-49da-a6c2-03725ce5a309}</SharePointProjectItemId>
+    </None>
+    <None Include="ListsDefinitions\List6\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{38a418c5-f0bf-4a74-8d8e-4c44cfed33bc}</SharePointProjectItemId>
+    </None>
     <None Include="packages.config" />
     <None Include="Package\Package.package">
       <PackageId>{911e29b7-4433-439e-98a5-ed3b8e2bc805}</PackageId>
@@ -194,6 +200,9 @@
     <Content Include="ListsDefinitions\List5\Elements.xml" />
     <Content Include="ListsDefinitions\List5\List5Instance\Elements.xml" />
     <Content Include="ListsDefinitions\List5\Schema.xml" />
+    <Content Include="ListsDefinitions\List6\Elements.xml" />
+    <Content Include="ListsDefinitions\List6\List6Instance\Elements.xml" />
+    <Content Include="ListsDefinitions\List6\Schema.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

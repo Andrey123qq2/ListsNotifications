@@ -12,7 +12,7 @@ using SPERCommonLib;
 
 namespace ListsNotifications
 {
-    static class MainInitNotif
+    internal static class MainInitNotif
     {
         public static void InitItemUpdating(SPItemEventProperties properties)
         {

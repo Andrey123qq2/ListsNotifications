@@ -18,15 +18,14 @@ namespace ListsNotifications
         protected IERItem item;
         protected readonly bool valueAfter;
 
-        protected dynamic fieldValueAfter;
-        protected dynamic fieldValueBefore;
+        public dynamic fieldValueAfter;
+        public dynamic fieldValueBefore;
 
         protected string fieldValueAfterToStringForCompare;
         protected string fieldValueBeforeToStringForCompare;
 
         protected string fieldValueAfterToStringForFriendly;
         protected string fieldValueBeforeToStringForFriendly;
-
 
         
         public SPItemField(params object[] attributes)
