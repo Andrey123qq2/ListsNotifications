@@ -23,9 +23,10 @@ namespace ListsNotifications
 
             TrackSingleMailSPItemFields = this.ERConf.ItemUpdatingTrackFieldsSingleMail
 				//.AsParallel()
-				.Select(f => SPItemFieldFactory.create(this, f.Key))
+				.Select(f => SPItemFieldFactory.create(this, f))
                 .Where(t => t.IsChanged)
-                .ToDictionary(t => t, t => this.ERConf.ItemUpdatingTrackFieldsSingleMail[t.fieldTitle]);
+				.ToList();
+                //.ToDictionary(t => t, t => this.ERConf.ItemUpdatingTrackFieldsSingleMail[t.fieldTitle]);
 
 			if (TrackSPItemFields.Count == 0 && TrackSingleMailSPItemFields.Count == 0)
 			{
@@ -54,8 +55,9 @@ namespace ListsNotifications
 
 		public override void SendNotifications()
 		{
-			NotificationsTrackFields(CommonConfigNotif.MAIL_SUBJECT_ITEMS, CommonConfigNotif.MAIL_MODIFIED_BY_TEMPLATE);
-			NotificationsTrackFieldsSingleMail(CommonConfigNotif.MAIL_MODIFIED_BY_TEMPLATE);
+			NotificationsTrackFields(ERConf.MailTemplates["_listMode"]["MAIL_SUBJECT_ITEMS"], ERConf.MailTemplates["_listMode"]["MAIL_MODIFIED_BY_TEMPLATE"]);
+			NotificationsTrackFieldsSingleMail();
+			//NotificationsTrackFieldsSingleMail(ERConf.MailTemplates["_listMode"]["MAIL_MODIFIED_BY_TEMPLATE"]);
 		}
 	}
 }

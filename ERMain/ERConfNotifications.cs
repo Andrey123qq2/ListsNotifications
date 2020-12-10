@@ -14,7 +14,8 @@ namespace ListsNotifications
         public List<string> bcc { get; set; } = new List<string> { };
         public List<string> ItemAddedTrackFields { get; set; } = new List<string> { };
         public List<string> ItemUpdatingTrackFields { get; set; } = new List<string> { };
-        public Dictionary<string, string> ItemUpdatingTrackFieldsSingleMail { get; set; } = new Dictionary<string, string> { };
+        public List<string> ItemUpdatingTrackFieldsSingleMail { get; set; } = new List<string> { };
         public List<string> ItemUpdatingFixedFields { get; set; } = new List<string> { };
+        public Dictionary<string, Dictionary<string, string>> MailTemplates { get; set; } = new Dictionary<string, Dictionary<string, string>> { };
     }
 }

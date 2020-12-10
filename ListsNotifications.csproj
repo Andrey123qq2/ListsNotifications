@@ -57,6 +57,11 @@
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
     </Reference>
+    <Reference Include="System.Collections.Specialized, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Collections.Specialized.4.3.0\lib\net46\System.Collections.Specialized.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -109,6 +114,13 @@
     <Compile Include="ERMain\PageSettings\SettingsTable.cs" />
     <Compile Include="ERMain\PageSettings\TrackFieldsTable.cs" />
     <Compile Include="ERMain\CommonConfigNotif.cs" />
+    <Compile Include="Layouts\ERListsSettings\MailTemplates.aspx.cs">
+      <DependentUpon>MailTemplates.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Layouts\ERListsSettings\MailTemplates.aspx.designer.cs">
+      <DependentUpon>MailTemplates.aspx.cs</DependentUpon>
+    </Compile>
     <Compile Include="Layouts\ERListsSettings\Notifications.aspx.cs">
       <DependentUpon>Notifications.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -183,6 +195,8 @@
     <Content Include="Features\Feature1\Feature1.Template.xml">
       <DependentUpon>Feature1.feature</DependentUpon>
     </Content>
+    <Content Include="Layouts\ERListsSettings\MailTemplates.js" />
+    <Content Include="Layouts\ERListsSettings\MailTemplates.aspx" />
     <Content Include="Layouts\ERListsSettings\Notifications.aspx" />
     <Content Include="Layouts\ERListsSettings\Notifications.js" />
     <Content Include="ListsDefinitions\List1\Elements.xml" />

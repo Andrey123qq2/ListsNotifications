@@ -12,7 +12,7 @@ namespace ListsNotifications
     abstract class ERItemNotifications : ERItem<ERConfNotifications>
 	{
         public List<SPItemField> TrackSPItemFields;
-        public Dictionary<SPItemField, string> TrackSingleMailSPItemFields;
+        public List<SPItemField> TrackSingleMailSPItemFields;
 		public readonly bool NotifiersPresent;
 		public List<string> toMails;
 
@@ -21,6 +21,26 @@ namespace ListsNotifications
 			NotifiersPresent = ERConf.to.Count > 0 || ERConf.cc.Count > 0 || ERConf.bcc.Count > 0 || ERConf.toManagers.Count > 0;
 
 			toMails = GetToMails();
+
+			GetMailTemplatesConf();
+		}
+
+		private void GetMailTemplatesConf()
+		{
+			if (!ERConf.MailTemplates.ContainsKey("_listMode"))
+			{
+				ERConf.MailTemplates["_listMode"] = CommonConfigNotif.MAIL_TEMPLATES_DEFAULT;
+			}
+
+			ERConf.ItemUpdatingTrackFieldsSingleMail.ForEach(k =>
+				{
+					if (!ERConf.MailTemplates.ContainsKey(k))
+					{
+						ERConf.MailTemplates[k] = CommonConfigNotif.MAIL_TEMPLATES_DEFAULT;
+					}
+				}
+			);
+			
 		}
 
 		private List<string> GetToMails()
@@ -53,21 +73,35 @@ namespace ListsNotifications
 			{
 				return;
 			}
-			MailItem mailToNotify = new MailItem(this, TrackSPItemFields, subject, modifiedByTemplate, eventType.Contains("ing"));
+			MailItem mailToNotify = new MailItem(
+				this, 
+				TrackSPItemFields, 
+				subject, 
+				modifiedByTemplate,
+				ERConf.MailTemplates["_listMode"],
+				eventType.Contains("ing")
+			);
 
 			mailToNotify.SendMail(listItem.ParentList.ParentWeb);
 		}
 
-		protected void NotificationsTrackFieldsSingleMail(string modifiedByTemplate)
+		protected void NotificationsTrackFieldsSingleMail()
 		{
 			if (!NotifiersPresent)
 			{
 				return;
 			}
 
-			foreach (KeyValuePair<SPItemField, string> trackField in TrackSingleMailSPItemFields)
+			foreach (SPItemField trackField in TrackSingleMailSPItemFields)
 			{
-				MailItem mailToNotifySingleField = new MailItem(this, new List<SPItemField> { trackField.Key }, trackField.Value, modifiedByTemplate, false);
+				MailItem mailToNotifySingleField = new MailItem(
+					this, 
+					new List<SPItemField> { trackField }, 
+					ERConf.MailTemplates[trackField.fieldTitle]["MAIL_SUBJECT_ITEMS"],
+					ERConf.MailTemplates[trackField.fieldTitle]["MAIL_MODIFIED_BY_TEMPLATE"],
+					ERConf.MailTemplates[trackField.fieldTitle],
+					false
+				);
 				mailToNotifySingleField.SendMail(listItem.ParentList.ParentWeb);
 			}
 		}
@@ -79,7 +113,12 @@ namespace ListsNotifications
 				return;
 			}
 
-			MailItem mailToNotify = new MailItem(this, subject, modifiedByTemplate);
+			MailItem mailToNotify = new MailItem(
+				this, 
+				subject, 
+				modifiedByTemplate, 
+				ERConf.MailTemplates["_listMode"]
+			);
 			mailToNotify.SendMail(listItem.ParentList.ParentWeb);
 		}
 	}

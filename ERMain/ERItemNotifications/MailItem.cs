@@ -31,17 +31,20 @@ namespace ListsNotifications
         string itemUrlBlock;
         string EditorDisplayName;
         string ModifiedByBlock;
+        Dictionary<string, string> TemplatesParams;
 
         public MailItem(
             ERItemNotifications item, 
             List<SPItemField> fieldsToTrack, 
             string mailSubjectMode,
             string ModifiedByBlockTemplate,
+            Dictionary<string, string> templatesParams,
             bool showBeforeValuesParam = true
         )
         {
             showBeforeValues = showBeforeValuesParam;
             modifiedByBlockTemplate = ModifiedByBlockTemplate;
+            TemplatesParams = templatesParams;
 
             InitCommonAttributes(item);
 
@@ -50,10 +53,16 @@ namespace ListsNotifications
             headers = GetHeaders();
         }
 
-        public MailItem(ERItemNotifications item, string mailSubjectMode, string ModifiedByBlockTemplate)
+        public MailItem(
+            ERItemNotifications item, 
+            string mailSubjectMode, 
+            string ModifiedByBlockTemplate, 
+            Dictionary<string, string> templatesParams
+        )
         {
             modifiedByBlockTemplate = ModifiedByBlockTemplate;
             attachmentUrl = item.listItem.Web.Url + "/" + item.eventProperties.AfterUrl.ToString();
+            TemplatesParams = templatesParams;
 
             InitCommonAttributes(item);
 
@@ -70,7 +79,7 @@ namespace ListsNotifications
 
             //itemAdded = item.eventType.Contains("Added");
 
-            itemUrlBlock = String.Format(CommonConfigNotif.MAIL_URL_TEMPLATE, item.listItem.GetItemFullUrl(), item.itemTitle);
+            itemUrlBlock = String.Format(TemplatesParams["MAIL_URL_TEMPLATE"], item.listItem.GetItemFullUrl(), item.itemTitle);
             EditorDisplayName = item.eventProperties.UserDisplayName;
             //string ModifiedByBlockTemplate = itemAdded ? CommonConfigNotif.MAIL_CREATED_BY_TEMPLATE : CommonConfigNotif.MAIL_MODIFIED_BY_TEMPLATE;
             ModifiedByBlock = String.Format(modifiedByBlockTemplate, EditorDisplayName);
@@ -88,7 +97,7 @@ namespace ListsNotifications
         private string GetChangedFieldsBlock(List<SPItemField> itemFields)
         {
             string ChangedFieldsBlock = "";
-            string fieldStringTemplate = showBeforeValues ? CommonConfigNotif.MAIL_FIELDS_TEMPLATE_ITEMS_BEFORE : CommonConfigNotif.MAIL_FIELDS_TEMPLATE_ITEMS_NOTBEFORE;
+            string fieldStringTemplate = showBeforeValues ? TemplatesParams["MAIL_FIELDS_TEMPLATE_ITEMS_BEFORE"] : TemplatesParams["MAIL_FIELDS_TEMPLATE_ITEMS_NOTBEFORE"];
 
             foreach (SPItemField field in itemFields)
             {
@@ -106,7 +115,7 @@ namespace ListsNotifications
         private string GetChangedFieldsBlock()
         {
             string attachmentName = Regex.Replace(attachmentUrl, @"^.*\/", "");
-            string ChangedFieldsBlock = String.Format(CommonConfigNotif.MAIL_FIELDS_TEMPLATE_ATTACHMENTS, CommonConfigNotif.MAIL_BODY_ATTACHMENTS, attachmentUrl, attachmentName);
+            string ChangedFieldsBlock = String.Format(TemplatesParams["MAIL_FIELDS_TEMPLATE_ATTACHMENTS"], TemplatesParams["MAIL_BODY_ATTACHMENTS"], attachmentUrl, attachmentName);
 
             return ChangedFieldsBlock;
         }
@@ -117,7 +126,7 @@ namespace ListsNotifications
 
             ChangedFieldsBlock = GetChangedFieldsBlock(fields);
 
-            mailBodyString = ChangedFieldsBlock != "" ? String.Format(CommonConfigNotif.MAIL_BODY_TEMPLATE, ChangedFieldsBlock, itemUrlBlock, ModifiedByBlock) : "";
+            mailBodyString = ChangedFieldsBlock != "" ? String.Format(TemplatesParams["MAIL_BODY_TEMPLATE"], ChangedFieldsBlock, itemUrlBlock, ModifiedByBlock) : "";
 
             return mailBodyString;
         }
@@ -128,7 +137,7 @@ namespace ListsNotifications
             string mailBodyString;
 
             ChangedFieldsBlock = GetChangedFieldsBlock();
-            mailBodyString = String.Format(CommonConfigNotif.MAIL_BODY_TEMPLATE, ChangedFieldsBlock, itemUrlBlock, ModifiedByBlock);
+            mailBodyString = String.Format(TemplatesParams["MAIL_BODY_TEMPLATE"], ChangedFieldsBlock, itemUrlBlock, ModifiedByBlock);
 
             return mailBodyString;
         }

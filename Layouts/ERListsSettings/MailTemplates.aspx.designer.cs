@@ -11,26 +11,17 @@ namespace ListsNotifications.Layouts.ERListsSettings
 {
 
 
-    public partial class ApplicationPage1
+    public partial class MailTemplatesPage
     {
 
         /// <summary>
-        /// SettingsPanel control.
+        /// FieldNameLabel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel SettingsPanel;
-
-        /// <summary>
-        /// AdditionalFieldsTable control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Microsoft.SharePoint.WebControls.SPGridView AdditionalFieldsTable;
+        protected global::System.Web.UI.WebControls.Label FieldNameLabel;
 
         /// <summary>
         /// MailVariablesTable control.

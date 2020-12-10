@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,19 +11,22 @@ namespace ListsNotifications
 	{
 		public static readonly string LIST_PROPERTY_JSON_CONF = "er_notif_json_conf";
 
-		public static readonly string MAIL_URL_TEMPLATE = "<p>Элемент: <a href='{0}'>{1}</a></p>";
-		public static readonly string MAIL_MODIFIED_BY_TEMPLATE = "<p>Кем изменено: {0}</p>";
-		public static readonly string MAIL_CREATED_BY_TEMPLATE = "<p>Кем создано: {0}</p>";
-		public static readonly string MAIL_SUBJECT_ATTACHMENTS = "добавлено вложение";
-		public static readonly string MAIL_SUBJECT_ITEMS = "элемент изменен";
-		public static readonly string MAIL_SUBJECT_ITEMS_ADDED = "элемент добавлен";
-		public static readonly string MAIL_FIELDS_TEMPLATE_ATTACHMENTS = "<p>{0}: <a href=\"{1}\">{2}</a></p>";
-		public static readonly string MAIL_FIELDS_TEMPLATE_ITEMS_BEFORE = "<p>{0}: <strike>{1}</strike> {2}</p>";
-		public static readonly string MAIL_FIELDS_TEMPLATE_ITEMS_NOTBEFORE = "<p>{0}: {2}</p>";
-		public static readonly string MAIL_BODY_ATTACHMENTS = "Вложение";
+		internal static readonly Dictionary<string, string> MAIL_TEMPLATES_DEFAULT = new Dictionary<string, string> {
+			{ "MAIL_SUBJECT_ATTACHMENTS", "добавлено вложение" },
+			{ "MAIL_SUBJECT_ITEMS", "элемент изменен"},
+			{ "MAIL_SUBJECT_ITEMS_ADDED", "элемент добавлен"},
 
-		public static readonly string MAIL_BODY_TEMPLATE = @"
-<!DOCTYPE html>
+			{ "MAIL_URL_TEMPLATE", "<p>Элемент: <a href='{0}'>{1}</a></p>"},
+
+			{ "MAIL_MODIFIED_BY_TEMPLATE", "<p>Кем изменено: {0}</p>"},
+			{ "MAIL_CREATED_BY_TEMPLATE", "<p>Кем создано: {0}</p>"},
+
+			{ "MAIL_FIELDS_TEMPLATE_ATTACHMENTS", "<p>{0}: <a href=\"{1}\">{2}</a></p>"},
+			{ "MAIL_FIELDS_TEMPLATE_ITEMS_BEFORE", "<p>{0}: <strike>{1}</strike> {2}</p>"},
+			{ "MAIL_FIELDS_TEMPLATE_ITEMS_NOTBEFORE", "<p>{0}: {2}</p>"},
+			{ "MAIL_BODY_ATTACHMENTS", "Вложение"},
+
+			{ "MAIL_BODY_TEMPLATE", @"<!DOCTYPE html>
 <html>
 	<style>
 		table{{
@@ -48,7 +52,7 @@ namespace ListsNotifications
             {2}
 		</div>
 	</body>
-</html>
-";
+</html>"  }
+		};
 	}
 }

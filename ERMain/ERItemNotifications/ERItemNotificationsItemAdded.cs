@@ -27,15 +27,16 @@ namespace ListsNotifications
 
 			TrackSingleMailSPItemFields = this.ERConf.ItemUpdatingTrackFieldsSingleMail
 				//.AsParallel()
-				.Select(f => SPItemFieldFactory.create(this, f.Key))
+				.Select(f => SPItemFieldFactory.create(this, f))
 				.Where(t => t.IsChanged)
-				.ToDictionary(t => t, t => this.ERConf.ItemUpdatingTrackFieldsSingleMail[t.fieldTitle]);
+				.ToList();
+				//.ToDictionary(t => t, t => this.ERConf.ItemUpdatingTrackFieldsSingleMail[t.fieldTitle]);
 		}
 
 		public override void SendNotifications()
 		{
-			NotificationsTrackFields(CommonConfigNotif.MAIL_SUBJECT_ITEMS_ADDED, CommonConfigNotif.MAIL_CREATED_BY_TEMPLATE);
-			NotificationsTrackFieldsSingleMail(CommonConfigNotif.MAIL_MODIFIED_BY_TEMPLATE);
+			NotificationsTrackFields(ERConf.MailTemplates["_listMode"]["MAIL_SUBJECT_ITEMS_ADDED"], ERConf.MailTemplates["_listMode"]["MAIL_CREATED_BY_TEMPLATE"]);
+			NotificationsTrackFieldsSingleMail();
 		}
 	}
 }

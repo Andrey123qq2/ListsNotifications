@@ -19,6 +19,75 @@
     <div class="listSettings" style="">
     </div>
     <asp:Panel ID="SettingsPanel" runat="server"></asp:Panel>
+
+    <SharePoint:SPGridView ID="AdditionalFieldsTable" runat="server" AutoGenerateColumns="false" Width="300px">
+        <RowStyle BackColor="#f6f7f8" Height="30px" HorizontalAlign="Left" />
+        <AlternatingRowStyle BackColor="White" ForeColor="#000" Height="30px" HorizontalAlign="Left" />
+        <HeaderStyle Font-Bold="true" HorizontalAlign="Left" CssClass="ms-viewheadertr" />
+        <HeaderStyle />
+        <Columns>
+            <%--<asp:BoundField DataField="Variable" HeaderText="Variable" ItemStyle-Width = "200" />--%>
+            <asp:TemplateField HeaderText="Parameter">
+                <ItemTemplate>
+                    <asp:Label ID='<%# Eval("Parameter").ToString() + "Label" %>' runat="server" Text='<%# Eval("Parameter") %>' Width="200"></asp:Label>
+                </ItemTemplate> 
+            </asp:TemplateField> 
+            <asp:TemplateField HeaderText="Value">
+                <ItemTemplate>
+                    <asp:TextBox ID='<%# Eval("Parameter").ToString() + "TextBox" %>' runat="server" Text='<%# Eval("Value") %>' Visible="true" Width="300"></asp:TextBox>
+                </ItemTemplate> 
+            </asp:TemplateField> 
+        </Columns>
+    </SharePoint:SPGridView>
+
+    <SharePoint:SPGridView ID="MailVariablesTable" runat="server" AutoGenerateColumns="false" Width="300px">
+        <RowStyle BackColor="#f6f7f8" Height="30px" HorizontalAlign="Left" />
+        <AlternatingRowStyle BackColor="White" ForeColor="#000" Height="30px" HorizontalAlign="Left" />
+        <HeaderStyle Font-Bold="true" HorizontalAlign="Left" CssClass="ms-viewheadertr" />
+        <HeaderStyle />
+        <Columns>
+            <%--<asp:BoundField DataField="Variable" HeaderText="Variable" ItemStyle-Width = "200" />--%>
+            <asp:TemplateField HeaderText="Parameter">
+                <ItemTemplate>
+                    <asp:Label ID='<%# "FieldName" + Eval("ID").ToString() %>' runat="server" Text='<%# Eval("Parameter") %>' Width="200"></asp:Label>
+                </ItemTemplate> 
+            </asp:TemplateField> 
+
+            <asp:TemplateField HeaderText="TrackUpdating">
+                <ItemTemplate>
+                    <asp:CheckBox runat="server" ID='<%# "TrackUpdating" + Eval("ID").ToString() %>' AutoPostBack="false" Checked='<%# Eval("TrackUpdating")%>''/> <%--.ToString()=="1" ? true : false --%>
+                </ItemTemplate>
+            </asp:TemplateField>
+            <asp:TemplateField HeaderText="TrackAdded">
+                <ItemTemplate>
+                    <asp:CheckBox runat="server" ID='CheckBox2' AutoPostBack="false" Checked='<%# Eval("TrackAdded")%>''/> <%--.ToString()=="1" ? true : false --%>
+                </ItemTemplate>
+            </asp:TemplateField>
+            <asp:TemplateField HeaderText="SeparateMail">
+                <ItemTemplate>
+                    <asp:CheckBox runat="server" ID='CheckBox3' AutoPostBack="false" Checked='<%# Eval("SeparateMail")%>''/> <%--.ToString()=="1" ? true : false --%>
+                </ItemTemplate>
+            </asp:TemplateField>
+            <asp:TemplateField HeaderText="Notify">
+                <ItemTemplate>
+                    <asp:CheckBox runat="server" ID='CheckBox4' AutoPostBack="false" Checked='<%# Eval("Notify")%>''/> <%--.ToString()=="1" ? true : false --%>
+                </ItemTemplate>
+            </asp:TemplateField>
+            <asp:TemplateField HeaderText="NotifyManagers">
+                <ItemTemplate>
+                    <asp:CheckBox runat="server" ID='CheckBox5' AutoPostBack="false" Checked='<%# Eval("NotifyManagers")%>''/> <%--.ToString()=="1" ? true : false --%>
+                </ItemTemplate>
+            </asp:TemplateField>
+            <asp:TemplateField HeaderText="FixedUpdating">
+                <ItemTemplate>
+                    <asp:CheckBox runat="server" ID='CheckBox6' AutoPostBack="false" Checked='<%# Eval("FixedUpdating")%>''/> <%--.ToString()=="1" ? true : false --%>
+                </ItemTemplate>
+            </asp:TemplateField>
+
+        </Columns>
+    </SharePoint:SPGridView>
+    <asp:Button ID="ButtonOK" runat="server" Text="OK" OnClick="ButtonOK_EventHandler" AutoPostback="false"/>
+    <asp:Button ID="ButtonCANCEL" runat="server" Text="Cancel" OnClick="ButtonCANCEL_EventHandler"/>
 </asp:Content>
 
 <asp:Content ID="PageTitle" ContentPlaceHolderID="PlaceHolderPageTitle" runat="server">
