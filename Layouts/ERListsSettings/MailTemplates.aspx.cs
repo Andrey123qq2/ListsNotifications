@@ -61,7 +61,7 @@ namespace ListsNotifications.Layouts.ERListsSettings
 
                     return new
                     {
-                        Variable = k,
+                        Variable = k.Key,
                         Value = k.Value,
                         TextMode = textMode,
                     };
@@ -70,60 +70,12 @@ namespace ListsNotifications.Layouts.ERListsSettings
 
             return defaultTemplatesValues;
         }
-
-        //private object GetDefaultTemplatesValues()
-        //{
-        //    Type VariablesClass = typeof(CommonConfigNotif);
-
-        //    var defaultTemplatesValues = VariablesClass
-        //        .GetFields(BindingFlags.Public | BindingFlags.Static)
-        //        .Where(f => Regex.IsMatch(f.Name, "^MAIL_"))
-        //        .Select(f => {
-        //            var value = (string)f.GetValue(null);
-        //            var textMode = value.Length > 100 ? TextBoxMode.MultiLine : TextBoxMode.SingleLine;
-        //            //var height = value.Length > 100 ? 400 : 17;
-
-        //            return new
-        //            {
-        //                Variable = f.Name,
-        //                Value = value,
-        //                TextMode = textMode,
-        //                //Height = height.ToString()
-        //            };
-        //        }).ToArray();
-
-        //    return defaultTemplatesValues;
-        //}
-
-        //private void SetPageControls()
-        //{
-        //    if (ERConf.MailTemplates.ContainsKey(ERConfonfKey))
-        //    {
-        //        if (ERConf.MailTemplates[ERConfonfKey].ContainsKey("MailTemplate"))
-        //        {
-        //            MailTemplateTextBoxValue = ERConf.MailTemplates[ERConfonfKey]["MailTemplate"];
-        //        }
-        //        if (ERConf.MailTemplates[ERConfonfKey].ContainsKey("FieldRowTemplate"))
-        //        {
-        //            FieldRowTemplateTextBoxValue = ERConf.MailTemplates[ERConfonfKey]["FieldRowTemplate"];
-        //        }
-        //    }
-
-        //    MailTemplateTextBox.Text = MailTemplateTextBoxValue;
-        //    FieldRowTemplateTextBox.Text = FieldRowTemplateTextBoxValue;
-
-        //    FieldNameLabel.Text = String.Format(FieldNameLabel.Text, FieldNameLabelText);
-        //}
-
         private void InitParams()
         {
             FieldName = Request.QueryString["Field"];
             Guid listGuid = new Guid(Request.QueryString["List"]);
 
             PageSPList = GetSPList(listGuid);
-
-            //MailTemplateTextBoxValue = CommonConfigNotif.MAIL_BODY_TEMPLATE;
-            //FieldRowTemplateTextBoxValue = CommonConfigNotif.MAIL_FIELDS_TEMPLATE_ITEMS_NOTBEFORE;
 
             ERConf = ERListConf<ERConfNotifications>.Get(PageSPList, CommonConfigNotif.LIST_PROPERTY_JSON_CONF);
 
@@ -141,7 +93,7 @@ namespace ListsNotifications.Layouts.ERListsSettings
             {
                 var row = (GridViewRow)ie.Current;
                 string variable = ((Label)(row.FindControl("TextBoxLabel"))).Text;
-                string value = ((Label)(row.FindControl("TextBox"))).Text;
+                string value = ((TextBox)(row.FindControl("TextBox"))).Text;
 
                 mailParams.Add(variable, value);
 
@@ -158,37 +110,6 @@ namespace ListsNotifications.Layouts.ERListsSettings
             ERListConf<ERConfNotifications>.Set(PageSPList, CommonConfigNotif.LIST_PROPERTY_JSON_CONF, ERConf);
 
             RedirectToParentPage();
-
-            //string MailTemplateTextBoxValue = MailTemplateTextBox.Text;
-            //string FieldRowTemplateTextBoxValue = FieldRowTemplateTextBox.Text;
-
-            //if (ERConf.MailTemplates.ContainsKey(ERConfonfKey))
-            //{
-            //    if (ERConf.MailTemplates[ERConfonfKey].ContainsKey("MailTemplate"))
-            //    {
-            //        ERConf.MailTemplates[ERConfonfKey]["MailTemplate"] = MailTemplateTextBoxValue;
-            //    }
-            //    else
-            //    {
-            //        ERConf.MailTemplates[ERConfonfKey].Add("MailTemplate", MailTemplateTextBoxValue);
-            //    }
-
-            //    if (ERConf.MailTemplates[ERConfonfKey].ContainsKey("FieldRowTemplate"))
-            //    {
-            //        ERConf.MailTemplates[ERConfonfKey]["FieldRowTemplate"] = FieldRowTemplateTextBoxValue;
-            //    }
-            //    else
-            //    {
-            //        ERConf.MailTemplates[ERConfonfKey].Add("FieldRowTemplate", FieldRowTemplateTextBoxValue);
-            //    }
-            //}
-            //else
-            //{
-            //    ERConf.MailTemplates.Add(ERConfonfKey, new Dictionary<string, string> { { "MailTemplate", MailTemplateTextBoxValue } });
-            //    ERConf.MailTemplates[ERConfonfKey].Add( "FieldRowTemplate", FieldRowTemplateTextBoxValue );
-            //}
-
-
         }
 
         protected void ButtonCANCEL_EventHandler(object sender, EventArgs e)

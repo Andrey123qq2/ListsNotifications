@@ -11,7 +11,7 @@ namespace ListsNotifications.Layouts.ERListsSettings
 {
 
 
-    public partial class ApplicationPage1
+    public partial class NotificationsSettingsPage
     {
 
         /// <summary>
@@ -24,22 +24,22 @@ namespace ListsNotifications.Layouts.ERListsSettings
         protected global::System.Web.UI.WebControls.Panel SettingsPanel;
 
         /// <summary>
-        /// AdditionalFieldsTable control.
+        /// AdditionalParamsTable control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Microsoft.SharePoint.WebControls.SPGridView AdditionalFieldsTable;
+        protected global::Microsoft.SharePoint.WebControls.SPGridView AdditionalParamsTable;
 
         /// <summary>
-        /// MailVariablesTable control.
+        /// FieldsTable control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Microsoft.SharePoint.WebControls.SPGridView MailVariablesTable;
+        protected global::Microsoft.SharePoint.WebControls.SPGridView FieldsTable;
 
         /// <summary>
         /// ButtonOK control.

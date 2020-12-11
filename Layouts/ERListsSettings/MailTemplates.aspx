@@ -19,16 +19,16 @@
     <asp:Label ID="FieldNameLabel" runat="server" Text="Mail Templates for {0}"></asp:Label>
     <br /><br />
 
-    <SharePoint:SPGridView ID="MailVariablesTable" runat="server" AutoGenerateColumns="false" Width="300px">
+    <SharePoint:SPGridView ID="MailVariablesTable" runat="server" AutoGenerateColumns="false" Width="80%">
         <RowStyle BackColor="#f6f7f8" Height="30px" HorizontalAlign="Left" />
         <AlternatingRowStyle BackColor="White" ForeColor="#000" Height="30px" HorizontalAlign="Left" />
         <HeaderStyle Font-Bold="true" HorizontalAlign="Left" CssClass="ms-viewheadertr" />
         <HeaderStyle />
         <Columns>
             <%--<asp:BoundField DataField="Variable" HeaderText="Variable" ItemStyle-Width = "200" />--%>
-            <asp:TemplateField HeaderText="Variable">
+            <asp:TemplateField HeaderText="Variable" HeaderStyle-Width="250px">
                 <ItemTemplate>
-                    <asp:Label ID="TextBoxLabel" runat="server" Text='<%# Eval("Variable") %>' Width="200"></asp:Label>
+                    <asp:Label ID="TextBoxLabel" runat="server" Text='<%# Eval("Variable") %>' Width="100"></asp:Label>
                 </ItemTemplate> 
             </asp:TemplateField> 
             <asp:TemplateField HeaderText="Value">

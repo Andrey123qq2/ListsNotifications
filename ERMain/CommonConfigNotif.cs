@@ -9,7 +9,8 @@ namespace ListsNotifications
 {
 	static class CommonConfigNotif
 	{
-		public static readonly string LIST_PROPERTY_JSON_CONF = "er_notif_json_conf";
+		internal static readonly string LIST_PROPERTY_JSON_CONF = "er_notif_json_conf";
+		internal static readonly List<string> PAGE_SETTINGS_ADDITIONAL_PARAMS = new List<string> { "cc", "bcc" };
 
 		internal static readonly Dictionary<string, string> MAIL_TEMPLATES_DEFAULT = new Dictionary<string, string> {
 			{ "MAIL_SUBJECT_ATTACHMENTS", "добавлено вложение" },
@@ -54,5 +55,5 @@ namespace ListsNotifications
 	</body>
 </html>"  }
 		};
-	}
+    }
 }

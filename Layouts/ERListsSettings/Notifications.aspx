@@ -5,7 +5,7 @@
 <%@ Register Tagprefix="asp" Namespace="System.Web.UI" Assembly="System.Web.Extensions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" %>
 <%@ Import Namespace="Microsoft.SharePoint" %>
 <%@ Assembly Name="Microsoft.Web.CommandUI, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
-<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Notifications.aspx.cs" Inherits="ListsNotifications.Layouts.ERListsSettings.ApplicationPage1" DynamicMasterPageFile="~masterurl/default.master" %>
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Notifications.aspx.cs" Inherits="ListsNotifications.Layouts.ERListsSettings.NotificationsSettingsPage" DynamicMasterPageFile="~masterurl/default.master" %>
 
 <asp:Content ID="PageHead" ContentPlaceHolderID="PlaceHolderAdditionalPageHead" runat="server">
 
@@ -20,67 +20,66 @@
     </div>
     <asp:Panel ID="SettingsPanel" runat="server"></asp:Panel>
 
-    <SharePoint:SPGridView ID="AdditionalFieldsTable" runat="server" AutoGenerateColumns="false" Width="300px">
+    <SharePoint:SPGridView ID="AdditionalParamsTable" runat="server" AutoGenerateColumns="false" Width="80%">
         <RowStyle BackColor="#f6f7f8" Height="30px" HorizontalAlign="Left" />
         <AlternatingRowStyle BackColor="White" ForeColor="#000" Height="30px" HorizontalAlign="Left" />
         <HeaderStyle Font-Bold="true" HorizontalAlign="Left" CssClass="ms-viewheadertr" />
         <HeaderStyle />
         <Columns>
             <%--<asp:BoundField DataField="Variable" HeaderText="Variable" ItemStyle-Width = "200" />--%>
-            <asp:TemplateField HeaderText="Parameter">
+            <asp:TemplateField HeaderText="Parameter" HeaderStyle-Width="100px">
                 <ItemTemplate>
-                    <asp:Label ID='<%# Eval("Parameter").ToString() + "Label" %>' runat="server" Text='<%# Eval("Parameter") %>' Width="200"></asp:Label>
+                    <asp:Label ID="ParameterLabel" runat="server" Text='<%# Eval("Parameter") %>' Width="100"></asp:Label>
                 </ItemTemplate> 
             </asp:TemplateField> 
             <asp:TemplateField HeaderText="Value">
                 <ItemTemplate>
-                    <asp:TextBox ID='<%# Eval("Parameter").ToString() + "TextBox" %>' runat="server" Text='<%# Eval("Value") %>' Visible="true" Width="300"></asp:TextBox>
+                    <asp:TextBox ID="ValueTextBox" runat="server" Text='<%# Eval("Value") %>' Width="500"></asp:TextBox>
                 </ItemTemplate> 
             </asp:TemplateField> 
         </Columns>
     </SharePoint:SPGridView>
-
-    <SharePoint:SPGridView ID="MailVariablesTable" runat="server" AutoGenerateColumns="false" Width="300px">
+    <br/>
+    <SharePoint:SPGridView ID="FieldsTable" runat="server" AutoGenerateColumns="false" Width="80%">
         <RowStyle BackColor="#f6f7f8" Height="30px" HorizontalAlign="Left" />
         <AlternatingRowStyle BackColor="White" ForeColor="#000" Height="30px" HorizontalAlign="Left" />
         <HeaderStyle Font-Bold="true" HorizontalAlign="Left" CssClass="ms-viewheadertr" />
         <HeaderStyle />
         <Columns>
-            <%--<asp:BoundField DataField="Variable" HeaderText="Variable" ItemStyle-Width = "200" />--%>
-            <asp:TemplateField HeaderText="Parameter">
+            <asp:TemplateField HeaderText="Field" HeaderStyle-Width="250px">
                 <ItemTemplate>
-                    <asp:Label ID='<%# "FieldName" + Eval("ID").ToString() %>' runat="server" Text='<%# Eval("Parameter") %>' Width="200"></asp:Label>
+                    <asp:Label ID="FieldLabel" runat="server" Text='<%# Eval("FieldName") %>'></asp:Label>
                 </ItemTemplate> 
             </asp:TemplateField> 
 
             <asp:TemplateField HeaderText="TrackUpdating">
                 <ItemTemplate>
-                    <asp:CheckBox runat="server" ID='<%# "TrackUpdating" + Eval("ID").ToString() %>' AutoPostBack="false" Checked='<%# Eval("TrackUpdating")%>''/> <%--.ToString()=="1" ? true : false --%>
+                    <asp:CheckBox ID="CheckBox1" runat="server" AutoPostBack="false" Checked='<%# Eval("TrackUpdating").ToString()=="1" ? true : false %>'/>
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="TrackAdded">
                 <ItemTemplate>
-                    <asp:CheckBox runat="server" ID='CheckBox2' AutoPostBack="false" Checked='<%# Eval("TrackAdded")%>''/> <%--.ToString()=="1" ? true : false --%>
+                    <asp:CheckBox ID="CheckBox2" runat="server" AutoPostBack="false" Checked='<%# Eval("TrackAdded").ToString()=="1" ? true : false %>'/>
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="SeparateMail">
                 <ItemTemplate>
-                    <asp:CheckBox runat="server" ID='CheckBox3' AutoPostBack="false" Checked='<%# Eval("SeparateMail")%>''/> <%--.ToString()=="1" ? true : false --%>
+                    <asp:CheckBox ID="CheckBox3" runat="server" AutoPostBack="false" Checked='<%# Eval("SeparateMail").ToString()=="1" ? true : false %>'/>
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="Notify">
                 <ItemTemplate>
-                    <asp:CheckBox runat="server" ID='CheckBox4' AutoPostBack="false" Checked='<%# Eval("Notify")%>''/> <%--.ToString()=="1" ? true : false --%>
+                    <asp:CheckBox ID="CheckBox4" runat="server" AutoPostBack="false" Checked='<%# Eval("Notify").ToString()=="1" ? true : false %>'/>
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="NotifyManagers">
                 <ItemTemplate>
-                    <asp:CheckBox runat="server" ID='CheckBox5' AutoPostBack="false" Checked='<%# Eval("NotifyManagers")%>''/> <%--.ToString()=="1" ? true : false --%>
+                    <asp:CheckBox  ID="CheckBox5" runat="server" AutoPostBack="false" Checked='<%# Eval("NotifyManagers").ToString()=="1" ? true : false %>'/>
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="FixedUpdating">
                 <ItemTemplate>
-                    <asp:CheckBox runat="server" ID='CheckBox6' AutoPostBack="false" Checked='<%# Eval("FixedUpdating")%>''/> <%--.ToString()=="1" ? true : false --%>
+                    <asp:CheckBox ID="CheckBox6" runat="server" AutoPostBack="false" Checked='<%# Eval("FixedUpdating").ToString()=="1" ? true : false %>'/>
                 </ItemTemplate>
             </asp:TemplateField>
 
