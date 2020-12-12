@@ -117,13 +117,16 @@ namespace ListsNotifications.Layouts.ERListsSettings
             RedirectToParentPage();
         }
 
+        //TODO: move to common lib
         private void RedirectToParentPage()
         {
             string currentUrl = HttpContext.Current.Request.UrlReferrer.OriginalString;
-            string listSettingsUrl = Regex.Replace(currentUrl, "MailTemplates", "Notifications", RegexOptions.IgnoreCase);
+            string listSettingsUrl = Regex.Replace(currentUrl, "}.*", "}", RegexOptions.IgnoreCase);
+            listSettingsUrl = Regex.Replace(listSettingsUrl, "MailTemplates", "Notifications", RegexOptions.IgnoreCase);
             Response.Redirect(listSettingsUrl);
         }
 
+        //TODO: move to common lib
         private SPList GetSPList(Guid listGUID)
         {
             SPList list;

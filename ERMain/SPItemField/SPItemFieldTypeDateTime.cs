@@ -15,34 +15,34 @@ namespace ListsNotifications
         }
         public override void GetFieldValuesToStringForCompare()
         {
-            dynamic fieldDateTime = item.listItem.ParentList.Fields.GetField(fieldTitle);
-            if (fieldDateTime.DisplayFormat.ToString() == "DateOnly" && Regex.IsMatch(fieldValueAfter.ToString(), @"T00:00:00Z$") && !(item.listItem.ParentList.BaseTemplate == SPListTemplateType.Events || item.listItem.ParentList.BaseTemplate == SPListTemplateType.TasksWithTimelineAndHierarchy))
+            dynamic fieldDateTime = Item.listItem.ParentList.Fields.GetField(FieldTitle);
+            if (fieldDateTime.DisplayFormat.ToString() == "DateOnly" && Regex.IsMatch(FieldValueAfter.ToString(), @"T00:00:00Z$") && !(Item.listItem.ParentList.BaseTemplate == SPListTemplateType.Events || Item.listItem.ParentList.BaseTemplate == SPListTemplateType.TasksWithTimelineAndHierarchy))
             {
-                fieldValueBefore = (fieldValueBefore != null && fieldValueBefore.ToString() != "") ? fieldValueBefore.ToLocalTime() : null;
+                FieldValueBefore = (FieldValueBefore != null && FieldValueBefore.ToString() != "") ? FieldValueBefore.ToLocalTime() : null;
             }
 
-            if (item.listItem.ParentList.BaseTemplate == SPListTemplateType.Events || item.listItem.ParentList.BaseTemplate == SPListTemplateType.TasksWithTimelineAndHierarchy)
+            if (Item.listItem.ParentList.BaseTemplate == SPListTemplateType.Events || Item.listItem.ParentList.BaseTemplate == SPListTemplateType.TasksWithTimelineAndHierarchy)
             {
-                fieldValueBeforeToStringForCompare = (fieldValueBefore != null && fieldValueBefore.ToString() != "") ? fieldValueBefore.ToString("yyyy-MM-ddTHH:mm:ssZ") : "";
+                FieldValueBeforeToStringForCompare = (FieldValueBefore != null && FieldValueBefore.ToString() != "") ? FieldValueBefore.ToString("yyyy-MM-ddTHH:mm:ssZ") : "";
             }
             else 
             {
-                fieldValueBeforeToStringForCompare = (fieldValueBefore != null && fieldValueBefore.ToString() != "") ? fieldValueBefore.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ") : "";
+                FieldValueBeforeToStringForCompare = (FieldValueBefore != null && FieldValueBefore.ToString() != "") ? FieldValueBefore.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ") : "";
             }
 
-            if (fieldValueAfter.GetType().Name != "DateTime")
+            if (FieldValueAfter.GetType().Name != "DateTime")
             {
-                fieldValueAfterToStringForCompare = (fieldValueAfter != null && fieldValueAfter.ToString() != "") ? fieldValueAfter.ToString() : "";
+                FieldValueAfterToStringForCompare = (FieldValueAfter != null && FieldValueAfter.ToString() != "") ? FieldValueAfter.ToString() : "";
             }
             else
             {
-                fieldValueAfterToStringForCompare = (fieldValueAfter != null && fieldValueAfter.ToString() != "") ? fieldValueAfter.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ") : "";
+                FieldValueAfterToStringForCompare = (FieldValueAfter != null && FieldValueAfter.ToString() != "") ? FieldValueAfter.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ") : "";
             }
         }
 
         public override void GetFriendlyFieldValues(string fieldValueString, out string friendlyFieldValue)
         {
-            if (item.listItem.ParentList.BaseTemplate == SPListTemplateType.Events || item.listItem.ParentList.BaseTemplate == SPListTemplateType.TasksWithTimelineAndHierarchy)
+            if (Item.listItem.ParentList.BaseTemplate == SPListTemplateType.Events || Item.listItem.ParentList.BaseTemplate == SPListTemplateType.TasksWithTimelineAndHierarchy)
             {
                 friendlyFieldValue = DateTime.Parse(fieldValueString.Replace("Z", "")).ToString();
             }
@@ -51,7 +51,7 @@ namespace ListsNotifications
                 friendlyFieldValue = fieldValueString.Contains("Z") ? DateTime.Parse(fieldValueString).ToLocalTime().ToString() : DateTime.Parse(fieldValueString).ToString();
             }
 
-            dynamic fieldDateTime = item.listItem.ParentList.Fields.GetField(fieldTitle);
+            dynamic fieldDateTime = Item.listItem.ParentList.Fields.GetField(FieldTitle);
             if (fieldDateTime.DisplayFormat.ToString() == "DateOnly")
             {
                 friendlyFieldValue = Regex.Replace(friendlyFieldValue, @"\s[\d:]+$", "");

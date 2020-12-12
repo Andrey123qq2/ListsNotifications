@@ -21,12 +21,12 @@ namespace ListsNotifications
 				.Where(t => t.IsChanged)
 				.ToList();
 
-            TrackSingleMailSPItemFields = this.ERConf.ItemUpdatingTrackFieldsSingleMail
+            TrackSingleMailSPItemFields = this.ERConf.TrackFieldsSingleMail
 				//.AsParallel()
 				.Select(f => SPItemFieldFactory.create(this, f))
                 .Where(t => t.IsChanged)
 				.ToList();
-                //.ToDictionary(t => t, t => this.ERConf.ItemUpdatingTrackFieldsSingleMail[t.fieldTitle]);
+                //.ToDictionary(t => t, t => this.ERConf.TrackFieldsSingleMail[t.fieldTitle]);
 
 			if (TrackSPItemFields.Count == 0 && TrackSingleMailSPItemFields.Count == 0)
 			{
@@ -38,15 +38,15 @@ namespace ListsNotifications
 				.Select(f => {
 					var itemField = SPItemFieldFactory.create(this, f);
 
-					if (String.IsNullOrEmpty(itemField.friendlyFieldValueAfter))
+					if (String.IsNullOrEmpty(itemField.FriendlyFieldValueAfter))
 					{
-						itemField.GetFriendlyFieldValues(itemField.fieldValueAfter, out itemField.friendlyFieldValueAfter);
+						itemField.GetFriendlyFieldValues(itemField.FieldValueAfter, out itemField.FriendlyFieldValueAfter);
 					};
-					itemField.friendlyFieldValueBefore = "";
+					itemField.FriendlyFieldValueBefore = "";
 
 					return itemField;
 				})
-				.Where(f => !String.IsNullOrEmpty(f.friendlyFieldValueAfter))
+				.Where(f => !String.IsNullOrEmpty(f.FriendlyFieldValueAfter))
 				.ToList();
 
 			TrackSPItemFields.AddRange(updatingFixedFields);

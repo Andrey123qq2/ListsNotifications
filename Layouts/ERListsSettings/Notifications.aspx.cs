@@ -6,17 +6,20 @@ using SPERCommonLib;
 using System.Linq;
 using System.Web;
 using System.Text.RegularExpressions;
-using System.Collections;
 using System.Web.UI.WebControls;
+using System.Data;
+using System.Reflection;
 
 namespace ListsNotifications.Layouts.ERListsSettings
 {
-    //TODO: recreate aspx page with static elements (tables etc) and dynamically set its contents
     public partial class NotificationsSettingsPage : LayoutsPageBase
     {
         private SPList PageSPList;
         private ERConfNotifications ERConf;
-        private SPFieldCollection listFields;
+        private SPFieldCollection ListFields;
+        private PropertyInfo[] ERConfProperties;
+        private string CurrentUrl;
+        private string MailTemplatesUrl;
         protected void Page_Load(object sender, EventArgs e)
         {
             InitParams();
@@ -28,116 +31,183 @@ namespace ListsNotifications.Layouts.ERListsSettings
 
             BindData();
         }
-
         private void InitParams()
         {
             Guid listGuid = new Guid(Request.QueryString["List"]);
 
             PageSPList = GetSPList(listGuid);
-            listFields = PageSPList.Fields;
+            ListFields = PageSPList.Fields;
 
             ERConf = ERListConf<ERConfNotifications>.Get(PageSPList, CommonConfigNotif.LIST_PROPERTY_JSON_CONF);
-        }
 
+            ERConfProperties = ERConf.GetType().GetProperties();
+
+            //currentUrl = HttpContext.Current.Request.UrlReferrer.OriginalString;
+            //currentUrl = HttpContext.Current.Request.Url.OriginalString;
+            CurrentUrl = HttpContext.Current.Request.RawUrl;
+            MailTemplatesUrl = Regex.Replace(CurrentUrl, "Notifications", "MailTemplates", RegexOptions.IgnoreCase);
+        }
         private void BindData()
         {
-
-            AdditionalParamsTable.DataSource = GetAdditionalParamsFromConfToTableSource();
+            AdditionalParamsTable.DataSource = GetDataFoAdditionalTable();
             AdditionalParamsTable.DataBind();
 
-            FieldsTable.DataSource = GetFieldsTableSource();
+            FieldsTable.DataSource = GetDataForFieldsTable();
             FieldsTable.DataBind();
         }
 
-        private Array GetAdditionalParamsFromConfToTableSource()
+        private Array GetDataFoAdditionalTable()
         {
             var additionalParamsTableSource = CommonConfigNotif.PAGE_SETTINGS_ADDITIONAL_PARAMS
-                .Select(p => {
-                    return new
+                .Select(p =>
+                {
+                    var p1 = new
                     {
                         Parameter = p,
-                        Value = String.Join(",", (List<string>)(ERConf.GetType().GetProperty(p).GetValue(ERConf)))
+                        Value = String.Join(",", (List<string>)(ERConf.GetType().GetProperty(p).GetValue(ERConf))),
+                        LinkVisible = false,
+                        LinkValue = ""
                     };
+                    return p1;
                 })
+                .Append(
+                    new
+                    {
+                        Parameter = "Mail Templates",
+                        Value = "Configuration",
+                        LinkVisible = true,
+                        LinkValue = MailTemplatesUrl
+                    })
                 .ToArray();
 
             return additionalParamsTableSource;
         }
-
-        private Array GetFieldsTableSource()
+        private DataTable GetDataForFieldsTable()
         {
-            List<object> fieldsTableSource = new List<object> { };
-            int i = 0;
-            foreach (SPField field in listFields)
+            var fieldsDataTable = new DataTable();
+            AddColumnsToFieldsDataTable(fieldsDataTable);
+            AddDataToFieldsDataTable(fieldsDataTable);
+
+            return fieldsDataTable;
+        }
+        private void AddColumnsToFieldsDataTable(DataTable fieldsDataTable)
+        {
+            fieldsDataTable.Columns.Add(new DataColumn("FieldName", typeof(string)));
+            fieldsDataTable.Columns.Add(new DataColumn("MailTemplatesUrl", typeof(string)));
+            fieldsDataTable.Columns.Add(new DataColumn("UserField", typeof(bool)));
+
+            foreach (var prop in ERConfProperties)
+            {
+                if (prop.PropertyType != typeof(List<string>))
+                    continue;
+
+                fieldsDataTable.Columns.Add(new DataColumn(prop.Name, typeof(bool)));
+            }
+
+        }
+        private void AddDataToFieldsDataTable(DataTable fieldsDataTable)
+        {
+            foreach (SPField field in ListFields)
             {
                 if (field.ReadOnlyField || field.Hidden)
-                {
                     continue;
-                };
-                i++;
+
+                List<object> dataRow = new List<object> { };
+
                 string fieldTitle = field.Title;
+                
+                // Order should be same as in AddColumnsToDataTable
+                // data for column FieldName
+                dataRow.Add(fieldTitle);
+                // data for columt MailTemplatesUrl
+                dataRow.Add(MailTemplatesUrl + "&Field=" + fieldTitle);
+                // data for column UserField
+                dataRow.Add(field.TypeAsString.Contains("User"));
 
-                fieldsTableSource.Add(
-                    new
-                    {
-                        FieldName = fieldTitle,
-                        TrackUpdating = ERConf.ItemUpdatingTrackFields.Contains(fieldTitle),
-                        TrackAdded = ERConf.ItemAddedTrackFields.Contains(fieldTitle),
-                        SeparateMail = ERConf.ItemUpdatingTrackFieldsSingleMail.Contains(fieldTitle),
-                        Notify = ERConf.to.Contains(fieldTitle),
-                        NotifyManagers = ERConf.toManagers.Contains(fieldTitle),
-                        FixedUpdating = ERConf.ItemUpdatingFixedFields.Contains(fieldTitle)
-                    }
-                );
+                foreach (var prop in ERConfProperties)
+                {
+                    if (prop.PropertyType != typeof(List<string>))
+                        continue;
+
+                    bool paramContainsField = ((List<string>)(prop.GetValue(ERConf))).Contains(fieldTitle);
+                    dataRow.Add(paramContainsField);
+                }
+                fieldsDataTable.Rows.Add(dataRow.ToArray());
             };
-
-            return fieldsTableSource.ToArray();
         }
 
-        private void GetAdditionalParamsConfFromPage()
+        private void GetAdditionalParamsFromPageToConf()
         {
-            IEnumerator ie = AdditionalParamsTable.Rows.GetEnumerator();
-            //List<string> additionalParams = new List<string> { };
+            var additionalParamsTableRows = AdditionalParamsTable.Rows;
 
-            while (ie.MoveNext())
+            foreach (GridViewRow row in additionalParamsTableRows)
             {
-                var row = (GridViewRow)ie.Current;
                 string param = ((Label)(row.FindControl("ParameterLabel"))).Text;
                 string value = ((TextBox)(row.FindControl("ValueTextBox"))).Text;
                 List<string> valueList = Regex.Split(value, @";|,").ToList();
 
                 ERConf.GetType().GetProperty(param).SetValue(ERConf, valueList);
-                //additionalParams.Add(variable, value);
-
             }
+        }
+        private void GetFieldsParamsFromPageToConf()
+        {
+            var fieldsTableRows = FieldsTable.Rows;
+            var headerCount = FieldsTable.HeaderRow.Cells.Count;
 
-            //ie.Reset();
+            for (int i = 1; i < headerCount; i++)
+            {
+                List<string> valueList = new List<string> { };
+                string ctrId = "";
+                foreach (GridViewRow row in fieldsTableRows)
+                {
+                    var cellLabel = row.Cells[0];
+                    var fieldName = ((Label)(cellLabel.FindControl("FieldLabel"))).Text;
 
-            //return additionalParams;
+                    var cell = row.Cells[i];
+                    var cellControls = cell.Controls;
+                    foreach (var ctr in cellControls)
+                    {
+                        if (ctr is CheckBox)
+                        {
+                            ctrId = ((CheckBox)ctr).ID;
+                            if (((CheckBox)ctr).Checked)
+                            {
+                                valueList.Add(fieldName);
+                            }
+                        }
+                    }
+                }
+                ERConf.GetType().GetProperty(ctrId)?.SetValue(ERConf, valueList);
+            }
+        }
+
+        protected void TrackSingleMail_EventHandler(object sender, EventArgs e)
+        {
+            CheckBox senderCheckbox = ((CheckBox)sender);
+            senderCheckbox.Parent.FindControl("MailTemplatesUrl").Visible = senderCheckbox.Checked;
         }
         protected void ButtonOK_EventHandler(object sender, EventArgs e)
         {
-            //ERConf.MailTemplates[ERConfKey] = GetMailTemplatesConfFromPage();
 
-            GetAdditionalParamsConfFromPage();
+            GetAdditionalParamsFromPageToConf();
+            GetFieldsParamsFromPageToConf();
 
             ERListConf<ERConfNotifications>.Set(PageSPList, CommonConfigNotif.LIST_PROPERTY_JSON_CONF, ERConf);
 
             RedirectToParentPage();
         }
-
         protected void ButtonCANCEL_EventHandler(object sender, EventArgs e)
         {
             RedirectToParentPage();
         }
 
+        //TODO: move to common lib
         private void RedirectToParentPage()
         {
-            string currentUrl = HttpContext.Current.Request.UrlReferrer.OriginalString;
-            string listSettingsUrl = Regex.Replace(currentUrl, "ERListsSettings/Notifications", "listedit", RegexOptions.IgnoreCase);
+            string listSettingsUrl = Regex.Replace(CurrentUrl, "ERListsSettings/Notifications", "listedit", RegexOptions.IgnoreCase);
             Response.Redirect(listSettingsUrl);
         }
-
+        //TODO: move to common lib
         private SPList GetSPList(Guid listGUID)
         {
             SPList list;

@@ -15,17 +15,17 @@ namespace ListsNotifications
         }
         public override void GetFieldValuesToStringForCompare()
         {
-            SPFieldUserValue[] FieldValueBeforeArr = (fieldValueBefore != null && fieldValueBefore.ToString() != "") ? fieldValueBefore.ToArray() : new SPFieldUserValue[] { };
-            SPFieldUserValue[] FieldValueAfterArr = (fieldValueAfter != null && fieldValueAfter.ToString() != "") ? (new SPFieldUserValueCollection(item.listItem.Web, fieldValueAfter.ToString())).ToArray() : new SPFieldUserValue[] { };
+            SPFieldUserValue[] FieldValueBeforeArr = (FieldValueBefore != null && FieldValueBefore.ToString() != "") ? FieldValueBefore.ToArray() : new SPFieldUserValue[] { };
+            SPFieldUserValue[] FieldValueAfterArr = (FieldValueAfter != null && FieldValueAfter.ToString() != "") ? (new SPFieldUserValueCollection(Item.listItem.Web, FieldValueAfter.ToString())).ToArray() : new SPFieldUserValue[] { };
 
-            fieldValueBeforeToStringForCompare = (FieldValueBeforeArr.Length > 0) ? String.Join(",", Array.ConvertAll(FieldValueBeforeArr, p => (p.User != null) ? p.User.LoginName : p.LookupValue )) : "";
-            fieldValueAfterToStringForCompare = (FieldValueAfterArr.Length > 0) ? String.Join(",", Array.ConvertAll(FieldValueAfterArr, p => (p.User != null) ? p.User.LoginName : p.LookupValue)) : "";
+            FieldValueBeforeToStringForCompare = (FieldValueBeforeArr.Length > 0) ? String.Join(",", Array.ConvertAll(FieldValueBeforeArr, p => (p.User != null) ? p.User.LoginName : p.LookupValue )) : "";
+            FieldValueAfterToStringForCompare = (FieldValueAfterArr.Length > 0) ? String.Join(",", Array.ConvertAll(FieldValueAfterArr, p => (p.User != null) ? p.User.LoginName : p.LookupValue)) : "";
         }
 
         public override void GetFriendlyFieldValues(string fieldValueString, out string friendlyFieldValue)
         {
-            bool valueAfterParam = friendlyFieldValueAfter == null;
-            List<SPPrincipal> fieldPrincipals = valueAfterParam ? item.GetUsersFromUsersFieldsAfter(new List<string> { fieldTitle }) : item.listItem.GetUsersFromUsersFields(new List<string> { fieldTitle });
+            bool valueAfterParam = FriendlyFieldValueAfter == null;
+            List<SPPrincipal> fieldPrincipals = valueAfterParam ? Item.GetUsersFromUsersFieldsAfter(new List<string> { FieldTitle }) : Item.listItem.GetUsersFromUsersFields(new List<string> { FieldTitle });
             friendlyFieldValue = String.Join(", ", SPCommon.GetUserNames(fieldPrincipals).ToArray());
         }
     }

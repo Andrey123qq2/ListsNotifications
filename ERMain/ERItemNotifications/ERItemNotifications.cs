@@ -9,18 +9,21 @@ using SPERCommonLib;
 
 namespace ListsNotifications
 {
-    abstract class ERItemNotifications : ERItem<ERConfNotifications>
+    /// <summary>
+	/// Gets all needed variables for creating email and send notifications
+	/// </summary>
+	abstract class ERItemNotifications : ERItem<ERConfNotifications>
 	{
         public List<SPItemField> TrackSPItemFields;
         public List<SPItemField> TrackSingleMailSPItemFields;
 		public readonly bool NotifiersPresent;
-		public List<string> toMails;
+		public List<string> ToMails;
 
 		public ERItemNotifications(SPItemEventProperties properties) : base(properties, CommonConfigNotif.LIST_PROPERTY_JSON_CONF)
 		{
 			NotifiersPresent = ERConf.to.Count > 0 || ERConf.cc.Count > 0 || ERConf.bcc.Count > 0 || ERConf.toManagers.Count > 0;
 
-			toMails = GetToMails();
+			ToMails = GetToMails();
 
 			GetMailTemplatesConf();
 		}
@@ -32,7 +35,7 @@ namespace ListsNotifications
 				ERConf.MailTemplates["_listMode"] = CommonConfigNotif.MAIL_TEMPLATES_DEFAULT;
 			}
 
-			ERConf.ItemUpdatingTrackFieldsSingleMail.ForEach(k =>
+			ERConf.TrackFieldsSingleMail.ForEach(k =>
 				{
 					if (!ERConf.MailTemplates.ContainsKey(k))
 					{
@@ -97,9 +100,9 @@ namespace ListsNotifications
 				MailItem mailToNotifySingleField = new MailItem(
 					this, 
 					new List<SPItemField> { trackField }, 
-					ERConf.MailTemplates[trackField.fieldTitle]["MAIL_SUBJECT_ITEMS"],
-					ERConf.MailTemplates[trackField.fieldTitle]["MAIL_MODIFIED_BY_TEMPLATE"],
-					ERConf.MailTemplates[trackField.fieldTitle],
+					ERConf.MailTemplates[trackField.FieldTitle]["MAIL_SUBJECT_ITEMS"],
+					ERConf.MailTemplates[trackField.FieldTitle]["MAIL_MODIFIED_BY_TEMPLATE"],
+					ERConf.MailTemplates[trackField.FieldTitle],
 					false
 				);
 				mailToNotifySingleField.SendMail(listItem.ParentList.ParentWeb);

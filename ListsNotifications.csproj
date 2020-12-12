@@ -109,10 +109,6 @@
     <Compile Include="ERMain\SPItemField\SPItemFieldTypeDateTime.cs" />
     <Compile Include="ERMain\SPItemField\SPItemField.cs" />
     <Compile Include="ERMain\SPItemField\SPItemFieldFactory.cs" />
-    <Compile Include="ERMain\PageSettings\AdditionalFieldsTable.cs" />
-    <Compile Include="ERMain\PageSettings\PageSettings.cs" />
-    <Compile Include="ERMain\PageSettings\SettingsTable.cs" />
-    <Compile Include="ERMain\PageSettings\TrackFieldsTable.cs" />
     <Compile Include="ERMain\CommonConfigNotif.cs" />
     <Compile Include="Layouts\ERListsSettings\MailTemplates.aspx.cs">
       <DependentUpon>MailTemplates.aspx</DependentUpon>
@@ -129,7 +125,7 @@
       <DependentUpon>Notifications.aspx.cs</DependentUpon>
     </Compile>
     <Compile Include="ERMain\ERItemNotifications\MailItem.cs" />
-    <Compile Include="ERMain\MainInitNotif.cs" />
+    <Compile Include="ERMain\MainInit.cs" />
     <Compile Include="EventReceiver1\EventReceiver1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

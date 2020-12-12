@@ -25,7 +25,6 @@
         <HeaderStyle Font-Bold="true" HorizontalAlign="Left" CssClass="ms-viewheadertr" />
         <HeaderStyle />
         <Columns>
-            <%--<asp:BoundField DataField="Variable" HeaderText="Variable" ItemStyle-Width = "200" />--%>
             <asp:TemplateField HeaderText="Variable" HeaderStyle-Width="250px">
                 <ItemTemplate>
                     <asp:Label ID="TextBoxLabel" runat="server" Text='<%# Eval("Variable") %>' Width="100"></asp:Label>

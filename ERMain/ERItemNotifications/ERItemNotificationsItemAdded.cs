@@ -25,12 +25,12 @@ namespace ListsNotifications
 				.Where(t => t.IsChanged)
 				.ToList();
 
-			TrackSingleMailSPItemFields = this.ERConf.ItemUpdatingTrackFieldsSingleMail
+			TrackSingleMailSPItemFields = this.ERConf.TrackFieldsSingleMail
 				//.AsParallel()
 				.Select(f => SPItemFieldFactory.create(this, f))
 				.Where(t => t.IsChanged)
 				.ToList();
-				//.ToDictionary(t => t, t => this.ERConf.ItemUpdatingTrackFieldsSingleMail[t.fieldTitle]);
+				//.ToDictionary(t => t, t => this.ERConf.TrackFieldsSingleMail[t.fieldTitle]);
 		}
 
 		public override void SendNotifications()

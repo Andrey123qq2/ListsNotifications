@@ -14,17 +14,17 @@ namespace ListsNotifications
         }
         public override void GetFieldValuesToStringForCompare()
         {
-            fieldValueBeforeToStringForCompare = (fieldValueBefore != null && fieldValueBefore.ToString() != "") ? fieldValueBefore.ToString() : "";
-            fieldValueAfterToStringForCompare = (fieldValueAfter != null && fieldValueAfter.ToString() != "") ? fieldValueAfter.ToString() : "";
-            fieldValueAfterToStringForCompare = Regex.Replace(fieldValueAfterToStringForCompare, @"\.", ",");
+            FieldValueBeforeToStringForCompare = (FieldValueBefore != null && FieldValueBefore.ToString() != "") ? FieldValueBefore.ToString() : "";
+            FieldValueAfterToStringForCompare = (FieldValueAfter != null && FieldValueAfter.ToString() != "") ? FieldValueAfter.ToString() : "";
+            FieldValueAfterToStringForCompare = Regex.Replace(FieldValueAfterToStringForCompare, @"\.", ",");
         }
 
         public override void GetFriendlyFieldValues(string fieldValueString, out string friendlyFieldValue)
         {
-            if (item.listItem.ParentList.Fields.GetField(fieldTitle).FieldRenderingControl.AlternateTemplateName == "PercentageNumberField")
+            if (Item.listItem.ParentList.Fields.GetField(FieldTitle).FieldRenderingControl.AlternateTemplateName == "PercentageNumberField")
             {
                 fieldValueString = fieldValueString.Replace(@",", ".");
-                friendlyFieldValue = item.listItem.ParentList.Fields.GetField(fieldTitle).GetFieldValueAsText(fieldValueString);
+                friendlyFieldValue = Item.listItem.ParentList.Fields.GetField(FieldTitle).GetFieldValueAsText(fieldValueString);
             }
             else
             {

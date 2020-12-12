@@ -8,34 +8,34 @@ using SPERCommonLib;
 
 namespace ListsNotifications
 {
-    abstract public class SPItemField
+    /// <summary>
+    /// Creates object for particular item field with useful params
+    /// </summary>
+    abstract class SPItemField
     {
-        public readonly string fieldTitle;
+        public readonly string FieldTitle;
         public readonly bool IsChanged;
-        public string friendlyFieldValueBefore;
-        public string friendlyFieldValueAfter;
+        public string FriendlyFieldValueBefore;
+        public string FriendlyFieldValueAfter;
+        public dynamic FieldValueAfter;
+        public dynamic FieldValueBefore;
 
-        protected IERItem item;
-        protected readonly bool valueAfter;
+        protected IERItem Item;
+        protected readonly bool ValueAfter;
 
-        public dynamic fieldValueAfter;
-        public dynamic fieldValueBefore;
-
-        protected string fieldValueAfterToStringForCompare;
-        protected string fieldValueBeforeToStringForCompare;
-
-        protected string fieldValueAfterToStringForFriendly;
-        protected string fieldValueBeforeToStringForFriendly;
-
+        protected string FieldValueAfterToStringForCompare;
+        protected string FieldValueBeforeToStringForCompare;
+        protected string FieldValueAfterToStringForFriendly;
+        protected string FieldValueBeforeToStringForFriendly;
         
         public SPItemField(params object[] attributes)
         {
-            item = (IERItem)attributes[0];
-            fieldTitle = (string)attributes[1];
-            valueAfter = (bool)attributes[2];
+            Item = (IERItem)attributes[0];
+            FieldTitle = (string)attributes[1];
+            ValueAfter = (bool)attributes[2];
 
-            fieldValueAfter = valueAfter ? item.GetFieldValueAfter(fieldTitle) : null;
-            fieldValueBefore = item.listItem.GetFieldValue(fieldTitle);
+            FieldValueAfter = ValueAfter ? Item.GetFieldValueAfter(FieldTitle) : null;
+            FieldValueBefore = Item.listItem.GetFieldValue(FieldTitle);
 
             GetFieldValuesToStringForCompare();
             IsChanged = FieldIsChanged();
@@ -47,18 +47,18 @@ namespace ListsNotifications
 
             GetFieldValuesToStringForFriendly();
             
-            if (friendlyFieldValueAfter != "-")
+            if (FriendlyFieldValueAfter != "-")
             {
-                GetFriendlyFieldValues(fieldValueAfterToStringForFriendly, out friendlyFieldValueAfter);
+                GetFriendlyFieldValues(FieldValueAfterToStringForFriendly, out FriendlyFieldValueAfter);
             }
-            if (friendlyFieldValueBefore != "-")
+            if (FriendlyFieldValueBefore != "-")
             {
-                GetFriendlyFieldValues(fieldValueBeforeToStringForFriendly, out friendlyFieldValueBefore);
+                GetFriendlyFieldValues(FieldValueBeforeToStringForFriendly, out FriendlyFieldValueBefore);
             }
 
-            if (item.eventType.Contains("Added"))
+            if (Item.eventType.Contains("Added"))
             {
-                friendlyFieldValueAfter = friendlyFieldValueBefore;
+                FriendlyFieldValueAfter = FriendlyFieldValueBefore;
             }
         }
 
@@ -67,13 +67,13 @@ namespace ListsNotifications
 
         private bool FieldIsChanged()
         {
-            if (item.eventType.Contains("Added") && fieldValueBeforeToStringForCompare != null && fieldValueBeforeToStringForCompare != "")
+            if (Item.eventType.Contains("Added") && FieldValueBeforeToStringForCompare != null && FieldValueBeforeToStringForCompare != "")
             {
                 
                 return true;
             }
 
-            if (fieldValueAfterToStringForCompare != fieldValueBeforeToStringForCompare)
+            if (FieldValueAfterToStringForCompare != FieldValueBeforeToStringForCompare)
             {
                 return true;
             }
@@ -87,17 +87,17 @@ namespace ListsNotifications
         {
             try
             {
-                fieldValueAfterToStringForFriendly = (fieldValueAfter != null) ? (string)fieldValueAfter : "";
+                FieldValueAfterToStringForFriendly = (FieldValueAfter != null) ? (string)FieldValueAfter : "";
             }
             catch
             {
-                fieldValueAfterToStringForFriendly = (fieldValueAfter != null) ? fieldValueAfter.ToString() : "";
+                FieldValueAfterToStringForFriendly = (FieldValueAfter != null) ? FieldValueAfter.ToString() : "";
             }
 
 
-            if (fieldValueAfterToStringForFriendly == "" || fieldValueAfterToStringForFriendly == null)
+            if (FieldValueAfterToStringForFriendly == "" || FieldValueAfterToStringForFriendly == null)
             {
-                friendlyFieldValueAfter = "-";
+                FriendlyFieldValueAfter = "-";
             }
 
 
@@ -108,17 +108,17 @@ namespace ListsNotifications
 
             try
             {
-                fieldValueBeforeToStringForFriendly = (fieldValueBefore != null) ? (string)fieldValueBefore : "";
+                FieldValueBeforeToStringForFriendly = (FieldValueBefore != null) ? (string)FieldValueBefore : "";
             }
             catch
             {
-                fieldValueBeforeToStringForFriendly = (fieldValueBefore != null) ? fieldValueBefore.ToString() : "";
+                FieldValueBeforeToStringForFriendly = (FieldValueBefore != null) ? FieldValueBefore.ToString() : "";
             }
 
 
-            if (fieldValueBeforeToStringForFriendly == "" || fieldValueBeforeToStringForFriendly == null)
+            if (FieldValueBeforeToStringForFriendly == "" || FieldValueBeforeToStringForFriendly == null)
             {
-                friendlyFieldValueBefore = "-";
+                FriendlyFieldValueBefore = "-";
             }
         }
     }

@@ -14,19 +14,19 @@ namespace ListsNotifications
         }
         public override void GetFieldValuesToStringForCompare()
         {
-            SPFieldUserValue fieldValueBeforeUser = new SPFieldUserValue(item.listItem.Web, fieldValueBefore.ToString());
-            SPFieldUserValue fieldValueAfterUser = new SPFieldUserValue(item.listItem.Web, fieldValueAfter.ToString());
+            SPFieldUserValue fieldValueBeforeUser = new SPFieldUserValue(Item.listItem.Web, FieldValueBefore.ToString());
+            SPFieldUserValue fieldValueAfterUser = new SPFieldUserValue(Item.listItem.Web, FieldValueAfter.ToString());
 
-            fieldValueBeforeToStringForCompare = 
-                (fieldValueBefore != null && fieldValueBefore.ToString() != "") ? 
+            FieldValueBeforeToStringForCompare = 
+                (FieldValueBefore != null && FieldValueBefore.ToString() != "") ? 
                     (fieldValueBeforeUser.User != null ? fieldValueBeforeUser.User.LoginName : fieldValueBeforeUser.LookupValue) : "";
-            fieldValueAfterToStringForCompare = 
-                (fieldValueAfter != null && fieldValueAfter.ToString() != "") ?
+            FieldValueAfterToStringForCompare = 
+                (FieldValueAfter != null && FieldValueAfter.ToString() != "") ?
                     (fieldValueAfterUser.User != null ? fieldValueAfterUser.User.LoginName : fieldValueAfterUser.LookupValue) : "";
 
-            if (fieldValueAfter != null && fieldValueAfter.ToString() != "" && fieldValueAfterToStringForCompare == "")
+            if (FieldValueAfter != null && FieldValueAfter.ToString() != "" && FieldValueAfterToStringForCompare == "")
             {
-                fieldValueAfterToStringForCompare = new SPFieldUserValue(item.listItem.Web, fieldValueAfter.ToString()).User.LoginName;
+                FieldValueAfterToStringForCompare = new SPFieldUserValue(Item.listItem.Web, FieldValueAfter.ToString()).User.LoginName;
             }
         }
 
@@ -34,11 +34,11 @@ namespace ListsNotifications
         {
             try
             {
-                friendlyFieldValue = item.listItem.Web.EnsureUser(new SPFieldUserValue(item.listItem.Web, fieldValueString.ToString()).LookupValue).Name;
+                friendlyFieldValue = Item.listItem.Web.EnsureUser(new SPFieldUserValue(Item.listItem.Web, fieldValueString.ToString()).LookupValue).Name;
             }
             catch
             {
-                friendlyFieldValue = new SPFieldUserValue(item.listItem.Web, fieldValueString.ToString()).User.Name;
+                friendlyFieldValue = new SPFieldUserValue(Item.listItem.Web, fieldValueString.ToString()).User.Name;
             }
         }
     }
