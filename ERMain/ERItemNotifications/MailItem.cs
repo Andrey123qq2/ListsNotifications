@@ -4,7 +4,7 @@ using System.Collections.Specialized;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Utilities;
 using System.Text.RegularExpressions;
-using SPERCommonLib;
+using SPSCommon.SPCustomExtensions;
 
 namespace ListsNotifications
 {

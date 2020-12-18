@@ -7,9 +7,9 @@ using System.Web;
 using System.Web.UI.WebControls;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.WebControls;
-using SPERCommonLib;
 using System.Linq;
 using System.Collections;
+using SPSCommon.SPJsonConf;
 
 namespace ListsNotifications.Layouts.ERListsSettings
 {
@@ -77,7 +77,7 @@ namespace ListsNotifications.Layouts.ERListsSettings
 
             PageSPList = GetSPList(listGuid);
 
-            ERConf = ERListConf<ERConfNotifications>.Get(PageSPList, CommonConfigNotif.LIST_PROPERTY_JSON_CONF);
+            ERConf = SPJsonConf<ERConfNotifications>.Get(PageSPList, CommonConfigNotif.LIST_PROPERTY_JSON_CONF);
 
             ERConfKey = (!String.IsNullOrEmpty(FieldName)) ? FieldName : "_listMode";
 
@@ -107,7 +107,7 @@ namespace ListsNotifications.Layouts.ERListsSettings
         {
             ERConf.MailTemplates[ERConfKey] = GetMailTemplatesConfFromPage();
 
-            ERListConf<ERConfNotifications>.Set(PageSPList, CommonConfigNotif.LIST_PROPERTY_JSON_CONF, ERConf);
+            SPJsonConf<ERConfNotifications>.Set(PageSPList, CommonConfigNotif.LIST_PROPERTY_JSON_CONF, ERConf);
 
             RedirectToParentPage();
         }

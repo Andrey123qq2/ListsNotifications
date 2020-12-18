@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.SharePoint;
-using SPERCommonLib;
+using SPSCommon.ERItem;
+using SPSCommon.SPCustomExtensions;
 
 namespace ListsNotifications
 {

@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.WebControls;
-using SPERCommonLib;
 using System.Linq;
 using System.Web;
 using System.Text.RegularExpressions;
 using System.Web.UI.WebControls;
 using System.Data;
 using System.Reflection;
+using SPSCommon.SPJsonConf;
 
 namespace ListsNotifications.Layouts.ERListsSettings
 {
@@ -38,7 +38,7 @@ namespace ListsNotifications.Layouts.ERListsSettings
             PageSPList = GetSPList(listGuid);
             ListFields = PageSPList.Fields;
 
-            ERConf = ERListConf<ERConfNotifications>.Get(PageSPList, CommonConfigNotif.LIST_PROPERTY_JSON_CONF);
+            ERConf = SPJsonConf<ERConfNotifications>.Get(PageSPList, CommonConfigNotif.LIST_PROPERTY_JSON_CONF);
 
             ERConfProperties = ERConf.GetType().GetProperties();
 
@@ -143,6 +143,9 @@ namespace ListsNotifications.Layouts.ERListsSettings
             foreach (GridViewRow row in additionalParamsTableRows)
             {
                 string param = ((Label)(row.FindControl("ParameterLabel"))).Text;
+                if (!CommonConfigNotif.PAGE_SETTINGS_ADDITIONAL_PARAMS.Contains(param))
+                    continue;
+
                 string value = ((TextBox)(row.FindControl("ValueTextBox"))).Text;
                 List<string> valueList = Regex.Split(value, @";|,").ToList();
 
@@ -167,10 +170,10 @@ namespace ListsNotifications.Layouts.ERListsSettings
                     var cellControls = cell.Controls;
                     foreach (var ctr in cellControls)
                     {
-                        if (ctr is CheckBox)
+                        if (ctr is CheckBox box)
                         {
-                            ctrId = ((CheckBox)ctr).ID;
-                            if (((CheckBox)ctr).Checked)
+                            ctrId = box.ID;
+                            if (box.Checked)
                             {
                                 valueList.Add(fieldName);
                             }
@@ -192,7 +195,7 @@ namespace ListsNotifications.Layouts.ERListsSettings
             GetAdditionalParamsFromPageToConf();
             GetFieldsParamsFromPageToConf();
 
-            ERListConf<ERConfNotifications>.Set(PageSPList, CommonConfigNotif.LIST_PROPERTY_JSON_CONF, ERConf);
+            SPJsonConf<ERConfNotifications>.Set(PageSPList, CommonConfigNotif.LIST_PROPERTY_JSON_CONF, ERConf);
 
             RedirectToParentPage();
         }

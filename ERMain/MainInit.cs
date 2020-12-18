@@ -8,7 +8,8 @@ using Microsoft.SharePoint.Utilities;
 using Microsoft.SharePoint.Workflow;
 using Microsoft.CSharp.RuntimeBinder;
 using ListsNotifications.ReadConfig;
-using SPERCommonLib;
+using SPSCommon.ERItem;
+using SPSCommon.SPCustomExtensions;
 
 namespace ListsNotifications
 {

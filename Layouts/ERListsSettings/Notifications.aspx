@@ -17,7 +17,7 @@
         window.onload = disableTextBoxes;
     </script>
 
-    <SharePoint:SPGridView ID="AdditionalParamsTable" runat="server" AutoGenerateColumns="false" Width="80%">
+    <SharePoint:SPGridView ID="AdditionalParamsTable" runat="server" AutoGenerateColumns="false">
         <RowStyle BackColor="#f6f7f8" Height="30px" HorizontalAlign="Left" />
         <AlternatingRowStyle BackColor="White" ForeColor="#000" Height="30px" HorizontalAlign="Left" />
         <HeaderStyle Font-Bold="true" HorizontalAlign="Left" CssClass="ms-viewheadertr" />
@@ -31,14 +31,14 @@
             <asp:TemplateField HeaderText="Value">
                 <ItemTemplate>
                     <asp:TextBox ID="ValueTextBox" runat="server" Text='<%# Eval("Value") %>' Width="500" Visible='<%# Eval("LinkVisible").ToString() != "True" %>'></asp:TextBox>
-                    <asp:HyperLink ID="MailTemplatesList" runat="server" Text='<%# Eval("Value") %>' ControlStyle-CssClass="table-links" 
-                        AutoPostBack="false" Visible='<%# Eval("LinkVisible") %>' NavigateUrl='<%# Eval("LinkValue") %>'/>
+                    <asp:HyperLink ID="MailTemplatesList" runat="server" Text='<%# Eval("Value") %>' 
+                        Visible='<%# Eval("LinkVisible") %>' NavigateUrl='<%# Eval("LinkValue") %>'/>
                 </ItemTemplate> 
             </asp:TemplateField> 
         </Columns>
     </SharePoint:SPGridView>
     <br/>
-    <SharePoint:SPGridView ID="FieldsTable" runat="server" AutoGenerateColumns="false" Width="80%">
+    <SharePoint:SPGridView ID="FieldsTable" runat="server" AutoGenerateColumns="false">
         <RowStyle BackColor="#f6f7f8" Height="30px" HorizontalAlign="Left" />
         <AlternatingRowStyle BackColor="White" ForeColor="#000" Height="30px" HorizontalAlign="Left" />
         <HeaderStyle Font-Bold="true" HorizontalAlign="Left" CssClass="ms-viewheadertr" />
@@ -51,36 +51,36 @@
             </asp:TemplateField> 
             
             <%--IDs of elements should be same as props in ERConfNotifications class--%>
-            <asp:TemplateField HeaderText="TrackUpdating">
+            <asp:TemplateField HeaderText="TrackUpdating" ControlStyle-Width="100">
                 <ItemTemplate>
                     <asp:CheckBox ID="ItemUpdatingTrackFields" runat="server" AutoPostBack="false" Checked='<%# Eval("ItemUpdatingTrackFields") %>'/>
                 </ItemTemplate>
             </asp:TemplateField>
-            <asp:TemplateField HeaderText="TrackAdded">
+            <asp:TemplateField HeaderText="TrackAdded" ControlStyle-Width="100">
                 <ItemTemplate>
                     <asp:CheckBox ID="ItemAddedTrackFields" runat="server" AutoPostBack="false" Checked='<%# Eval("ItemAddedTrackFields") %>'/>
                 </ItemTemplate>
             </asp:TemplateField>
-            <asp:TemplateField HeaderText="SeparateMail">
+            <asp:TemplateField HeaderText="SeparateMail" ControlStyle-Width="50">
                 <ItemTemplate>
                     <asp:CheckBox ID="TrackFieldsSingleMail" runat="server" OnCheckedChanged="TrackSingleMail_EventHandler" 
                         Checked='<%# Eval("TrackFieldsSingleMail") %>' AutoPostBack="true"/>
-                    <asp:HyperLink ID="MailTemplatesUrl" ControlStyle-CssClass="table-links" runat="server" 
-                        Text="Configuration" AutoPostBack="false" NavigateUrl='<%# Eval("MailTemplatesUrl") %>'
+                    <asp:HyperLink ID="MailTemplatesUrl" runat="server" 
+                        Text="Configuration" NavigateUrl='<%# Eval("MailTemplatesUrl") %>'
                         Visible='<%# Eval("TrackFieldsSingleMail") %>'/>
                 </ItemTemplate>
             </asp:TemplateField>
-            <asp:TemplateField HeaderText="Notify">
+            <asp:TemplateField HeaderText="Notify" ControlStyle-Width="100">
                 <ItemTemplate>
                     <asp:CheckBox ID="to" runat="server" AutoPostBack="false" Checked='<%# Eval("to") %>' Visible='<%# Eval("UserField") %>'/>
                 </ItemTemplate>
             </asp:TemplateField>
-            <asp:TemplateField HeaderText="NotifyManagers">
+            <asp:TemplateField HeaderText="NotifyManagers" ControlStyle-Width="100">
                 <ItemTemplate>
                     <asp:CheckBox  ID="toManagers" runat="server" AutoPostBack="false" Checked='<%# Eval("toManagers") %>' Visible='<%# Eval("UserField") %>'/>
                 </ItemTemplate>
             </asp:TemplateField>
-            <asp:TemplateField HeaderText="FixedUpdating">
+            <asp:TemplateField HeaderText="FixedUpdating" ControlStyle-Width="100">
                 <ItemTemplate>
                     <asp:CheckBox ID="ItemUpdatingFixedFields" runat="server" AutoPostBack="false" Checked='<%# Eval("ItemUpdatingFixedFields") %>'/>
                 </ItemTemplate>
@@ -88,7 +88,7 @@
 
         </Columns>
     </SharePoint:SPGridView>
-    <asp:Button ID="ButtonOK" runat="server" Text="OK" OnClick="ButtonOK_EventHandler" AutoPostback="false"/>
+    <asp:Button ID="ButtonOK" runat="server" Text="OK" OnClick="ButtonOK_EventHandler"/>
     <asp:Button ID="ButtonCANCEL" runat="server" Text="Cancel" OnClick="ButtonCANCEL_EventHandler"/>
 </asp:Content>
 
