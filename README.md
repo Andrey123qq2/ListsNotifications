@@ -2,9 +2,9 @@
 This project creates a custom SharePoint notifications Event Receiver (ER) that offers more flexible functionalities compared to default notifications.
 
 ### Features:
-l. Created as .wsp solution which activated as feature in per web basis
-l. ER parameters are defined in list settings in entry "ER Lists Notifications" (note: not all types of lists has this feature but most of common - defined in project)
-l. Main parameters:
+1. Created as .wsp solution which activated as feature in per web basis
+1. ER parameters are defined in list settings in entry "ER Lists Notifications" (note: not all types of lists has this feature but most of common - defined in project)
+1. Main parameters:
   * Static notified mails: cc, bcc
   * TrackUpdating - values (current and previous) of checked field includes in notification (only if this field is changed)
   * TrackAdded - field includes in notification on item creation (only if it containes some value)
@@ -12,13 +12,15 @@ l. Main parameters:
   * Notify - notification for users in checked field
   * NotifyManagers - notification for all user's managers in checked field
   * ConstantUpdating - field value always added to notification
-l. This solution/project depends on other custom library SPCommonLib which contains some common classes to work with SharePoint objects
+1. This solution/project depends on other custom library SPCommonLib which contains some common classes to work with SharePoint objects
 
 ### Sceenshots
-Main settins page:
+Main settings page:
+
 ![ ERSettings_ex ](ERSettings_ex.png)
 
 Mail:
+
 ![ ERMail_ex ](ERMail_ex.png)
 
 ## Disclaimer
