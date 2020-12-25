@@ -27,7 +27,7 @@ namespace ListsNotifications
 
 			TrackSingleMailSPItemFields = this.ERConf.TrackFieldsSingleMail
 				//.AsParallel()
-				.Select(f => SPItemFieldFactory.create(this, f))
+				.Select(f => SPItemFieldFactory.create(this, f, false))
 				.Where(t => t.IsChanged)
 				.ToList();
 				//.ToDictionary(t => t, t => this.ERConf.TrackFieldsSingleMail[t.fieldTitle]);

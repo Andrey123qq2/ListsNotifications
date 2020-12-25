@@ -12,11 +12,6 @@
 </asp:Content>
 
 <asp:Content ID="Main" ContentPlaceHolderID="PlaceHolderMain" runat="server">
-    <script type="text/javascript" src="<%= Page.ResolveUrl("Notifications.js") %>"></script>
-    <script type="text/javascript">
-        window.onload = disableTextBoxes;
-    </script>
-
     <SharePoint:SPGridView ID="AdditionalParamsTable" runat="server" AutoGenerateColumns="false">
         <RowStyle BackColor="#f6f7f8" Height="30px" HorizontalAlign="Left" />
         <AlternatingRowStyle BackColor="White" ForeColor="#000" Height="30px" HorizontalAlign="Left" />
@@ -80,7 +75,7 @@
                     <asp:CheckBox  ID="toManagers" runat="server" AutoPostBack="false" Checked='<%# Eval("toManagers") %>' Visible='<%# Eval("UserField") %>'/>
                 </ItemTemplate>
             </asp:TemplateField>
-            <asp:TemplateField HeaderText="FixedUpdating" ControlStyle-Width="100">
+            <asp:TemplateField HeaderText="ConstantUpdating" ControlStyle-Width="100">
                 <ItemTemplate>
                     <asp:CheckBox ID="ItemUpdatingFixedFields" runat="server" AutoPostBack="false" Checked='<%# Eval("ItemUpdatingFixedFields") %>'/>
                 </ItemTemplate>

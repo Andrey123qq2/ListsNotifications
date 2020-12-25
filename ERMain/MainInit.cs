@@ -15,7 +15,7 @@ namespace ListsNotifications
 {
     internal static class MainInit
     {
-        public static void InitItemUpdating(SPItemEventProperties properties)
+        internal static void InitItemUpdating(SPItemEventProperties properties)
         {
             if (!SPCommon.IsUpdatingByAccountMatch(properties, "svc_") && properties.ListItem != null && !SPCommon.IsJustCreated(properties.ListItem))
             {
@@ -39,7 +39,7 @@ namespace ListsNotifications
                 });
             }
         }
-        public static void InitItemAdded(SPItemEventProperties properties)
+        internal static void InitItemAdded(SPItemEventProperties properties)
         {
             if (!SPCommon.IsUpdatingByAccountMatch(properties, "svc_"))
             {
@@ -65,7 +65,7 @@ namespace ListsNotifications
             }
         }
 
-        public static void InitItemAttachmentAdded(SPItemEventProperties properties)
+        internal static void InitItemAttachmentAdded(SPItemEventProperties properties)
         {
             if (!SPCommon.IsUpdatingByAccountMatch(properties, "svc_") && !SPCommon.IsJustCreated(properties.ListItem))
             {

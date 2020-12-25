@@ -12,10 +12,6 @@
 </asp:Content>
 
 <asp:Content ID="Main" ContentPlaceHolderID="PlaceHolderMain" runat="server">
-    <script type="text/javascript" src="<%= Page.ResolveUrl("MailTemplates.js") %>"></script>
-    <script type="text/javascript">
-        window.onload = linksForMailTemplates;
-    </script>
     <asp:Label ID="FieldNameLabel" runat="server" Text="Mail Templates for {0}"></asp:Label>
     <br /><br />
 

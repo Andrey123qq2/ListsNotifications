@@ -69,18 +69,19 @@ namespace ListsNotifications.Layouts.ERListsSettings
                         LinkValue = ""
                     };
                     return p1;
-                })
-                .Append(
+                }).ToList();
+
+            additionalParamsTableSource.Add(
                     new
                     {
                         Parameter = "Mail Templates",
                         Value = "Configuration",
                         LinkVisible = true,
                         LinkValue = MailTemplatesUrl
-                    })
-                .ToArray();
+                    }
+                );
 
-            return additionalParamsTableSource;
+            return additionalParamsTableSource.ToArray();
         }
         private DataTable GetDataForFieldsTable()
         {

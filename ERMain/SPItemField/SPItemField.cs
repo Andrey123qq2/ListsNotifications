@@ -39,9 +39,10 @@ namespace ListsNotifications
             FieldValueBefore = Item.listItem.GetFieldValue(FieldTitle);
 
             GetFieldValuesToStringForCompare();
+
             IsChanged = FieldIsChanged();
 
-            if (IsChanged == false)
+            if (!IsChanged)
             {
                 return;
             }

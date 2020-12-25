@@ -16,7 +16,7 @@ namespace ListsNotifications
         public override void GetFieldValuesToStringForCompare()
         {
             dynamic fieldDateTime = Item.listItem.ParentList.Fields.GetField(FieldTitle);
-            if (fieldDateTime.DisplayFormat.ToString() == "DateOnly" && Regex.IsMatch(FieldValueAfter.ToString(), @"T00:00:00Z$") && !(Item.listItem.ParentList.BaseTemplate == SPListTemplateType.Events || Item.listItem.ParentList.BaseTemplate == SPListTemplateType.TasksWithTimelineAndHierarchy))
+            if (fieldDateTime.DisplayFormat.ToString() == "DateOnly" && FieldValueAfter != null && Regex.IsMatch(FieldValueAfter.ToString(), @"T00:00:00Z$") && !(Item.listItem.ParentList.BaseTemplate == SPListTemplateType.Events || Item.listItem.ParentList.BaseTemplate == SPListTemplateType.TasksWithTimelineAndHierarchy))
             {
                 FieldValueBefore = (FieldValueBefore != null && FieldValueBefore.ToString() != "") ? FieldValueBefore.ToLocalTime() : null;
             }
@@ -30,7 +30,7 @@ namespace ListsNotifications
                 FieldValueBeforeToStringForCompare = (FieldValueBefore != null && FieldValueBefore.ToString() != "") ? FieldValueBefore.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ") : "";
             }
 
-            if (FieldValueAfter.GetType().Name != "DateTime")
+            if (FieldValueAfter != null && FieldValueAfter.GetType().Name != "DateTime")
             {
                 FieldValueAfterToStringForCompare = (FieldValueAfter != null && FieldValueAfter.ToString() != "") ? FieldValueAfter.ToString() : "";
             }

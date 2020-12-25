@@ -191,10 +191,8 @@
     <Content Include="Features\Feature1\Feature1.Template.xml">
       <DependentUpon>Feature1.feature</DependentUpon>
     </Content>
-    <Content Include="Layouts\ERListsSettings\MailTemplates.js" />
     <Content Include="Layouts\ERListsSettings\MailTemplates.aspx" />
     <Content Include="Layouts\ERListsSettings\Notifications.aspx" />
-    <Content Include="Layouts\ERListsSettings\Notifications.js" />
     <Content Include="ListsDefinitions\List1\Elements.xml" />
     <Content Include="ListsDefinitions\List1\List1Instance\Elements.xml" />
     <Content Include="ListsDefinitions\List1\Schema.xml" />
