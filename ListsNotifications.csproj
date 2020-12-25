@@ -184,9 +184,12 @@
     <None Include="Package\Package.Template.xml">
       <DependentUpon>Package.package</DependentUpon>
     </None>
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="ERMail_ex.png" />
+    <Content Include="ERSettings_ex.png" />
     <Content Include="EventReceiver1\Elements.xml" />
     <Content Include="Features\Feature1\Feature1.Template.xml">
       <DependentUpon>Feature1.feature</DependentUpon>
