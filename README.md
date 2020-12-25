@@ -14,7 +14,7 @@ This project creates a custom SharePoint notifications Event Receiver (ER) that 
   * ConstantUpdating - field value always added to notification
 1. This solution/project depends on other custom library SPCommonLib which contains some common classes to work with SharePoint objects
 
-### Sceenshots
+### Screenshots
 Main settings page:
 
 ![ ERSettings_ex ](ERSettings_ex.png)
