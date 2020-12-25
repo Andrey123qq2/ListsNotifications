@@ -2,7 +2,7 @@
 This project creates a custom SharePoint notifications Event Receiver (ER) that offers more flexible functionalities compared to default notifications.
 
 ### Features:
-1. Created as .wsp solution which activated as feature in per web basis
+1. SharePoint .wsp solution which activated as feature in per web basis
 1. ER parameters are defined in list settings in entry "ER Lists Notifications" (note: not all types of lists has this feature but most of common - defined in project)
 1. Main parameters:
   1. Static notified mails: cc, bcc
