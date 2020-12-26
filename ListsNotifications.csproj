@@ -185,6 +185,7 @@
       <DependentUpon>Package.package</DependentUpon>
     </None>
     <None Include="README.md" />
+    <None Include="TODO.md" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

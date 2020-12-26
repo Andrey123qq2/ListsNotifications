@@ -1,0 +1,2 @@
+- [] refactor application to use events, subscriptions instead of using class MailItem with many responsobilites - this will also allow to use different types of notifications (telegram, sms, etc)
+- [] take out from MailItem class logic of making mail attributes/headers (to, from, subject, body) to separate class
