@@ -26,7 +26,6 @@ namespace ListsNotifications
 				.Select(f => SPItemFieldFactory.create(this, f))
                 .Where(t => t.IsChanged)
 				.ToList();
-                //.ToDictionary(t => t, t => this.ERConf.TrackFieldsSingleMail[t.fieldTitle]);
 
 			if (TrackSPItemFields.Count == 0 && TrackSingleMailSPItemFields.Count == 0)
 			{
@@ -57,7 +56,6 @@ namespace ListsNotifications
 		{
 			NotificationsTrackFields(ERConf.MailTemplates["_listMode"]["MAIL_SUBJECT_ITEMS"], ERConf.MailTemplates["_listMode"]["MAIL_MODIFIED_BY_TEMPLATE"]);
 			NotificationsTrackFieldsSingleMail();
-			//NotificationsTrackFieldsSingleMail(ERConf.MailTemplates["_listMode"]["MAIL_MODIFIED_BY_TEMPLATE"]);
 		}
 	}
 }

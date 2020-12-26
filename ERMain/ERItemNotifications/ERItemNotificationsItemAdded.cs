@@ -15,9 +15,6 @@ namespace ListsNotifications
 		}
 		public override void SetSPItemFieldsAttributesByERType()
 		{
-			//this.SetAttribute(listItem.ParentList, out TrackFields, NotifCommonConfig.LIST_PROPERTY_TRACK_FIELDS_ITEMADDED, true);
-			//TrackFields = ERConf.ItemAddedTrackFields;
-			
 			TrackSPItemFields = this.ERConf.ItemAddedTrackFields
 				//.AsParallel()
 				.Where(f => this.listItem.ParentList.Fields.ContainsField(f))
@@ -30,7 +27,6 @@ namespace ListsNotifications
 				.Select(f => SPItemFieldFactory.create(this, f, false))
 				.Where(t => t.IsChanged)
 				.ToList();
-				//.ToDictionary(t => t, t => this.ERConf.TrackFieldsSingleMail[t.fieldTitle]);
 		}
 
 		public override void SendNotifications()

@@ -72,11 +72,8 @@ namespace ListsNotifications
             Cc = String.Join(",", item.ERConf.cc);
             Bcc = String.Join(",", item.ERConf.bcc);
 
-            //itemAdded = item.eventType.Contains("Added");
-
             ItemUrlBlock = String.Format(TemplatesParams["MAIL_URL_TEMPLATE"], item.listItem.GetItemFullUrl(), item.itemTitle);
             EditorDisplayName = item.eventProperties.UserDisplayName;
-            //string ModifiedByBlockTemplate = itemAdded ? CommonConfigNotif.MAIL_CREATED_BY_TEMPLATE : CommonConfigNotif.MAIL_MODIFIED_BY_TEMPLATE;
             ModifiedByBlock = String.Format(ModifiedByBlockTemplate, EditorDisplayName);
         }
         private StringDictionary GetHeaders()

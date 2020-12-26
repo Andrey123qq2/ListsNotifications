@@ -20,8 +20,6 @@ namespace ListsNotifications
         public override void GetFriendlyFieldValues(string fieldValueString, out string friendlyFieldValue)
         {
             friendlyFieldValue = Regex.Replace(fieldValueString, @"href=""/", @"href=""" + Item.listItem.Web.Site.Url + "/");
-
-            //friendlyFieldValue = fieldValueString;
         }
     }
 }
