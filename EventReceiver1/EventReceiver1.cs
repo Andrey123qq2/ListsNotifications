@@ -7,6 +7,8 @@ using Microsoft.SharePoint;
 using Microsoft.SharePoint.Utilities;
 using Microsoft.SharePoint.Workflow;
 using Microsoft.CSharp.RuntimeBinder;
+using SPSCommon.SPCustomExtensions;
+using SPSCommon.ERItem;
 
 namespace ListsNotifications.EventReceiver1
 {
@@ -26,16 +28,25 @@ namespace ListsNotifications.EventReceiver1
             {
                 base.EventFiringEnabled = false;
 
-                MainInit.InitItemUpdating(properties);
+                if (SPCommon.IsUpdatingByAccountMatch(properties, "svc_") || properties.ListItem == null || SPCommon.IsJustCreated(properties.ListItem))
+                    return;
+
+                SPSecurity.RunWithElevatedPrivileges(delegate ()
+                {
+                    ERItemNotifications itemER;
+
+                    try { itemER = new ERItemNotificationsItemUpdating(properties); }
+                    catch (ERItemListItemNullException e) { return; }
+                    catch (Exception e) { throw new Exception("ERItem constructor exception: " + e.Message); }
+
+                    NotificationsManager.SendNotifications(itemER);
+                });
             }
             catch (Exception ex)
             {
                 throw new Exception("CustomER Exception (ItemUpdating): " + properties.ListItemId + ", " + "[ " + ex.ToString() + "].");
             }
-            finally
-            {
-                base.EventFiringEnabled = true;
-            }
+            finally { base.EventFiringEnabled = true; }
         }
 
         public override void ItemAdded(SPItemEventProperties properties)

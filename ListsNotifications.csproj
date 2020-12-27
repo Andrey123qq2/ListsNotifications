@@ -95,6 +95,9 @@
     <Reference Include="Microsoft.SharePoint.Client.ServerRuntime" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ERMain\NotificationsManager.cs" />
+    <Compile Include="ERMain\ERItemNotifications\MailNotification.cs" />
+    <Compile Include="ERMain\ERItemNotifications\NotificationEventArgs.cs" />
     <Compile Include="ERMain\ERItemNotifications\ERItemNotifications.cs" />
     <Compile Include="ERMain\ERConfNotifications.cs" />
     <Compile Include="ERMain\ERItemNotifications\ERItemNotificationsItemAdded.cs" />

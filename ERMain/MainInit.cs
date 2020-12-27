@@ -17,78 +17,82 @@ namespace ListsNotifications
     {
         internal static void InitItemUpdating(SPItemEventProperties properties)
         {
-            if (!SPCommon.IsUpdatingByAccountMatch(properties, "svc_") && properties.ListItem != null && !SPCommon.IsJustCreated(properties.ListItem))
+
+                
+
+            SPSecurity.RunWithElevatedPrivileges(delegate ()
             {
-                SPSecurity.RunWithElevatedPrivileges(delegate ()
+                ERItemNotifications itemER;
+
+                try
                 {
-                    ERItemNotifications itemER;
+                    itemER = new ERItemNotificationsItemUpdating(properties);
+                }
+                catch (ERItemListItemNullException e) {
+                    return;
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("ERItem constructor exception: " + e.Message);
+                }
 
-                    try
-                    {
-                        itemER = new ERItemNotificationsItemUpdating(properties);
-                    }
-                    catch (ERItemListItemNullException e) {
-                        return;
-                    }
-                    catch (Exception e)
-                    {
-                        throw new Exception("ERItem constructor exception: " + e.Message);
-                    }
-
-                    itemER.SendNotifications();
-                });
-            }
+                itemER.SendNotifications();
+            });
         }
         internal static void InitItemAdded(SPItemEventProperties properties)
         {
-            if (!SPCommon.IsUpdatingByAccountMatch(properties, "svc_"))
+            if (SPCommon.IsUpdatingByAccountMatch(properties, "svc_"))
             {
-                SPSecurity.RunWithElevatedPrivileges(delegate ()
-                {
-                    ERItemNotifications itemER;
-
-                    try
-                    {
-                        itemER = new ERItemNotificationsItemAdded(properties);
-                    }
-                    catch (ERItemListItemNullException e)
-                    {
-                        return;
-                    }
-                    catch (Exception e)
-                    {
-                        throw new Exception("ERItem constructor exception: " + e.Message);
-                    }
-
-                    itemER.SendNotifications();
-                });
+                return;
             }
+
+            SPSecurity.RunWithElevatedPrivileges(delegate ()
+            {
+                ERItemNotifications itemER;
+
+                try
+                {
+                    itemER = new ERItemNotificationsItemAdded(properties);
+                }
+                catch (ERItemListItemNullException e)
+                {
+                    return;
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("ERItem constructor exception: " + e.Message);
+                }
+
+                itemER.SendNotifications();
+            });
         }
 
         internal static void InitItemAttachmentAdded(SPItemEventProperties properties)
         {
-            if (!SPCommon.IsUpdatingByAccountMatch(properties, "svc_") && !SPCommon.IsJustCreated(properties.ListItem))
+            if (SPCommon.IsUpdatingByAccountMatch(properties, "svc_") || SPCommon.IsJustCreated(properties.ListItem))
             {
-                SPSecurity.RunWithElevatedPrivileges(delegate ()
-                {
-                    ERItemNotifications itemER;
-
-                    try
-                    {
-                        itemER = new ERItemNotificationsItemAttachmentAdded(properties);
-                    }
-                    catch (ERItemListItemNullException e)
-                    {
-                        return;
-                    }
-                    catch (Exception e)
-                    {
-                        throw new Exception("ERItem constructor exception: " + e.Message);
-                    }
-
-                    itemER.SendNotifications();
-                });
+                return;
             }
+
+            SPSecurity.RunWithElevatedPrivileges(delegate ()
+            {
+                ERItemNotifications itemER;
+
+                try
+                {
+                    itemER = new ERItemNotificationsItemAttachmentAdded(properties);
+                }
+                catch (ERItemListItemNullException e)
+                {
+                    return;
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("ERItem constructor exception: " + e.Message);
+                }
+
+                itemER.SendNotifications();
+            });
         }
     }
 }
