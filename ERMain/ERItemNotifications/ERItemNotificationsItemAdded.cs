@@ -11,7 +11,6 @@ namespace ListsNotifications
 	{
 		public ERItemNotificationsItemAdded(SPItemEventProperties properties) : base(properties)
 		{
-			SetSPItemFieldsAttributesByERType();
 		}
 		public override void SetSPItemFieldsAttributesByERType()
 		{
@@ -29,10 +28,10 @@ namespace ListsNotifications
 				.ToList();
 		}
 
-		public override void SendNotifications()
+		public override void SetEventArgs()
 		{
-			NotificationsTrackFields(ERConf.MailTemplates["_listMode"]["MAIL_SUBJECT_ITEMS_ADDED"], ERConf.MailTemplates["_listMode"]["MAIL_CREATED_BY_TEMPLATE"]);
-			NotificationsTrackFieldsSingleMail();
+			SetEventArgsTrackFields(ERConf.MailTemplates["_listMode"]["MAIL_SUBJECT_ITEMS_ADDED"], ERConf.MailTemplates["_listMode"]["MAIL_CREATED_BY_TEMPLATE"]);
+			SetEventArgsTrackFieldsSingleMail();
 		}
 	}
 }

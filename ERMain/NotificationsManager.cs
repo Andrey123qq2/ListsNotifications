@@ -13,23 +13,20 @@ namespace ListsNotifications
 
 		public static void SendNotifications(ERItemNotifications itemER)
 		{
-			NotificationEventArgs notificationEventArgs = itemER.NotificationEventArgs;
+			List<NotificationEventArgs> notificationEventArgs = itemER.EventArgs;
 
 			NotificationsManager notificationsManager = new NotificationsManager();
-			notificationsManager.OnNewEvent(notificationEventArgs);
-		}
-		public NotificationsManager()
-		{
-			NotificationsManager nm = new NotificationsManager();
+			MailNotification mailNotification = new MailNotification(notificationsManager);
 
-			MailNotification mailNotification = new MailNotification(nm);
-			mailNotification.Unregister(nm);
+			notificationsManager.OnNewEvent(notificationEventArgs);
+
+			mailNotification.Unregister(notificationsManager);
 		}
-		public void OnNewEvent(NotificationEventArgs e)
+		public void OnNewEvent(List<NotificationEventArgs> eventArgs)
 		{
 			EventHandler<NotificationEventArgs> temp = Volatile.Read(ref ItemEvent);
 
-			temp?.Invoke(this, e);
+			eventArgs.ForEach(e => temp?.Invoke(this, e));
 		}
 	}
 }

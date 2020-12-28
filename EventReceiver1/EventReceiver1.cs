@@ -57,16 +57,25 @@ namespace ListsNotifications.EventReceiver1
             {
                 base.EventFiringEnabled = false;
 
-                MainInit.InitItemAdded(properties);
+                if (SPCommon.IsUpdatingByAccountMatch(properties, "svc_"))
+                    return;
+
+                SPSecurity.RunWithElevatedPrivileges(delegate ()
+                {
+                    ERItemNotifications itemER;
+
+                    try { itemER = new ERItemNotificationsItemAdded(properties); }
+                    catch (ERItemListItemNullException e) { return; }
+                    catch (Exception e) { throw new Exception("ERItem constructor exception: " + e.Message); }
+
+                    NotificationsManager.SendNotifications(itemER);
+                });
             }
             catch (Exception ex)
             {
                 throw new Exception("CustomER Exception (ItemAdded): " + properties.ListId + ", " + properties.ListItemId + ", " + "[ " + ex.ToString() + "].");
             }
-            finally
-            {
-                base.EventFiringEnabled = true;
-            }
+            finally { base.EventFiringEnabled = true; }
         }
 
         public override void ItemAttachmentAdded(SPItemEventProperties properties)
@@ -76,16 +85,25 @@ namespace ListsNotifications.EventReceiver1
             {
                 base.EventFiringEnabled = false;
 
-                MainInit.InitItemAttachmentAdded(properties);
+                if (SPCommon.IsUpdatingByAccountMatch(properties, "svc_") || SPCommon.IsJustCreated(properties.ListItem))
+                    return;
+
+                SPSecurity.RunWithElevatedPrivileges(delegate ()
+                {
+                    ERItemNotifications itemER;
+
+                    try { itemER = new ERItemNotificationsItemAttachmentAdded(properties); }
+                    catch (ERItemListItemNullException e) { return; }
+                    catch (Exception e) { throw new Exception("ERItem constructor exception: " + e.Message); }
+
+                    NotificationsManager.SendNotifications(itemER);
+                });
             }
             catch (Exception ex)
             {
                 throw new Exception("CustomER Exception (ItemAttachmentAdding): " + properties.ListId + ", " + properties.ListItemId + ", " + "[ " + ex.ToString() + "].");
             }
-            finally
-            {
-                base.EventFiringEnabled = true;
-            }
+            finally { base.EventFiringEnabled = true; }
         }
     }
 }

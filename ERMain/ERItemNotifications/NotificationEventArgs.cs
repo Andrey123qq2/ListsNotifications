@@ -74,16 +74,6 @@ namespace ListsNotifications
             EditorDisplayName = item.eventProperties.UserDisplayName;
             ModifiedByBlock = String.Format(ModifiedByBlockTemplate, EditorDisplayName);
         }
-        private StringDictionary GetHeaders()
-        {
-            StringDictionary mailHeaders = new StringDictionary();
-            mailHeaders.Add("to", To);
-            mailHeaders.Add("cc", Cc);
-            mailHeaders.Add("bcc", Bcc);
-            mailHeaders.Add("subject", Subject);
-            mailHeaders.Add("content-type", "text/html");
-            return mailHeaders;
-        }
         private string GetChangedFieldsBlock(List<SPItemField> itemFields)
         {
             string ChangedFieldsBlock = "";
