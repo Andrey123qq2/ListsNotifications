@@ -12,19 +12,10 @@ namespace ListsNotifications
 		public ERItemNotificationsItemUpdating(SPItemEventProperties properties) : base(properties)
 		{
 		}
-		public override void SetSPItemFieldsAttributesByERType()
+		public override void SetSPItemFieldsByERType()
 		{
-			TrackSPItemFields = this.ERConf.ItemUpdatingTrackFields
-				//.AsParallel()
-				.Select(f => SPItemFieldFactory.create(this, f))
-				.Where(t => t.IsChanged)
-				.ToList();
-
-            TrackSingleMailSPItemFields = this.ERConf.TrackFieldsSingleMail
-				//.AsParallel()
-				.Select(f => SPItemFieldFactory.create(this, f))
-                .Where(t => t.IsChanged)
-				.ToList();
+			TrackSPItemFields = SPItemFieldFactory.GetChangedFieldsList(this, this.ERConf.ItemUpdatingTrackFields);
+            TrackSingleMailSPItemFields = SPItemFieldFactory.GetChangedFieldsList(this, this.ERConf.TrackFieldsSingleMail);
 
 			if (TrackSPItemFields.Count == 0 && TrackSingleMailSPItemFields.Count == 0)
 			{

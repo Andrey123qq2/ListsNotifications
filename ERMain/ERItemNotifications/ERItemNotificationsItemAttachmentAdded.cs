@@ -12,7 +12,7 @@ namespace ListsNotifications
 		public ERItemNotificationsItemAttachmentAdded(SPItemEventProperties properties) : base(properties)
 		{
 		}
-		public override void SetSPItemFieldsAttributesByERType()
+		public override void SetSPItemFieldsByERType()
 		{
 
 		}

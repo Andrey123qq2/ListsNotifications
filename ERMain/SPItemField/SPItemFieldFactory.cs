@@ -42,5 +42,15 @@ namespace ListsNotifications
 
             return SPItemFieldType;
         }
+
+        public static List<SPItemField> GetChangedFieldsList(IERItem item, List<string> fields)
+        {
+            var fieldList = fields.Where(f => item.listItem.ParentList.Fields.ContainsField(f))
+                .Select(f => create(item, f, false))
+                .Where(t => t.IsChanged)
+                .ToList();
+
+            return fieldList;
+        }
     }
 }

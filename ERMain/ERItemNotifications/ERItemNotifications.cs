@@ -24,12 +24,10 @@ namespace ListsNotifications
 		public ERItemNotifications(SPItemEventProperties properties) : base(properties, CommonConfigNotif.LIST_PROPERTY_JSON_CONF)
 		{
 			NotifiersPresent = ERConf.to.Count > 0 || ERConf.cc.Count > 0 || ERConf.bcc.Count > 0 || ERConf.toManagers.Count > 0;
-
 			ToMails = GetToMails();
-
 			GetMailTemplatesConf();
 
-			SetSPItemFieldsAttributesByERType();
+			SetSPItemFieldsByERType();
 			SetEventArgs();
 		}
 
@@ -73,7 +71,7 @@ namespace ListsNotifications
 		}
 		abstract public void SetEventArgs();
 
-		abstract public void SetSPItemFieldsAttributesByERType();
+		abstract public void SetSPItemFieldsByERType();
 
 		protected void SetEventArgsTrackFields(string subject, string modifiedByTemplate)
 		{
