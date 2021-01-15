@@ -14,8 +14,8 @@ namespace ListsNotifications
 		}
 		public override void SetSPItemFieldsByERType()
 		{
-			TrackSPItemFields = SPItemFieldFactory.GetChangedFieldsList(this, this.ERConf.ItemAddedTrackFields);
-			TrackSingleMailSPItemFields = SPItemFieldFactory.GetChangedFieldsList(this, this.ERConf.TrackFieldsSingleMail);
+			TrackSPItemFields = SPItemFieldFactory.GetChangedFieldsList(this, this.ERConf.ItemAddedTrackFields, false);
+			TrackSingleMailSPItemFields = SPItemFieldFactory.GetChangedFieldsList(this, this.ERConf.TrackFieldsSingleMail, false);
 		}
 
 		public override void SetEventArgs()

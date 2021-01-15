@@ -23,14 +23,10 @@ namespace ListsNotifications
 			var updatingFixedFields = this.ERConf.ItemUpdatingFixedFields
 				//.AsParallel()
 				.Select(f => {
-					var itemField = SPItemFieldFactory.create(this, f);
-
+					var itemField = SPItemFieldFactory.Create(this, f);
 					if (String.IsNullOrEmpty(itemField.FriendlyFieldValueAfter))
-					{
-						itemField.GetFriendlyFieldValues(itemField.FieldValueAfter, out itemField.FriendlyFieldValueAfter);
-					};
+						itemField.GetFriendlyFieldValues(itemField.FieldValueAfter.ToString(), out itemField.FriendlyFieldValueAfter);
 					itemField.FriendlyFieldValueBefore = "";
-
 					return itemField;
 				})
 				.Where(f => !String.IsNullOrEmpty(f.FriendlyFieldValueAfter))

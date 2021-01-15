@@ -26,7 +26,7 @@ namespace ListsNotifications
 
         protected string FieldValueAfterToStringForCompare;
         protected string FieldValueBeforeToStringForCompare;
-        protected string FieldValueAfterToStringForFriendly;
+        public string FieldValueAfterToStringForFriendly;
         protected string FieldValueBeforeToStringForFriendly;
         
         public SPItemField(params object[] attributes)
@@ -73,11 +73,11 @@ namespace ListsNotifications
         {
             try
             {
-                FieldValueAfterToStringForFriendly = (FieldValueAfter != null) ? (string)FieldValueAfter : "";
+                FieldValueAfterToStringForFriendly = FieldValueAfter?.ToString() ?? "";
             }
             catch
             {
-                FieldValueAfterToStringForFriendly = (FieldValueAfter != null) ? FieldValueAfter.ToString() : "";
+                FieldValueAfterToStringForFriendly = FieldValueAfter?.ToString() ?? "";
             }
 
 
