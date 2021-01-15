@@ -2,7 +2,7 @@
 <package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="911e29b7-4433-439e-98a5-ed3b8e2bc805" solutionId="911e29b7-4433-439e-98a5-ed3b8e2bc805" resetWebServer="false" sharePointProductVersion="15.0" name="ListsNotifications" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
   <assemblies>
     <customAssembly location="Newtonsoft.Json.dll" deploymentTarget="GlobalAssemblyCache" sourcePath="bin\Debug\Newtonsoft.Json.dll" />
-    <customAssembly location="LibCustom.SPS.Common.dll" deploymentTarget="GlobalAssemblyCache" sourcePath="..\SPSCommon\bin\Debug\LibCustom.SPS.Common.dll" />
+    <customAssembly location="LibCustom.SPS.Common.dll" deploymentTarget="GlobalAssemblyCache" sourcePath="..\SPCommonLib\bin\Debug\LibCustom.SPS.Common.dll" />
   </assemblies>
   <features>
     <featureReference itemId="dbd2d127-831e-43da-94e0-cc062eff2e20" />
