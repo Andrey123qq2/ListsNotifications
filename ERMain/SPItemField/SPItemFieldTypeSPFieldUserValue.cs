@@ -38,7 +38,7 @@ namespace ListsNotifications
             }
             catch
             {
-                friendlyFieldValue = new SPFieldUserValue(Item.listItem.Web, fieldValueString.ToString()).User.Name;
+                friendlyFieldValue = new SPFieldUserValue(Item.listItem.Web, fieldValueString.ToString()).User?.Name ?? "";
             }
         }
     }
