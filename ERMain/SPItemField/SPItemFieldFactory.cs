@@ -36,9 +36,7 @@ namespace ListsNotifications
             SPItemFieldType = Type.GetType(assemblyName + "." + SPItemFieldTypeName);
 
             if (SPItemFieldType == null)
-            {
                 SPItemFieldType = Type.GetType(assemblyName + ".SPItemFieldTypeCommon");
-            }
 
             return SPItemFieldType;
         }

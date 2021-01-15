@@ -18,9 +18,7 @@ namespace ListsNotifications
             TrackSingleMailSPItemFields = SPItemFieldFactory.GetChangedFieldsList(this, this.ERConf.TrackFieldsSingleMail);
 
 			if (TrackSPItemFields.Count == 0 && TrackSingleMailSPItemFields.Count == 0)
-			{
 				return;
-			}
 
 			var updatingFixedFields = this.ERConf.ItemUpdatingFixedFields
 				//.AsParallel()
@@ -39,12 +37,14 @@ namespace ListsNotifications
 				.ToList();
 
 			TrackSPItemFields.AddRange(updatingFixedFields);
-
 		}
 
 		public override void SetEventArgs()
 		{
-			SetEventArgsTrackFields(ERConf.MailTemplates["_listMode"]["MAIL_SUBJECT_ITEMS"], ERConf.MailTemplates["_listMode"]["MAIL_MODIFIED_BY_TEMPLATE"]);
+			SetEventArgsTrackFields(
+				ERConf.MailTemplates["_listMode"]["MAIL_SUBJECT_ITEMS"], 
+				ERConf.MailTemplates["_listMode"]["MAIL_MODIFIED_BY_TEMPLATE"]
+			);
 			SetEventArgsTrackFieldsSingleMail();
 		}
 	}

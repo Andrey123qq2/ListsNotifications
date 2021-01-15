@@ -34,16 +34,12 @@ namespace ListsNotifications
 		private void GetMailTemplatesConf()
 		{
 			if (!ERConf.MailTemplates.ContainsKey("_listMode"))
-			{
 				ERConf.MailTemplates["_listMode"] = CommonConfigNotif.MAIL_TEMPLATES_DEFAULT;
-			}
 
 			ERConf.TrackFieldsSingleMail.ForEach(k =>
 				{
 					if (!ERConf.MailTemplates.ContainsKey(k))
-					{
 						ERConf.MailTemplates[k] = CommonConfigNotif.MAIL_TEMPLATES_DEFAULT;
-					}
 				}
 			);
 			
@@ -70,15 +66,13 @@ namespace ListsNotifications
 			return mails;
 		}
 		abstract public void SetEventArgs();
-
 		abstract public void SetSPItemFieldsByERType();
 
 		protected void SetEventArgsTrackFields(string subject, string modifiedByTemplate)
 		{
 			if (TrackSPItemFields.Count == 0 || !NotifiersPresent)
-			{
 				return;
-			}
+
 			NotificationEventArgs eventArgsTrackFields = new NotificationEventArgs(
 				this, 
 				TrackSPItemFields, 
@@ -94,9 +88,7 @@ namespace ListsNotifications
 		protected void SetEventArgsTrackFieldsSingleMail()
 		{
 			if (!NotifiersPresent)
-			{
 				return;
-			}
 
 			foreach (SPItemField trackField in TrackSingleMailSPItemFields)
 			{
@@ -116,9 +108,7 @@ namespace ListsNotifications
 		protected void SetEventArgsAttachments(string subject, string modifiedByTemplate)
 		{
 			if (!NotifiersPresent)
-			{
 				return;
-			}
 
 			NotificationEventArgs eventArgsAttachments = new NotificationEventArgs(
 				this, 

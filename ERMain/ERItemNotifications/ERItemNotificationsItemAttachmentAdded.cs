@@ -14,12 +14,14 @@ namespace ListsNotifications
 		}
 		public override void SetSPItemFieldsByERType()
 		{
-
 		}
 
 		public override void SetEventArgs()
 		{
-			SetEventArgsAttachments(ERConf.MailTemplates["_listMode"]["MAIL_SUBJECT_ATTACHMENTS"], ERConf.MailTemplates["_listMode"]["MAIL_MODIFIED_BY_TEMPLATE"]);
+			SetEventArgsAttachments(
+				ERConf.MailTemplates["_listMode"]["MAIL_SUBJECT_ATTACHMENTS"], 
+				ERConf.MailTemplates["_listMode"]["MAIL_MODIFIED_BY_TEMPLATE"]
+			);
 		}
 	}
 }

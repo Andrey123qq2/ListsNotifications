@@ -77,16 +77,15 @@ namespace ListsNotifications
         private string GetChangedFieldsBlock(List<SPItemField> itemFields)
         {
             string ChangedFieldsBlock = "";
-            string fieldStringTemplate = ShowBeforeValues ? TemplatesParams["MAIL_FIELDS_TEMPLATE_ITEMS_BEFORE"] : 
+            string fieldStringTemplate = ShowBeforeValues ? 
+                TemplatesParams["MAIL_FIELDS_TEMPLATE_ITEMS_BEFORE"] : 
                 TemplatesParams["MAIL_FIELDS_TEMPLATE_ITEMS_NOTBEFORE"];
 
             foreach (SPItemField field in itemFields)
             {
                 // TODO: Move condition block to another/field class
                 if (!ShowBeforeValues && (field.FriendlyFieldValueAfter == "-" || field.FriendlyFieldValueAfter == ""))
-                {
                     continue;
-                }
 
                 ChangedFieldsBlock += String.Format(
                     fieldStringTemplate, 
@@ -142,6 +141,5 @@ namespace ListsNotifications
 
             return mailBodyString;
         }
-
     }
 }

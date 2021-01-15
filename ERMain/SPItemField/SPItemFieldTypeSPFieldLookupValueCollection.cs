@@ -11,7 +11,6 @@ namespace ListsNotifications
     {
         public SPItemFieldTypeSPFieldLookupValueCollection(params object[] attributes) : base(attributes)
         {
-
         }
         public override void GetFieldValuesToStringForCompare()
         {

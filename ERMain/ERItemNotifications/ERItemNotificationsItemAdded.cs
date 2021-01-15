@@ -20,7 +20,10 @@ namespace ListsNotifications
 
 		public override void SetEventArgs()
 		{
-			SetEventArgsTrackFields(ERConf.MailTemplates["_listMode"]["MAIL_SUBJECT_ITEMS_ADDED"], ERConf.MailTemplates["_listMode"]["MAIL_CREATED_BY_TEMPLATE"]);
+			SetEventArgsTrackFields(
+				ERConf.MailTemplates["_listMode"]["MAIL_SUBJECT_ITEMS_ADDED"], 
+				ERConf.MailTemplates["_listMode"]["MAIL_CREATED_BY_TEMPLATE"]
+			);
 			SetEventArgsTrackFieldsSingleMail();
 		}
 	}

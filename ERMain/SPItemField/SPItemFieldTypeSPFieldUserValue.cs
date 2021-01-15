@@ -17,9 +17,7 @@ namespace ListsNotifications
             SPFieldUserValue fieldValueBeforeUser = new SPFieldUserValue(Item.listItem.Web, FieldValueBefore.ToString());
             SPFieldUserValue fieldValueAfterUser = new SPFieldUserValue();
             if (FieldValueAfter != null)
-            {
                 fieldValueAfterUser = new SPFieldUserValue(Item.listItem.Web, FieldValueAfter.ToString());
-            }
 
             FieldValueBeforeToStringForCompare = 
                 (FieldValueBefore != null && FieldValueBefore.ToString() != "") ? 
@@ -29,9 +27,7 @@ namespace ListsNotifications
                     (fieldValueAfterUser.User != null ? fieldValueAfterUser.User.LoginName : fieldValueAfterUser.LookupValue) : "";
 
             if (FieldValueAfter != null && FieldValueAfter.ToString() != "" && FieldValueAfterToStringForCompare == "")
-            {
                 FieldValueAfterToStringForCompare = new SPFieldUserValue(Item.listItem.Web, FieldValueAfter.ToString()).User.LoginName;
-            }
         }
 
         public override void GetFriendlyFieldValues(string fieldValueString, out string friendlyFieldValue)

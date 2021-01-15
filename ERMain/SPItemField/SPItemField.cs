@@ -43,25 +43,16 @@ namespace ListsNotifications
             IsChanged = FieldIsChanged();
 
             if (!IsChanged)
-            {
                 return;
-            }
 
             GetFieldValuesToStringForFriendly();
             
             if (FriendlyFieldValueAfter != "-")
-            {
                 GetFriendlyFieldValues(FieldValueAfterToStringForFriendly, out FriendlyFieldValueAfter);
-            }
             if (FriendlyFieldValueBefore != "-")
-            {
                 GetFriendlyFieldValues(FieldValueBeforeToStringForFriendly, out FriendlyFieldValueBefore);
-            }
-
             if (Item.eventType.Contains("Added"))
-            {
                 FriendlyFieldValueAfter = FriendlyFieldValueBefore;
-            }
         }
 
         abstract public void GetFieldValuesToStringForCompare();
@@ -70,19 +61,12 @@ namespace ListsNotifications
         private bool FieldIsChanged()
         {
             if (Item.eventType.Contains("Added") && FieldValueBeforeToStringForCompare != null && FieldValueBeforeToStringForCompare != "")
-            {
-                
                 return true;
-            }
 
             if (FieldValueAfterToStringForCompare != FieldValueBeforeToStringForCompare)
-            {
                 return true;
-            }
             else
-            {
                 return false;
-            }
         }
 
         private void GetFieldValuesToStringForFriendly()
@@ -98,9 +82,7 @@ namespace ListsNotifications
 
 
             if (FieldValueAfterToStringForFriendly == "" || FieldValueAfterToStringForFriendly == null)
-            {
                 FriendlyFieldValueAfter = "-";
-            }
 
 
             //if (!valueAfter)
@@ -119,9 +101,7 @@ namespace ListsNotifications
 
 
             if (FieldValueBeforeToStringForFriendly == "" || FieldValueBeforeToStringForFriendly == null)
-            {
                 FriendlyFieldValueBefore = "-";
-            }
         }
     }
 }

@@ -30,9 +30,7 @@ namespace ListsNotifications
         public void SendMail(Object sender, NotificationEventArgs e)
         {
             if (e.Body == "" || (e.To == "" && e.Cc == "" && e.Bcc == ""))
-            {
                 return;
-            }
 
             StringDictionary headers = GetHeaders(e);
 

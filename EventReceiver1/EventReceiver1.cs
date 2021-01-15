@@ -36,16 +36,13 @@ namespace ListsNotifications.EventReceiver1
                     ERItemNotifications itemER;
 
                     try { itemER = new ERItemNotificationsItemUpdating(properties); }
-                    catch (ERItemListItemNullException e) { return; }
+                    catch (ERItemListItemNullException) { return; }
                     catch (Exception e) { throw new Exception("ERItem constructor exception: " + e.Message); }
 
                     NotificationsManager.SendNotifications(itemER);
                 });
             }
-            catch (Exception ex)
-            {
-                throw new Exception("CustomER Exception (ItemUpdating): " + properties.ListItemId + ", " + "[ " + ex.ToString() + "].");
-            }
+            catch (Exception ex) { ProcessException(properties, ex); }
             finally { base.EventFiringEnabled = true; }
         }
 
@@ -71,10 +68,7 @@ namespace ListsNotifications.EventReceiver1
                     NotificationsManager.SendNotifications(itemER);
                 });
             }
-            catch (Exception ex)
-            {
-                throw new Exception("CustomER Exception (ItemAdded): " + properties.ListId + ", " + properties.ListItemId + ", " + "[ " + ex.ToString() + "].");
-            }
+            catch (Exception ex) { ProcessException(properties, ex); }
             finally { base.EventFiringEnabled = true; }
         }
 
@@ -93,17 +87,27 @@ namespace ListsNotifications.EventReceiver1
                     ERItemNotifications itemER;
 
                     try { itemER = new ERItemNotificationsItemAttachmentAdded(properties); }
-                    catch (ERItemListItemNullException e) { return; }
+                    catch (ERItemListItemNullException) { return; }
                     catch (Exception e) { throw new Exception("ERItem constructor exception: " + e.Message); }
 
                     NotificationsManager.SendNotifications(itemER);
                 });
             }
-            catch (Exception ex)
-            {
-                throw new Exception("CustomER Exception (ItemAttachmentAdding): " + properties.ListId + ", " + properties.ListItemId + ", " + "[ " + ex.ToString() + "].");
-            }
+            catch (Exception ex) { ProcessException(properties, ex); }
             finally { base.EventFiringEnabled = true; }
+        }
+
+        private void ProcessException(SPItemEventProperties properties, Exception ex)
+        {
+            throw new Exception(
+                String.Format(
+                    "CustomER Exception ({0}): {1}, {2}, " + "[ {3} ].", 
+                    properties.EventType, 
+                    properties.ListId, 
+                    properties.ListItemId, 
+                    ex.ToString()
+                )
+            );
         }
     }
 }
