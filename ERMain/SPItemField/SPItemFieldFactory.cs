@@ -9,7 +9,7 @@ namespace ListsNotifications
 {
     class SPItemFieldFactory
     {
-        public static SPItemField create(IERItem item, string fieldTitle, bool valueAfterParam = true)
+        public static SPItemField Create(IERItem item, string fieldTitle, bool valueAfterParam = true)
         {
             object[] SPItemFieldParams = { item, fieldTitle, valueAfterParam };
 
@@ -36,11 +36,19 @@ namespace ListsNotifications
             SPItemFieldType = Type.GetType(assemblyName + "." + SPItemFieldTypeName);
 
             if (SPItemFieldType == null)
-            {
                 SPItemFieldType = Type.GetType(assemblyName + ".SPItemFieldTypeCommon");
-            }
 
             return SPItemFieldType;
+        }
+
+        public static List<SPItemField> GetChangedFieldsList(IERItem item, List<string> fields, bool valueAfterParam = true)
+        {
+            var fieldList = fields.Where(f => item.listItem.ParentList.Fields.ContainsField(f))
+                .Select(f => Create(item, f, valueAfterParam))
+                .Where(t => t.IsChanged)
+                .ToList();
+
+            return fieldList;
         }
     }
 }

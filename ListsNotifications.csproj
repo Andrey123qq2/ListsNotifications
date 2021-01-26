@@ -40,9 +40,9 @@
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LibCustom.SPS.Common, Version=1.1.7654.27551, Culture=neutral, PublicKeyToken=a9cfd3b5973e55a7, processorArchitecture=MSIL">
+    <Reference Include="LibCustom.SPS.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a9cfd3b5973e55a7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SPSCommon\bin\Debug\LibCustom.SPS.Common.dll</HintPath>
+      <HintPath>..\SPCommonLib\bin\Debug\LibCustom.SPS.Common.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
@@ -95,6 +95,9 @@
     <Reference Include="Microsoft.SharePoint.Client.ServerRuntime" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ERMain\NotificationsManager.cs" />
+    <Compile Include="ERMain\ERItemNotifications\MailNotification.cs" />
+    <Compile Include="ERMain\ERItemNotifications\NotificationEventArgs.cs" />
     <Compile Include="ERMain\ERItemNotifications\ERItemNotifications.cs" />
     <Compile Include="ERMain\ERConfNotifications.cs" />
     <Compile Include="ERMain\ERItemNotifications\ERItemNotificationsItemAdded.cs" />
@@ -124,8 +127,6 @@
     <Compile Include="Layouts\ERListsSettings\Notifications.aspx.designer.cs">
       <DependentUpon>Notifications.aspx.cs</DependentUpon>
     </Compile>
-    <Compile Include="ERMain\ERItemNotifications\MailItem.cs" />
-    <Compile Include="ERMain\MainInit.cs" />
     <Compile Include="EventReceiver1\EventReceiver1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

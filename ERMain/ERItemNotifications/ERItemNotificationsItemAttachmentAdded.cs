@@ -5,22 +5,23 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.SharePoint;
 
-namespace ListsNotifications.ReadConfig
+namespace ListsNotifications
 {
     class ERItemNotificationsItemAttachmentAdded : ERItemNotifications
 	{
 		public ERItemNotificationsItemAttachmentAdded(SPItemEventProperties properties) : base(properties)
 		{
-			SetSPItemFieldsAttributesByERType();
 		}
-		public override void SetSPItemFieldsAttributesByERType()
+		public override void SetSPItemFieldsByERType()
 		{
-
 		}
 
-		public override void SendNotifications()
+		public override void SetEventArgs()
 		{
-			NotificationsAttachments(ERConf.MailTemplates["_listMode"]["MAIL_SUBJECT_ATTACHMENTS"], ERConf.MailTemplates["_listMode"]["MAIL_MODIFIED_BY_TEMPLATE"]);
+			SetEventArgsAttachments(
+				ERConf.MailTemplates["_listMode"]["MAIL_SUBJECT_ATTACHMENTS"], 
+				ERConf.MailTemplates["_listMode"]["MAIL_MODIFIED_BY_TEMPLATE"]
+			);
 		}
 	}
 }

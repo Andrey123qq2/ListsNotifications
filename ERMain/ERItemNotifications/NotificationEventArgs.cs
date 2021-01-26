@@ -1,24 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using Microsoft.SharePoint;
-using Microsoft.SharePoint.Utilities;
+using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using SPSCommon.ERItem;
 using SPSCommon.SPCustomExtensions;
 
 namespace ListsNotifications
 {
-    /// <summary>
-    /// Creates mail elements for ERItemNotifications and send mail by public method
-    /// </summary>
-    class MailItem
+    internal sealed class NotificationEventArgs : EventArgs
     {
-        private readonly string Body;
-        private readonly string Subject;
-        private readonly StringDictionary Headers;
-        private string To;
-        private string Cc;
-        private string Bcc;
+        public readonly string Body;
+        public readonly string Subject;
+        public string To;
+        public string Cc;
+        public string Bcc;
+        public IERItem Item;
 
         private readonly string AttachmentUrl;
         private readonly bool ShowBeforeValues;
@@ -28,9 +27,9 @@ namespace ListsNotifications
         private string ModifiedByBlock;
         private readonly Dictionary<string, string> TemplatesParams;
 
-        public MailItem(
-            ERItemNotifications item, 
-            List<SPItemField> fieldsToTrack, 
+        public NotificationEventArgs(
+            ERItemNotifications item,
+            List<SPItemField> fieldsToTrack,
             string mailSubjectMode,
             string modifiedByBlockTemplate,
             Dictionary<string, string> templatesParams,
@@ -44,14 +43,13 @@ namespace ListsNotifications
             InitCommonAttributes(item);
 
             Body = CreateBody(fieldsToTrack);
-            Subject = String.Format("{0}: {1}", item.itemTitle, mailSubjectMode); 
-            Headers = GetHeaders();
+            Subject = String.Format("{0}: {1}", item.itemTitle, mailSubjectMode);
         }
 
-        public MailItem(
-            ERItemNotifications item, 
-            string mailSubjectMode, 
-            string modifiedByBlockTemplate, 
+        public NotificationEventArgs(
+            ERItemNotifications item,
+            string mailSubjectMode,
+            string modifiedByBlockTemplate,
             Dictionary<string, string> templatesParams
         )
         {
@@ -63,7 +61,6 @@ namespace ListsNotifications
 
             Body = CreateBody();
             Subject = String.Format("{0}: {1}", item.itemTitle, mailSubjectMode);
-            Headers = GetHeaders();
         }
 
         private void InitCommonAttributes(ERItemNotifications item)
@@ -71,35 +68,31 @@ namespace ListsNotifications
             To = String.Join(",", item.ToMails);
             Cc = String.Join(",", item.ERConf.cc);
             Bcc = String.Join(",", item.ERConf.bcc);
+            Item = item;
 
             ItemUrlBlock = String.Format(TemplatesParams["MAIL_URL_TEMPLATE"], item.listItem.GetItemFullUrl(), item.itemTitle);
             EditorDisplayName = item.eventProperties.UserDisplayName;
             ModifiedByBlock = String.Format(ModifiedByBlockTemplate, EditorDisplayName);
         }
-        private StringDictionary GetHeaders()
-        {
-            StringDictionary mailHeaders = new StringDictionary();
-            mailHeaders.Add("to", To);
-            mailHeaders.Add("cc", Cc);
-            mailHeaders.Add("bcc", Bcc);
-            mailHeaders.Add("subject", Subject);
-            mailHeaders.Add("content-type", "text/html");
-            return mailHeaders;
-        }
         private string GetChangedFieldsBlock(List<SPItemField> itemFields)
         {
             string ChangedFieldsBlock = "";
-            string fieldStringTemplate = ShowBeforeValues ? TemplatesParams["MAIL_FIELDS_TEMPLATE_ITEMS_BEFORE"] : TemplatesParams["MAIL_FIELDS_TEMPLATE_ITEMS_NOTBEFORE"];
+            string fieldStringTemplate = ShowBeforeValues ? 
+                TemplatesParams["MAIL_FIELDS_TEMPLATE_ITEMS_BEFORE"] : 
+                TemplatesParams["MAIL_FIELDS_TEMPLATE_ITEMS_NOTBEFORE"];
 
             foreach (SPItemField field in itemFields)
             {
                 // TODO: Move condition block to another/field class
                 if (!ShowBeforeValues && (field.FriendlyFieldValueAfter == "-" || field.FriendlyFieldValueAfter == ""))
-                {
                     continue;
-                }
 
-                ChangedFieldsBlock += String.Format(fieldStringTemplate, field.FieldTitle, field.FriendlyFieldValueBefore, field.FriendlyFieldValueAfter);
+                ChangedFieldsBlock += String.Format(
+                    fieldStringTemplate, 
+                    field.FieldTitle, 
+                    field.FriendlyFieldValueBefore, 
+                    field.FriendlyFieldValueAfter
+                );
             }
 
             return ChangedFieldsBlock;
@@ -107,7 +100,12 @@ namespace ListsNotifications
         private string GetChangedFieldsBlock()
         {
             string attachmentName = Regex.Replace(AttachmentUrl, @"^.*\/", "");
-            string ChangedFieldsBlock = String.Format(TemplatesParams["MAIL_FIELDS_TEMPLATE_ATTACHMENTS"], TemplatesParams["MAIL_BODY_ATTACHMENTS"], AttachmentUrl, attachmentName);
+            string ChangedFieldsBlock = String.Format(
+                TemplatesParams["MAIL_FIELDS_TEMPLATE_ATTACHMENTS"], 
+                TemplatesParams["MAIL_BODY_ATTACHMENTS"], 
+                AttachmentUrl, 
+                attachmentName
+            );
 
             return ChangedFieldsBlock;
         }
@@ -118,7 +116,12 @@ namespace ListsNotifications
 
             ChangedFieldsBlock = GetChangedFieldsBlock(fields);
 
-            mailBodyString = ChangedFieldsBlock != "" ? String.Format(TemplatesParams["MAIL_BODY_TEMPLATE"], ChangedFieldsBlock, ItemUrlBlock, ModifiedByBlock) : "";
+            mailBodyString = ChangedFieldsBlock != "" ? String.Format(
+                TemplatesParams["MAIL_BODY_TEMPLATE"], 
+                ChangedFieldsBlock, 
+                ItemUrlBlock, 
+                ModifiedByBlock
+            ) : "";
 
             return mailBodyString;
         }
@@ -129,17 +132,14 @@ namespace ListsNotifications
             string mailBodyString;
 
             ChangedFieldsBlock = GetChangedFieldsBlock();
-            mailBodyString = String.Format(TemplatesParams["MAIL_BODY_TEMPLATE"], ChangedFieldsBlock, ItemUrlBlock, ModifiedByBlock);
+            mailBodyString = String.Format(
+                TemplatesParams["MAIL_BODY_TEMPLATE"], 
+                ChangedFieldsBlock, 
+                ItemUrlBlock, 
+                ModifiedByBlock
+            );
 
             return mailBodyString;
-        }
-
-        public void SendMail(SPWeb web)
-        {
-            if (Body != "" && (To != "" || Cc != "" || Bcc != ""))
-            {
-                SPUtility.SendEmail(web, Headers, Body);
-            }
         }
     }
 }

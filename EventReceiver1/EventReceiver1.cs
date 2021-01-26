@@ -7,6 +7,8 @@ using Microsoft.SharePoint;
 using Microsoft.SharePoint.Utilities;
 using Microsoft.SharePoint.Workflow;
 using Microsoft.CSharp.RuntimeBinder;
+using SPSCommon.SPCustomExtensions;
+using SPSCommon.ERItem;
 
 namespace ListsNotifications.EventReceiver1
 {
@@ -26,16 +28,22 @@ namespace ListsNotifications.EventReceiver1
             {
                 base.EventFiringEnabled = false;
 
-                MainInit.InitItemUpdating(properties);
+                if (SPCommon.IsUpdatingByAccountMatch(properties, "svc_") || properties.ListItem == null || SPCommon.IsJustCreated(properties.ListItem))
+                    return;
+
+                SPSecurity.RunWithElevatedPrivileges(delegate ()
+                {
+                    ERItemNotifications itemER;
+
+                    try { itemER = new ERItemNotificationsItemUpdating(properties); }
+                    catch (ERItemListItemNullException) { return; }
+                    catch (Exception e) { throw new Exception("ERItem constructor exception: " + e.Message); }
+
+                    NotificationsManager.SendNotifications(itemER);
+                });
             }
-            catch (Exception ex)
-            {
-                throw new Exception("CustomER Exception (ItemUpdating): " + properties.ListItemId + ", " + "[ " + ex.ToString() + "].");
-            }
-            finally
-            {
-                base.EventFiringEnabled = true;
-            }
+            catch (Exception ex) { ProcessException(properties, ex); }
+            finally { base.EventFiringEnabled = true; }
         }
 
         public override void ItemAdded(SPItemEventProperties properties)
@@ -46,16 +54,22 @@ namespace ListsNotifications.EventReceiver1
             {
                 base.EventFiringEnabled = false;
 
-                MainInit.InitItemAdded(properties);
+                if (SPCommon.IsUpdatingByAccountMatch(properties, "svc_"))
+                    return;
+
+                SPSecurity.RunWithElevatedPrivileges(delegate ()
+                {
+                    ERItemNotifications itemER;
+
+                    try { itemER = new ERItemNotificationsItemAdded(properties); }
+                    catch (ERItemListItemNullException e) { return; }
+                    catch (Exception e) { throw new Exception("ERItem constructor exception: " + e.Message); }
+
+                    NotificationsManager.SendNotifications(itemER);
+                });
             }
-            catch (Exception ex)
-            {
-                throw new Exception("CustomER Exception (ItemAdded): " + properties.ListId + ", " + properties.ListItemId + ", " + "[ " + ex.ToString() + "].");
-            }
-            finally
-            {
-                base.EventFiringEnabled = true;
-            }
+            catch (Exception ex) { ProcessException(properties, ex); }
+            finally { base.EventFiringEnabled = true; }
         }
 
         public override void ItemAttachmentAdded(SPItemEventProperties properties)
@@ -65,16 +79,35 @@ namespace ListsNotifications.EventReceiver1
             {
                 base.EventFiringEnabled = false;
 
-                MainInit.InitItemAttachmentAdded(properties);
+                if (SPCommon.IsUpdatingByAccountMatch(properties, "svc_") || SPCommon.IsJustCreated(properties.ListItem))
+                    return;
+
+                SPSecurity.RunWithElevatedPrivileges(delegate ()
+                {
+                    ERItemNotifications itemER;
+
+                    try { itemER = new ERItemNotificationsItemAttachmentAdded(properties); }
+                    catch (ERItemListItemNullException) { return; }
+                    catch (Exception e) { throw new Exception("ERItem constructor exception: " + e.Message); }
+
+                    NotificationsManager.SendNotifications(itemER);
+                });
             }
-            catch (Exception ex)
-            {
-                throw new Exception("CustomER Exception (ItemAttachmentAdding): " + properties.ListId + ", " + properties.ListItemId + ", " + "[ " + ex.ToString() + "].");
-            }
-            finally
-            {
-                base.EventFiringEnabled = true;
-            }
+            catch (Exception ex) { ProcessException(properties, ex); }
+            finally { base.EventFiringEnabled = true; }
+        }
+
+        private void ProcessException(SPItemEventProperties properties, Exception ex)
+        {
+            throw new Exception(
+                String.Format(
+                    "CustomER Exception ({0}): {1}, {2}, " + "[ {3} ].", 
+                    properties.EventType, 
+                    properties.ListId, 
+                    properties.ListItemId, 
+                    ex.ToString()
+                )
+            );
         }
     }
 }

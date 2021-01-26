@@ -11,12 +11,11 @@ namespace ListsNotifications
     {
         public SPItemFieldTypeSPFieldLookupValueCollection(params object[] attributes) : base(attributes)
         {
-
         }
         public override void GetFieldValuesToStringForCompare()
         {
-            FieldValueBeforeToStringForCompare = (FieldValueBefore != null) ? FieldValueBefore.ToString() : "";
-            FieldValueAfterToStringForCompare = (FieldValueAfter != null) ? (string)FieldValueAfter : "";
+            FieldValueBeforeToStringForCompare = FieldValueBefore?.ToString() ?? "";
+            FieldValueAfterToStringForCompare = FieldValueAfter?.ToString() ?? "";
         }
 
         public override void GetFriendlyFieldValues(string fieldValueString, out string friendlyFieldValue)

@@ -11,28 +11,20 @@ namespace ListsNotifications
 	{
 		public ERItemNotificationsItemAdded(SPItemEventProperties properties) : base(properties)
 		{
-			SetSPItemFieldsAttributesByERType();
 		}
-		public override void SetSPItemFieldsAttributesByERType()
+		public override void SetSPItemFieldsByERType()
 		{
-			TrackSPItemFields = this.ERConf.ItemAddedTrackFields
-				//.AsParallel()
-				.Where(f => this.listItem.ParentList.Fields.ContainsField(f))
-				.Select(f => SPItemFieldFactory.create(this, f, false))
-				.Where(t => t.IsChanged)
-				.ToList();
-
-			TrackSingleMailSPItemFields = this.ERConf.TrackFieldsSingleMail
-				//.AsParallel()
-				.Select(f => SPItemFieldFactory.create(this, f, false))
-				.Where(t => t.IsChanged)
-				.ToList();
+			TrackSPItemFields = SPItemFieldFactory.GetChangedFieldsList(this, this.ERConf.ItemAddedTrackFields, false);
+			TrackSingleMailSPItemFields = SPItemFieldFactory.GetChangedFieldsList(this, this.ERConf.TrackFieldsSingleMail, false);
 		}
 
-		public override void SendNotifications()
+		public override void SetEventArgs()
 		{
-			NotificationsTrackFields(ERConf.MailTemplates["_listMode"]["MAIL_SUBJECT_ITEMS_ADDED"], ERConf.MailTemplates["_listMode"]["MAIL_CREATED_BY_TEMPLATE"]);
-			NotificationsTrackFieldsSingleMail();
+			SetEventArgsTrackFields(
+				ERConf.MailTemplates["_listMode"]["MAIL_SUBJECT_ITEMS_ADDED"], 
+				ERConf.MailTemplates["_listMode"]["MAIL_CREATED_BY_TEMPLATE"]
+			);
+			SetEventArgsTrackFieldsSingleMail();
 		}
 	}
 }
